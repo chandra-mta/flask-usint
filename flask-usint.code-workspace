@@ -1,0 +1,15 @@
+/*
+This file is a VSCode configuration for development of the web application in conjunction with the python-server-configs git repo located in a sibling directory.
+Such a config is typical in this dev work flow. This file is not necessary for the application to run whatsoever.
+*/
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../python-server-configs"
+		}
+	],
+	"settings": {}
+}
