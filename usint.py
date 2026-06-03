@@ -46,7 +46,7 @@ runtime behavior with minimal reliance on system-level changes.
 """
 import os
 try:
-    #: Normal startup for app configuration selection and and creation
+    #: Normal startup for app configuration selection and creation
     from cus_app import create_app
     CONFIG_NAME = os.getenv("USINT_CONFIG", "localhost")
     application = create_app(CONFIG_NAME)
