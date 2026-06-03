@@ -4,10 +4,24 @@ This repository contains the Python Flask application supporting the [Usint Webs
 
 For information related to the web server backend, support, and development of this application, consult the **Flask/Usint** folder in the MTA shared drive.
 
+## Gunicorn Server
+
+This is the server process startup command, running under Syshelp control, using the usint.py entrypoint.
+https://flask.palletsprojects.com/en/stable/deploying/gunicorn/#running
+```
+gunicorn -c <server_config_name>.conf.py usint:application
+```
+
+The gunicorn server configuration file handles settings to allow the cxc web servers to send requests to the application server.
+Flask application specific settings, such as database connections and email settings, exists as flask config files, and thus within MTA file ownership.
+
 ## Structure
 
-* **`usint` / `usint.py`**  
-  Python script for instantiating the Flask application. Navigating to this file in a web browser starts the application.
+* **`usint.py`**  
+  Python module entrypoint for the Gunicorn server which determine application creation and configuration.
+  By acting as an entrypoint, MTA can perform file edits to the application configuration and creation without necessarily requiring a
+  gunicorn server restart. Conceptually, the application could still run if gunicorn called the cus_app package create_app() function directly.
+  
 
 * **`config.py`**  
   Configuration file.
