@@ -20,7 +20,7 @@ from config import _CONFIG_DICT
 
 #: Import Flask Extensions from sibling module.
 #: Flask Extensions expand functionality for the 
-from .extensions import db, login, web_session, bootstrap
+from .extensions import db, login, web_session_instance, bootstrap
 
 
 from cus_app.supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
@@ -102,10 +102,10 @@ def create_app(_configuration_name):
 
     app.config['SESSION_SQLALCHEMY'] = db #: Must set the SQLAlchemy database for server-side session data after construction
     db.init_app(app)
-    web_session.init_app(app)
+    web_session_instance.init_app(app)
     #: Note that this application uses both an SQLite database session for writing to the database more permanently,
     #: and a web application session for short-term client interactions. These will be labels explicitly as
-    #: web_session and database_session.
+    #: web_session and db.session
     
     #app.app_context().push()
 

@@ -17,5 +17,5 @@ from flask_bootstrap import Bootstrap5
 
 db = SQLAlchemy()
 login = LoginManager()
-web_session = Session()
+web_session_instance = Session()
 bootstrap = Bootstrap5()
