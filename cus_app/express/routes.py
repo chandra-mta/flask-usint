@@ -16,7 +16,7 @@ from flask import current_app, render_template, request, flash, session, redirec
 from flask_login    import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
-from cus_app import db
+from cus_app.extensions import db
 from cus_app.models import register_user
 from cus_app.express import bp
 from cus_app.express.forms import ExpressApprovalForm, ConfirmForm

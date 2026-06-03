@@ -27,7 +27,7 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from flask import current_app, render_template, request, flash, session, redirect, url_for
 from flask_login    import current_user
 
-from cus_app import db
+from cus_app.extensions import db
 import cus_app.emailing as mail
 from cus_app.models import register_user
 from cus_app.ocatdatapage import bp

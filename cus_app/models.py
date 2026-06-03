@@ -33,7 +33,7 @@ object oriented relational mapping to related table entires.
 import os
 from flask import session, request
 from flask_login import UserMixin, login_user
-from cus_app import db, login
+from cus_app.extensions import db, login
 from typing import Optional, List #: Allows for Mapper to determine nullability of the table column.
 from datetime import datetime
 from sqlalchemy import ForeignKey
