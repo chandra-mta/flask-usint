@@ -16,11 +16,13 @@ import json
 import logging
 
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
-from flask_session import Session
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from config import _CONFIG_DICT
+
+#: Import Flask Extensions from sibling module.
+#: Flask Extensions expand functionality for the 
+from .extensions import db, login, web_session, bootstrap
+
+
 from cus_app.supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
 
 #
@@ -36,13 +38,6 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
-#
-# --- Flask Additions
-#
-bootstrap = Bootstrap()
-db = SQLAlchemy()
-sess = Session()
-login = LoginManager()
 
 function_dict = {
     'zip_longest': zip_longest,
@@ -93,12 +88,26 @@ def create_app(_configuration_name):
     app = Flask(__name__)
     app.jinja_env.globals.update(function_dict)
     app.config.from_object(_CONFIG_DICT[_configuration_name])
-    app.config['SESSION_SQLALCHEMY'] = db #: Must set the SQLAlchemy database for server-side session data after construction
+
+    #: Bind the imported Flask Extensions to the initialized application.
     bootstrap.init_app(app)
-    db.init_app(app)
-    sess.init_app(app)
     login.init_app(app)
-    app.app_context().push()
+
+    #: This application stores user session data inside the Usint SQLite database using the flask_session library.
+    #: This means that user input into a revision is temporarily stored inside the flask_session database table as they navigate multiple web pages.
+    #: Once a user is finished with their revision, the application performs the official database transaction,
+    #: such as adding an obsid to the approved list, by writing to the revisions table.
+    #: The corresponding session data column in the flask_session database table is then cleared by the application with clear_session_data() function.
+    #: https://flask-session.readthedocs.io/en/latest/introduction.html#client-side-vs-server-side-sessions
+
+    app.config['SESSION_SQLALCHEMY'] = db #: Must set the SQLAlchemy database for server-side session data after construction
+    db.init_app(app)
+    web_session.init_app(app)
+    #: Note that this application uses both an SQLite database session for writing to the database more permanently,
+    #: and a web application session for short-term client interactions. These will be labels explicitly as
+    #: web_session and database_session.
+    
+    #app.app_context().push()
 
     #
     # --- Available handler for processing in the event of keyboard interrupts (localhost testing)

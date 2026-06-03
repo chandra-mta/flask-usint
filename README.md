@@ -26,9 +26,6 @@ Flask application specific settings, such as database connections and email sett
 * **`config.py`**  
   Configuration file.
 
-* **`localhost`**  
-  A `tcsh` shell script used for quickly starting a localhost test of the application using the `/data/mta4/CUS/ska3-cus-r2d2-v` environment.
-
 * **`instance/`**  
   Instance folder for storing application-specific files such as logs and the `usint.db` database.
 
@@ -41,6 +38,7 @@ Flask application specific settings, such as database connections and email sett
   * **`__init__.py`** — Application instantiation script
   * **`emailing.py`** — Email-related functions for notifications
   * **`models.py`** — SQLAlchemy ORM models for interfacing with the Usint Revision database
+  * **`extensions.py`** - Module for instantiating the Flask Extension class instances.
 
   ### Submodules
 
