@@ -17,13 +17,15 @@ Flask application specific settings, such as database connections and email sett
 
 ## Structure
 
+The top level of this project is the application root, containing the server entrypoint modules, base configuration settings, the instance directory containing file relevant to this application installation's specific runtime, and the cus_app package containing our source code.
+
 * **`usint.py`**  
   Python module entrypoint for the Gunicorn server which determine application creation and configuration.
   By acting as an entrypoint, MTA can perform file edits to the application configuration and creation without necessarily requiring a
   gunicorn server restart. Conceptually, the application could still run if gunicorn called the cus_app package create_app() function directly.
   
 
-* **`config.py`**  
+* **`baseconfig.py`**  
   Configuration file.
 
 * **`instance/`**  

@@ -52,7 +52,7 @@ function_dict = {
     'get_more': get_more,
     'IterateRecords': IterateRecords
 }
-def create_app(_configuration_name):
+def create_app(config_object='baseconfig.BaseConfig'):
     """
     Function for instantiating the entire application.
 
@@ -68,6 +68,7 @@ def create_app(_configuration_name):
         - PRG: https://en.wikipedia.org/wiki/Post/Redirect/Get
         - ACA Team Sybase Interface: https://github.com/sot/ska_dbi/blob/master/ska_dbi/sqsh.py
     
+    # Is this true?
     The SQLite database interface libraries share a single "database" session per web request so that all users operate with the same data.
     This differs from a "web" session which stores data for the user in between web requests where common usage means they submit multiple web requests in a single sitting.
 
@@ -85,9 +86,12 @@ def create_app(_configuration_name):
     :NOTE: Wherever form input is required, use the PRG design pattern (https://en.wikipedia.org/wiki/Post/Redirect/Get)
 
     """
-    app = Flask(__name__)
-    app.jinja_env.globals.update(function_dict)
-    app.config.from_object(_CONFIG_DICT[_configuration_name])
+    #: Instance 
+    app = Flask(__name__, instance_relative_config=True)
+    #: Import the configuration class listed as an argument from the application root baseconfig.py module.
+    app.config.from_object(config_object)
+    #: Read this installation's specific instance folder for configuration overrides. Relative pathing from the instance_realtive_config argument.
+    app.config.from_pyfile('config.py', silent=True)
 
     #: Bind the imported Flask Extensions to the initialized application.
     bootstrap.init_app(app)
@@ -107,7 +111,9 @@ def create_app(_configuration_name):
     #: and a web application session for short-term client interactions. These will be labels explicitly as
     #: web_session and db.session
     
-    #app.app_context().push()
+    app.jinja_env.globals.update(function_dict)
+
+    #app.app_context().push() #: Suspect. Investigate more.
 
     #
     # --- Available handler for processing in the event of keyboard interrupts (localhost testing)

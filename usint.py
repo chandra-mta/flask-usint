@@ -46,10 +46,9 @@ runtime behavior with minimal reliance on system-level changes.
 """
 import os
 try:
-    #: Normal startup for app configuration selection and creation
+    #: Normal startup for app configuration and creation
     from cus_app import create_app
-    CONFIG_NAME = os.getenv("USINT_CONFIG", "localhost")
-    application = create_app(CONFIG_NAME)
+    application = create_app()
 
 except Exception as e:
     #: Failure in startup, notify Usint Error handlers and raise exception for logging in Gunicorn error log
