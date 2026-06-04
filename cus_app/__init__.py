@@ -7,30 +7,31 @@
 """
 import logging.handlers
 import os
-import sys
-import signal
-import traceback
 from datetime import datetime
 from itertools import zip_longest
-import json
 import logging
-
 from flask import Flask, render_template
-from config import _CONFIG_DICT
 
 #: Import Flask Extensions from sibling module.
-#: Flask Extensions expand functionality for the 
+#: Flask Extensions expand functionality for the application
 from .extensions import db, login, web_session_instance, bootstrap
 
+from .supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
 
-from cus_app.supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
+#: Import Flask Blueprints from the rest of the application
+from .errors import bp as errors_bp #: Error Pages
+from .ocatdatapage import bp as odp_bp #: OCAT data page for submitting revisions
+from .orupdate import bp as oru_bp #: Parameter signoff status pages
+from .express import bp as exp_bp #: Express approval pages
+from .chkupdata import bp as cup_bp #: Read individual revision request data and status page
+from .rm_submission import bp as rmv_bp #: Remove accidental revision submission
+from .scheduler import bp as sch_bp #: TOO POC duty scheduler
 
 #
 # --- SQLAlchemy event handler to turn on Foreign Key Constraints for every engine connection.
 #
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
-
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -115,75 +116,10 @@ def create_app(config_object='baseconfig.BaseConfig'):
 
     #app.app_context().push() #: Suspect. Investigate more.
 
-    #
-    # --- Available handler for processing in the event of keyboard interrupts (localhost testing)
-    #
-    def graceful_shutdown(signal, frame):
-        """
-        Handler to run operations in app context following keyboard interrupts (localhost testing)
-        """
-        with app.app_context():
-            print("Running graceful shutdown")
-            try:
-                pass #: Locate shutdown functions here.
-            except Exception:
-                traceback.print_exc()
-            finally:
-                sys.exit(0)
-    #: Register signal for application
-    signal.signal(signal.SIGINT, graceful_shutdown)
-
-    #
-    # --- connect all apps with blueprint
-    #
-    # --- error handling
-    #
-    from cus_app.errors import bp as errors_bp
-
-    app.register_blueprint(errors_bp)
-    #
-    # --- ocat data page
-    #
-    from cus_app.ocatdatapage import bp as odp_bp
-
-    app.register_blueprint(odp_bp, url_prefix="/ocatdatapage")
-
-    #
-    # --- target parameter status page
-    #
-    from cus_app.orupdate import bp as oru_bp
-
-    app.register_blueprint(oru_bp, url_prefix="/orupdate")
-
-    #
-    # --- express signoff page
-    #
-    from cus_app.express import bp as exp_bp
-
-    app.register_blueprint(exp_bp, url_prefix="/express")
-
-    #
-    # --- chkupdata page
-    #
-    from cus_app.chkupdata import bp as cup_bp
-
-    app.register_blueprint(cup_bp, url_prefix="/chkupdata")
-    #
-    # --- remove accidental submission page
-    #
-    from cus_app.rm_submission import bp as rmv_bp
-
-    app.register_blueprint(rmv_bp, url_prefix="/rm_submission")
-    #
-    # --- poc duty sign up page
-    #
-    from cus_app.scheduler import bp as sch_bp
-
-    app.register_blueprint(sch_bp, url_prefix="/scheduler")
-
-    #
-    # --- Main Usint Page
-    #
+    #: Register all subpages stored in the Flask Blueprints as URL routes
+    register_blueprints(app)
+    
+    #: Register Main Usint Page as URL route
     @app.route("/")
     def index():
         """
@@ -216,3 +152,20 @@ def create_app(config_object='baseconfig.BaseConfig'):
         app.logger.setLevel(logging.INFO)
 
     return app
+
+
+def register_blueprints(app):
+    """
+    Flask Blueprints are a way to containerize Flask application components and endpoints (webpages) into
+    reusable sets of modules. For Flask Usint, we just use them to organize different Usint tasks together,
+    i.e. the Ocat Revision pages in one directory, the paramter status pages in another.
+    https://flask.palletsprojects.com/en/stable/blueprints/
+    """
+    app.register_blueprint(errors_bp) #: Error Pages
+    app.register_blueprint(odp_bp, url_prefix="/ocatdatapage") #: OCAT data page for submitting revisions
+    app.register_blueprint(oru_bp, url_prefix="/orupdate") #: Parameter signoff status pages
+    app.register_blueprint(exp_bp, url_prefix="/express") #: Express approval pages
+    app.register_blueprint(cup_bp, url_prefix="/chkupdata") #: Read individual revision request data and status page
+    app.register_blueprint(rmv_bp, url_prefix="/rm_submission") #: Remove accidental revision submission
+    app.register_blueprint(sch_bp, url_prefix="/scheduler") #: TOO POC duty scheduler
+
