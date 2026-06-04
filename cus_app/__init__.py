@@ -18,7 +18,7 @@ from .extensions import db, login, web_session_instance, bootstrap
 
 from .supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
 
-#: Import Flask Blueprints from the rest of the application
+#: Import Flask Blueprints (sets of webpages) from the rest of the application
 from .errors import bp as errors_bp #: Error Pages
 from .ocatdatapage import bp as odp_bp #: OCAT data page for submitting revisions
 from .orupdate import bp as oru_bp #: Parameter signoff status pages
@@ -27,19 +27,25 @@ from .chkupdata import bp as cup_bp #: Read individual revision request data and
 from .rm_submission import bp as rmv_bp #: Remove accidental revision submission
 from .scheduler import bp as sch_bp #: TOO POC duty scheduler
 
-#
-# --- SQLAlchemy event handler to turn on Foreign Key Constraints for every engine connection.
-#
+
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
-
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
+    """
+    SQLite can use Foreign Key Constraints to make row references between tables very convenient.
+    - https://sqlite.org/foreignkeys.html
+    For backwards compatiblity, SQLite database connections do not start with this setting available.
+    This functions is an event listener for any database connection, turning foreign keys on before 
+    any transaction is performed.
+
+    :NOTE: If needed, this can implement other PRAGMA settings for every database connection.
+    """
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
-
+#: Small Python convenience functions for use in the Jinja Tempaltes
 function_dict = {
     'zip_longest': zip_longest,
     'set': set,
@@ -95,23 +101,9 @@ def create_app(config_object='baseconfig.BaseConfig'):
     app.config.from_pyfile('config.py', silent=True)
 
     #: Bind the imported Flask Extensions to the initialized application.
-    bootstrap.init_app(app)
-    login.init_app(app)
+    bind_flask_extensions(app)
 
-    #: This application stores user session data inside the Usint SQLite database using the flask_session library.
-    #: This means that user input into a revision is temporarily stored inside the flask_session database table as they navigate multiple web pages.
-    #: Once a user is finished with their revision, the application performs the official database transaction,
-    #: such as adding an obsid to the approved list, by writing to the revisions table.
-    #: The corresponding session data column in the flask_session database table is then cleared by the application with clear_session_data() function.
-    #: https://flask-session.readthedocs.io/en/latest/introduction.html#client-side-vs-server-side-sessions
-
-    app.config['SESSION_SQLALCHEMY'] = db #: Must set the SQLAlchemy database for server-side session data after construction
-    db.init_app(app)
-    web_session_instance.init_app(app)
-    #: Note that this application uses both an SQLite database session for writing to the database more permanently,
-    #: and a web application session for short-term client interactions. These will be labels explicitly as
-    #: web_session and db.session
-    
+    #: Define convenient minor functions in Jinja templates for rendering HTML files.
     app.jinja_env.globals.update(function_dict)
 
     #app.app_context().push() #: Suspect. Investigate more.
@@ -153,6 +145,41 @@ def create_app(config_object='baseconfig.BaseConfig'):
 
     return app
 
+def bind_flask_extensions(app):
+    """
+    Flask Extensions are additional libraries which expand the functionality of an application,
+    such as a user login manager and SQLite database connection handler.
+
+    :NOTE: **SESSIONS:** A session is a temporary stateful exchange of information between a user and an application.
+        This application uses TWO distinct sessions.
+
+        - web_session: Part of Flask. This stores user input data and used to render web pages. For example, the OCAT data page
+                    stores a new Z-offset user input value in the web_session so that the confirmation page can read and display.
+                    web_session is client specific, relatively temporary, and only for storing data across multiple web pages.
+
+                    For convenience, we use the flask_session library to write this data to the Usint SQLite database in the flask_sessions table.
+                    While still recording data in the same file, this is not our permanent revision database. This is a server-side session
+                    mathced to a client-side cookie with a session-id to allocate intermediary data.
+                    https://flask-session.readthedocs.io/en/latest/introduction.html#client-side-vs-server-side-sessions
+        
+        - db.session: Part of SQLAlchemy. This stores data to be injected into or fetch from the Usint SQLite database. Revision request data,
+                    signoff statuses, TOO POC schedule, etc. This session exists for basic database mechanics to handle multiple simultaneous transactions
+                    without overwritting other data. While technically a temporary data location, this contains data meant to be more permanent on the shared
+                    Usint Database so that other users can read it.
+    """
+    #: Bootstrap is a front-end templater, which means it provides helper functions
+    #: to the Jinja templates for easily writing and rendering HTML files.
+    bootstrap.init_app(app)
+
+    #: Login provides helper functions to pull information on the logged-in user.
+    #: WE DO NOT USE THIS FOR USER AUTHENTICATION. Login is done by the main web server
+    #: using Apache LDAP and we just fetch the REMOTE_USER variable for the logged in user.
+    login.init_app(app)
+
+    #: To use server-side sessions, we bind the database connection as our web_session data file.
+    app.config['SESSION_SQLALCHEMY'] = db #: Must set after connection construction but before binding extensions to the app.
+    db.init_app(app)
+    web_session_instance.init_app(app)
 
 def register_blueprints(app):
     """
