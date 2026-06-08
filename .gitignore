@@ -4,6 +4,7 @@ outTest/
 _example/
 logs/
 memo
+*pid
 
 #Ignore Pycache Files
 __pycache__/
