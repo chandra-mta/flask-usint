@@ -15,6 +15,22 @@ gunicorn -c <server_config_name>.conf.py usint:application
 The gunicorn server configuration file handles settings to allow the cxc web servers to send requests to the application server.
 Flask application specific settings, such as database connections and email settings, exists as flask config files, and thus within MTA file ownership.
 
+## Logging
+
+Syshelp uses a separate setup for processing logs which relate to their Apache web server operations. For Flask Usint on the Gunicorn sever,
+this differs to provided more direct access to compartmentalized logs for each application installation.
+Starting at the root folder of the application, `/proj/web-cxc/wsgi-scripts/cus` for example, there is an `instance/logs` directory which contains four types of logs
+
+- **gunicorn_access.log:** This contains a log of the HTTP requests made to the server. Here you can see what URL's are requested by which user and other HTTP request header information
+- **gunicorn_error.log:** This contains errors with the gunicorn server, such as worker crashes, certain environemnt failures, and application startup issues. Errors here tend to exist outside of the Flask Usint application code and indicate a problem requiring system administrators.
+
+  The Gunicorn server is configured to run as the `cus` user, so these logs written with `cus` file ownership. However, gunicorn does not natively handle clearing logs.
+  To prevent the log files from simply growing larger, we run a `cus@r2d2-v` cronjob using `logrotate` to rotate these logs.
+  **IMPORTANT:** The gunicorn server access and error logs rotation happens externally to the server process, using a `logrotate_<servername>.conf` file requiring hardcoded paths.
+
+- **flask_error.log:** Errors in the python application specifically. These contain functional tracestack information of any error in the application code.
+- **flask_app.log:** These are informational logs of successful operation of the flask application. For example, when a user submits a revision, it's recorded here.
+
 ## Structure
 
 The top level of this project is the application root, containing the server entrypoint modules, base configuration settings, the instance directory containing file relevant to this application installation's specific runtime, and the cus_app package containing our source code.

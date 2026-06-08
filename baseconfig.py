@@ -57,3 +57,6 @@ class BaseConfig(object):
     # --- Directory Pathing
     #
     OBS_SS = "/data/mta4/obs_ss/"
+
+    #: Logging Parameters
+    
