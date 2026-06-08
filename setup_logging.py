@@ -68,7 +68,7 @@ def server_logging_setup(app_root):
     gunicorn_access = logging.getLogger("gunicorn.access")
     gunicorn_access.handlers.clear()
     access_handler = build_rotating_handler(
-            os.path.join(access_dir, "gunicorn_access.log"),
+            os.path.join(access_dir, "access.log"),
             logging.INFO
         )
     access_handler.set_name('access')
@@ -81,7 +81,7 @@ def server_logging_setup(app_root):
     gunicorn_error = logging.getLogger("gunicorn.error")
     gunicorn_error.handlers.clear()
     error_handler = build_rotating_handler(
-            os.path.join(error_dir, "gunicorn_error.log"),
+            os.path.join(error_dir, "error.log"),
             logging.INFO
         )
     error_handler.set_name('error')
@@ -120,9 +120,10 @@ def application_logging_setup(app):
         operations_logger.setLevel(logging.INFO)
 
         operations_handler = build_rotating_handler(
-            os.path.join(operation_dir, "gunicorn_error.log"),
+            os.path.join(operation_dir, "operations.log"),
             logging.INFO
         )
+        operations_handler.set_name("operation")
         operations_logger.addHandler(operations_handler)
     
     app.op_logger = operations_logger
