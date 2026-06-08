@@ -19,17 +19,11 @@ Flask application specific settings, such as database connections and email sett
 
 Syshelp uses a separate setup for processing logs which relate to their Apache web server operations. For Flask Usint on the Gunicorn sever,
 this differs to provided more direct access to compartmentalized logs for each application installation.
-Starting at the root folder of the application, `/proj/web-cxc/wsgi-scripts/cus` for example, there is an `instance/logs` directory which contains four types of logs
+Starting at the root folder of the application, `/proj/web-cxc/wsgi-scripts/cus` for example, there is an `instance/logs` directory which contains three types of logs
 
-- **gunicorn_access.log:** This contains a log of the HTTP requests made to the server. Here you can see what URL's are requested by which user and other HTTP request header information
-- **gunicorn_error.log:** This contains errors with the gunicorn server, such as worker crashes, certain environemnt failures, and application startup issues. Errors here tend to exist outside of the Flask Usint application code and indicate a problem requiring system administrators.
-
-  The Gunicorn server is configured to run as the `cus` user, so these logs written with `cus` file ownership. However, gunicorn does not natively handle clearing logs.
-  To prevent the log files from simply growing larger, we run a `cus@r2d2-v` cronjob using `logrotate` to rotate these logs.
-  **IMPORTANT:** The gunicorn server access and error logs rotation happens externally to the server process, using a `logrotate_<servername>.conf` file requiring hardcoded paths.
-
-- **flask_error.log:** Errors in the python application specifically. These contain functional tracestack information of any error in the application code.
-- **flask_app.log:** These are informational logs of successful operation of the flask application. For example, when a user submits a revision, it's recorded here.
+- **access:** This contains a log of the HTTP requests made to the server. Here you can see what URL's are requested by which user and other HTTP request header information
+- **error:** This contains runtime errors for both the gunicorn server running the flask application, and runtime errors within the flask application.
+- **operation:** This is a log for noromal operational messages, such as a revision being submitted, or a signoff being performed.
 
 ## Structure
 

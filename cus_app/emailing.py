@@ -76,10 +76,12 @@ def send_email(content, subject, to, sender = None, cc = []):
     send_msg(msg)
 
 def send_error_email(e=None,logline=None):
+    #: TODO. remake error handling such that more logging infromation is properly gathered from disparate sources,
+    #: rather than relying on just one log file for everything.
     if not current_app.debug:
         handler_list = current_app.logger.handlers
         for item in handler_list:
-            if item.name == "Error-Info":
+            if item.name == "error":
                 error_handler = item
                 break
         file_path = error_handler.baseFilename

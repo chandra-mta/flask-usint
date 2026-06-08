@@ -5,12 +5,10 @@
 :Last Updated: Mar 13, 2025
 
 """
-import logging.handlers
-import os
 from datetime import datetime
 from itertools import zip_longest
-import logging
 from flask import Flask, render_template
+from setup_logging import application_logging_setup
 
 #: Import Flask Extensions from sibling module.
 #: Flask Extensions expand functionality for the application
@@ -118,30 +116,9 @@ def create_app(config_object='baseconfig.BaseConfig'):
         Render the Default Usint page
         """
         return render_template("index.html")
-    #
-    # --- Setup file logger for UsintErrorHandler if not using the Werkzeug Browser Debugger
-    #
-    if not app.debug:
-        #
-        # --- keep last 10 error logs
-        #
-        log_dir = app.config.get("LOG_DIR") or os.path.join(app.instance_path, 'logs')
-        if not os.path.exists(log_dir):
-            os.mkdir(log_dir)
-        file_handler = logging.handlers.RotatingFileHandler(
-            os.path.join(log_dir, "ocat.log"),
-            maxBytes=51200,
-            backupCount=10,
-        )
-        file_handler.name = "Error-Info"
-        file_handler.setFormatter(
-            logging.Formatter(
-                "%(asctime)s %(levelname)s: %(message)s " "[in %(pathname)s:%(lineno)d]"
-            )
-        )
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
-        app.logger.setLevel(logging.INFO)
+    
+    #: Setup Application logging handlers
+    application_logging_setup(app)
 
     return app
 
