@@ -11,7 +11,7 @@ Error Handlers
 """
 from flask      import render_template
 from cus_app.errors import bp
-from cus_app import db
+from cus_app.extensions import db
 from cus_app.emailing import send_error_email
 #
 #--- use blueprint error handler to take care the error

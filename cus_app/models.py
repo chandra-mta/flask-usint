@@ -31,9 +31,10 @@ object oriented relational mapping to related table entires.
 
 """
 import os
-from flask import session, request
+from flask import request
+from flask import session as web_session
 from flask_login import UserMixin, login_user
-from cus_app import db, login
+from cus_app.extensions import db, login
 from typing import Optional, List #: Allows for Mapper to determine nullability of the table column.
 from datetime import datetime
 from sqlalchemy import ForeignKey
@@ -329,7 +330,7 @@ def register_user():
     """
     Function to register the application current_user based off of the LDAP Authenticated username
     """
-    session.clear()
+    web_session.clear()
     if os.environ.get("REMOTE_USER") is not None:
         username = os.environ.get("REMOTE_USER") #: Defined in Shell script invoking the flask executable to test application on local host
     else:

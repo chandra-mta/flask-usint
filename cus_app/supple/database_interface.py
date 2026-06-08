@@ -22,7 +22,7 @@ from datetime import datetime, timedelta
 import json
 from sqlalchemy import select, desc, case, text, or_, delete
 from sqlalchemy.orm.exc import NoResultFound
-from cus_app import db
+from cus_app.extensions import db
 import cus_app.emailing as mail
 from cus_app.models import User, Revision, Signoff, Parameter, Request, Original, Schedule
 from flask import flash

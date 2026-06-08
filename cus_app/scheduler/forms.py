@@ -8,7 +8,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, SelectField
 
-from cus_app import db
+from cus_app.extensions import db
 from cus_app.models import User
 from sqlalchemy import select
 from calendar import month_name
