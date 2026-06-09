@@ -35,10 +35,10 @@ import os
 import logging
 #: This logger is very similar to the native RotatingFileHandler class,
 #: but implements multi-process handling, necessary due to multiple server workers.
-from concurrent_log_handler import ConcurrentRotatingFileHandler
+from logging.handlers import RotatingFileHandler
 
 def build_rotating_handler(path, level):
-    handler = ConcurrentRotatingFileHandler(
+    handler = RotatingFileHandler(
         path,
         maxBytes=100 * 1024, # 100KB
         backupCount=4

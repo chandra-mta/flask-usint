@@ -46,7 +46,14 @@ class BaseConfig(object):
     #: With relative database URI's Flask_SQLAlchemy will automatically path the database URI to the instance folder.
     SQLALCHEMY_DATABASE_URI = "sqlite:///test_usint.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ENGINE_OPTIONS = {'echo': sqlalchemy_echo}
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'echo': sqlalchemy_echo,
+        "pool_pre_ping": True,
+        "pool_recycle": 1800,
+        "pool_size": 5,
+        "max_overflow": 10,
+        "pool_timeout": 10
+        }
     #
     # --- Session Settings
     #
