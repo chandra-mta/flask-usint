@@ -11,8 +11,8 @@
     {%- endblock metas %}
 
     {%- block styles %}
-    <!-- Bootstrap -->
-    <link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+        {{ bootstrap.load_css() }}
     {%- endblock styles %}
     {%- endblock head %}
   </head>
@@ -24,8 +24,7 @@
     {%- endblock content %}
 
     {% block scripts %}
-    <script src="{{bootstrap_find_resource('jquery.js', cdn='jquery')}}"></script>
-    <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
+        {{ bootstrap.load_js() }}
     {%- endblock scripts %}
     {%- endblock body %}
   </body>
