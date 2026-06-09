@@ -75,7 +75,8 @@ The top level of this project is the application root, containing the server ent
 
   ### Templates (`templates/`)
 
-  * `base.html` — Base template
+  * `base.html` -  Base template block for general web pages.
+  * `app_base.html` — Base template for application pages (mainly CSS differences)
   * `index.html` — Main index page
   * Additional page-specific templates (see sections below)
 

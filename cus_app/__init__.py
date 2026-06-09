@@ -34,7 +34,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     """
     SQLite can use Foreign Key Constraints to make row references between tables very convenient.
     - https://sqlite.org/foreignkeys.html
-    For backwards compatiblity, SQLite database connections do not start with this setting available.
+    For backwards compatibility, SQLite database connections do not start with this setting available.
     This functions is an event listener for any database connection, turning foreign keys on before 
     any transaction is performed.
 
@@ -44,7 +44,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
-#: Small Python convenience functions for use in the Jinja Tempaltes
+#: Small Python convenience functions for use in the Jinja Templates
 function_dict = {
     'zip_longest': zip_longest,
     'set': set,
@@ -96,7 +96,7 @@ def create_app(config_object='baseconfig.BaseConfig'):
     app = Flask(__name__, instance_relative_config=True)
     #: Import the configuration class listed as an argument from the application root baseconfig.py module.
     app.config.from_object(config_object)
-    #: Read this installation's specific instance folder for configuration overrides. Relative pathing from the instance_realtive_config argument.
+    #: Read this installation's specific instance folder for configuration overrides. Relative pathing from the instance_relative_config argument.
     app.config.from_pyfile('config.py', silent=True)
 
     #: Bind the imported Flask Extensions to the initialized application.
@@ -140,15 +140,15 @@ def bind_flask_extensions(app):
 
                     For convenience, we use the flask_session library to write this data to the Usint SQLite database in the flask_sessions table.
                     While still recording data in the same file, this is not our permanent revision database. This is a server-side session
-                    mathced to a client-side cookie with a session-id to allocate intermediary data.
+                    matched to a client-side cookie with a session-id to allocate intermediary data.
                     https://flask-session.readthedocs.io/en/latest/introduction.html#client-side-vs-server-side-sessions
         
         - db.session: Part of SQLAlchemy. This stores data to be injected into or fetch from the Usint SQLite database. Revision request data,
                     signoff statuses, TOO POC schedule, etc. This session exists for basic database mechanics to handle multiple simultaneous transactions
-                    without overwritting other data. While technically a temporary data location, this contains data meant to be more permanent on the shared
+                    without overwriting other data. While technically a temporary data location, this contains data meant to be more permanent on the shared
                     Usint Database so that other users can read it.
     """
-    #: Bootstrap is a front-end templater, which means it provides helper functions
+    #: Bootstrap is a front-end template, which means it provides helper functions
     #: to the Jinja templates for easily writing and rendering HTML files.
     bootstrap.init_app(app)
 
@@ -166,7 +166,7 @@ def register_blueprints(app):
     """
     Flask Blueprints are a way to containerize Flask application components and endpoints (webpages) into
     reusable sets of modules. For Flask Usint, we just use them to organize different Usint tasks together,
-    i.e. the Ocat Revision pages in one directory, the paramter status pages in another.
+    i.e. the Ocat Revision pages in one directory, the parameter status pages in another.
     https://flask.palletsprojects.com/en/stable/blueprints/
     """
     app.register_blueprint(errors_bp) #: Error Pages
