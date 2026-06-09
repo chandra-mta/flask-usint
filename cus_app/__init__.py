@@ -8,6 +8,7 @@
 from datetime import datetime
 from itertools import zip_longest
 from flask import Flask, render_template
+from werkzeug.middleware.proxy_fix import ProxyFix
 from setup_logging import application_logging_setup
 
 #: Import Flask Extensions from sibling module.
@@ -123,6 +124,19 @@ def create_app(config_object='baseconfig.BaseConfig'):
     
     #: Setup Application logging handlers
     application_logging_setup(app)
+
+    #: Apply the middleware, trusting headers from the specified number of proxies
+    #: This proxy handling is configured to allow specifically the proxy between the CXC Web servers
+    #: and the Flask Usint Gunicorn server. Proxies external to this hop are handled by Apache modules directly.
+    #: Meaning that this has no influence over the proxy between external CloudFlare servers and CXC Web servers.
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, 
+        x_for=1,      #: Number of proxies setting X-Forwarded-For
+        x_proto=1,    #: Number of proxies setting X-Forwarded-Proto
+        x_host=1,     #: Number of proxies setting X-Forwarded-Host
+        x_prefix=1    #: Number of proxies setting X-Forwarded-Prefix
+    )
+
 
     return app
 
