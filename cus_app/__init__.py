@@ -13,6 +13,7 @@ from setup_logging import application_logging_setup
 #: Import Flask Extensions from sibling module.
 #: Flask Extensions expand functionality for the application
 from .extensions import db, login, web_session_instance, bootstrap
+from .auth import init_login
 
 from .supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
 
@@ -103,6 +104,9 @@ def create_app(config_object='baseconfig.BaseConfig'):
 
     #: Define convenient minor functions in Jinja templates for rendering HTML files.
     app.jinja_env.globals.update(function_dict)
+
+    #: Register the login handler functions.
+    init_login()
 
     #app.app_context().push() #: Suspect. Investigate more.
 

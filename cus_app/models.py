@@ -30,11 +30,8 @@ object oriented relational mapping to related table entires.
         - https://flask.palletsprojects.com/en/stable/api/#flask.session
 
 """
-import os
-from flask import request
-from flask import session as web_session
-from flask_login import UserMixin, login_user
-from cus_app.extensions import db, login
+from flask_login import UserMixin
+from .extensions import db
 from typing import Optional, List #: Allows for Mapper to determine nullability of the table column.
 from datetime import datetime
 from sqlalchemy import ForeignKey
@@ -325,23 +322,3 @@ class Schedule(db.Model):
     
     def __repr__(self) -> str:
         return f"Schedule(order_id={self.order_id!r}, user_id={self.user_id!r}, start={self.start!r}, stop={self.stop!r})"
-
-def register_user():
-    """
-    Function to register the application current_user based off of the LDAP Authenticated username
-    """
-    web_session.clear()
-    if os.environ.get("REMOTE_USER") is not None:
-        username = os.environ.get("REMOTE_USER") #: Defined in Shell script invoking the flask executable to test application on local host
-    else:
-        username = request.environ.get("REMOTE_USER") #: Defined by Apache Web Server Context with LDAP authentication
-    
-    user = db.session.execute(db.select(User).where(User.username == username)).scalar()
-    login_user(user)
-
-@login.user_loader
-def load_user(id):
-    """
-    Flask-Login decorator for pairing a logged-in user to the Usint database.
-    """
-    return db.session.get(User,int(id))
