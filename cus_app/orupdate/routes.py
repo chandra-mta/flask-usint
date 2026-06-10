@@ -16,22 +16,16 @@ from flask import render_template, request, redirect, url_for, flash
 from flask import session as web_session
 from flask_login import current_user
 
-from cus_app.models import register_user
-from cus_app.orupdate import bp
-from cus_app.orupdate.forms import SignoffRow, OrderForm
-from cus_app.supple.helper_functions import is_open
-import cus_app.supple.database_interface as dbi
+from . import bp
+from .forms import SignoffRow, OrderForm
+from ..supple.helper_functions import is_open
+from ..supple import database_interface as dbi
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
 with open(os.path.join(stat_dir, 'color.json')) as f:
     _COLORS = json.load(f)
 
 _36_HOURS_AGO = (datetime.now() - timedelta(days=1.5)).timestamp()
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 @bp.route('/',      methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])

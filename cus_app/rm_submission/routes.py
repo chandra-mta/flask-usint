@@ -12,18 +12,12 @@ from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for
 from flask_login import current_user
 
-from cus_app.models import register_user
-from cus_app.rm_submission import bp
-from cus_app.rm_submission.forms import RemoveRow
-from cus_app.supple.helper_functions import _SIGNOFF_COLUMNS
-import cus_app.supple.database_interface as dbi
+from . import bp
+from .forms import RemoveRow
+from ..supple.helper_functions import _SIGNOFF_COLUMNS
+from ..supple import database_interface as dbi
 
 _36_HOURS_AGO = (datetime.now() - timedelta(days=1.5)).timestamp()
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 @bp.route('/',      methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])

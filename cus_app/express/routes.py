@@ -8,27 +8,16 @@ Express Approval Page
 :Last Updated: May 12, 2025
 
 """
-import os
-import json
-from datetime import datetime, timedelta
-
-from flask import current_app, render_template, request, flash, redirect, url_for, abort
+from flask import render_template, request, flash, redirect, url_for
 from flask import session as web_session
-from flask_login    import current_user
 from sqlalchemy.orm.exc import NoResultFound
 
-from cus_app.extensions import db
-from cus_app.models import register_user
-from cus_app.express import bp
-from cus_app.express.forms import ExpressApprovalForm, ConfirmForm
-from cus_app.supple.read_ocat_data import read_basic_ocat_data
-import cus_app.supple.database_interface as dbi
-from cus_app.supple.helper_functions import create_obsid_list
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
+from ..extensions import db
+from . import bp
+from .forms import ExpressApprovalForm, ConfirmForm
+from ..supple.read_ocat_data import read_basic_ocat_data
+from ..supple import database_interface as dbi
+from ..supple.helper_functions import create_obsid_list
 
 @bp.route('/',      methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])

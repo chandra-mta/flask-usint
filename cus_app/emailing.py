@@ -8,11 +8,11 @@
 
 import json
 import os
-from datetime import datetime
-from flask          import current_app, flash, url_for
+from flask          import current_app, url_for
 from flask_login    import current_user
-from email.message import EmailMessage
-from subprocess import Popen, PIPE
+from flask_mail import Message
+from .extensions import mail
+
 from cus_app.supple.database_interface import pull_revision
 
 CUS  = 'cus@cfa.harvard.edu'
@@ -25,25 +25,33 @@ stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 with open(os.path.join(stat_dir, 'labels.json')) as f:
     _LABELS = json.load(f)
 
-def construct_msg(content, subject, to, sender = None, cc = None):
-    """
-    Construct Email Instance
-    """
-    msg = EmailMessage()
-    msg.set_content(content)
-    msg['Subject'] = subject
-    msg['To'] = to
-    if sender is not None:
-        msg['From'] = sender
+def _split_addresses(field):
+    if not field:
+        return []
+    if isinstance(field, (list, tuple)):
+        return list(field)
+    return [addr.strip() for addr in field.split(",")]
+
+def construct_msg(content, subject, to, sender=None, cc=None):
+    if sender is None:
+        sender = current_app.config.get("MAIL_DEFAULT_SENDER")
+
     if cc is not None:
-        if isinstance(cc,list):
-            msg['CC'] = [CUS] + cc
-        elif isinstance(cc, set):
-            msg['CC'] = [CUS] + list(cc)
+        if isinstance(cc, (list, set)):
+            _cc = [CUS] + list(cc)
         else:
-            msg['CC'] = [CUS] + [cc]
+            _cc = [CUS, cc]
     else:
-        msg['CC'] = CUS
+        _cc = [CUS]
+
+    msg = Message(
+        subject=subject,
+        recipients=to,
+        cc=_cc,
+        body=content,
+        sender=sender
+    )
+    
     return msg
 
 def send_msg(msg):
@@ -55,15 +63,10 @@ def send_msg(msg):
             send_msg(entry)
     else:
         #: Print message instead of sending it if configured to test notifications
-        if current_app.config['TEST_NOTIFICATIONS']:
+        if current_app.config['MAIL_SUPPRESS_SEND']:
             print(msg.as_string())
         else:
-            p = Popen(["/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
-            (out, error) = p.communicate(msg.as_bytes())
-            if error is not None:
-                current_app.logger.error(error)
-                flash("Error sending notification email. Check Inbox.")
-                send_error_email()
+            mail.send(msg)
 
 def send_email(content, subject, to, sender = None, cc = []):
     """
@@ -72,40 +75,9 @@ def send_email(content, subject, to, sender = None, cc = []):
     :NOTE: This functionality is split only to allow cases in which we'd like to prepare sending emails in bulk before actually sending them.
     In typical usage, the send_email() function will be used across the board.
     """
-    msg = construct_msg(content, subject, to, sender = None, cc = [])
+    msg = construct_msg(content, subject, to, sender = sender, cc = [])
     send_msg(msg)
 
-def send_error_email(e=None,logline=None):
-    #: TODO. remake error handling such that more logging infromation is properly gathered from disparate sources,
-    #: rather than relying on just one log file for everything.
-    if not current_app.debug:
-        handler_list = current_app.logger.handlers
-        for item in handler_list:
-            if item.name == "error":
-                error_handler = item
-                break
-        file_path = error_handler.baseFilename
-        #Once the log path is found, must search the file to send email contents
-        with open(file_path,'r') as f:
-            content = f.read()
-        content = f"User: {current_user}\n\nocat.log:\n{content}"
-        msg = EmailMessage()
-        msg.set_content(content)
-        msg['Subject'] = f"Usint Error-[{datetime.now().strftime('%c')}]"
-        msg['To'] = current_app.config['ADMINS']
-        msg['From'] = "UsintErrorHandler"
-        p = Popen(["/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
-        (out, error) = p.communicate(msg.as_bytes())
-        
-    else:
-        if e is not None:
-            #
-            #--- File logger has not been initialized for the UsintErrorHandler as we are using the Werkzeug Browser Debugger instead.
-            #--- If error passed, then raise in the Werkzeug Browser Debugger.
-            #
-            raise e
-        if logline is not None:
-            print(logline)
 #
 # --- Special case email formatting functions
 #

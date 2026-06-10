@@ -19,7 +19,7 @@ See cus_app/configurations/memo.md for more details.
 import os
 from datetime import timedelta
 
-sqlalchemy_echo = os.getenv('SQLALCHEMY_ECHO') == 'true'
+sqlalchemy_echo = bool(os.getenv('SQLALCHEMY_ECHO'))
 
 class BaseConfig(object):
     """
@@ -29,7 +29,7 @@ class BaseConfig(object):
     #CONFIGURATION_NAME = "baseconfig"
 
     # find way to depend on flask app context variables instead.
-    #HTTP_ADDRESS = "http://127.0.0.1:5000"
+    HTTP_ADDRESS = "http://127.0.0.1:8888"
 
     # store config external to usint app so that startup will also have error handling.
     #ADMINS = ["william.aaron@cfa.harvard.edu"]
@@ -65,5 +65,15 @@ class BaseConfig(object):
     #
     OBS_SS = "/data/mta4/obs_ss/"
 
-    #: Logging Parameters
+    #: Flask Mail Parameters
+    MAIL_DEFAULT_SENDER = "cus@cfa.harvard.edu"
+    #: HEAD system hosts all run locally trusted mail-transfer-agents
+    MAIL_SERVER = "localhost"
+    MAIL_PORT = 25
+    #: Unsecured protocol usage since security implemented by HEAD system host MTA's
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = None
+    MAIL_PASSWORD = None
+    MAIL_SUPPRESS_SEND = True
     

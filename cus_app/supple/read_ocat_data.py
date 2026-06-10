@@ -25,7 +25,7 @@ from astropy.table import vstack
 import os
 import numpy as np
 from datetime import datetime
-from cus_app.supple.helper_functions import convert_astropy_to_native, coerce_none, OCAT_DATETIME_FORMAT, STORAGE_FORMAT
+from .helper_functions import convert_astropy_to_native, coerce_none, OCAT_DATETIME_FORMAT, STORAGE_FORMAT
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from flask import current_app
 #
