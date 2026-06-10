@@ -12,25 +12,20 @@ import os
 import json
 from datetime import datetime, timedelta
 
-from flask import render_template, request, session, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash
+from flask import session as web_session
 from flask_login import current_user
 
-from cus_app.models import register_user
-from cus_app.orupdate import bp
-from cus_app.orupdate.forms import SignoffRow, OrderForm
-from cus_app.supple.helper_functions import is_open
-import cus_app.supple.database_interface as dbi
+from . import bp
+from .forms import SignoffRow, OrderForm
+from ..supple.helper_functions import is_open
+from ..supple import database_interface as dbi
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
 with open(os.path.join(stat_dir, 'color.json')) as f:
     _COLORS = json.load(f)
 
 _36_HOURS_AGO = (datetime.now() - timedelta(days=1.5)).timestamp()
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 @bp.route('/',      methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
@@ -46,7 +41,7 @@ def index():
                 signoff_id, signoff_kind = k.split('-')
                 return redirect(url_for('orupdate.perform_signoff', id = signoff_id, kind = signoff_kind))
 
-    status_page_order_kwarg = session.get('status_page_order_kwarg', {}) #: Pull revision orders by descending submission by default
+    status_page_order_kwarg = web_session.get('status_page_order_kwarg', {}) #: Pull revision orders by descending submission by default
 
     #: TODO Suggested future development to convert table sorting to a jQuery data table approach to avoid unnecessary queries.
     order_form = OrderForm(request.form, data={'username': current_user.username}) #: default input username is current user
@@ -63,7 +58,7 @@ def index():
         else:
             flash("Unknown username. Please verify spelling.")
 
-    session['status_page_order_kwarg'] = status_page_order_kwarg
+    web_session['status_page_order_kwarg'] = status_page_order_kwarg
     result = dbi.pull_status(**status_page_order_kwarg)
 
     open_revision_signoff = []

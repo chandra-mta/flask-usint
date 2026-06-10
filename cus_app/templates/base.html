@@ -1,113 +1,33 @@
-{% extends 'bootstrap/base.html' %}
-{% import 'bootstrap/wtf.html' as wtf %}
+{% block doc -%}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
 
+    {%- block metas %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- endblock metas %}
 
-{% block title %}
-    {% if title %}{{ title }}{% else %}{{ 'USINT Ocat Home Page' }}{% endif %}
-{% endblock %}
+    {%- block styles %}
+    <!-- Bootstrap CSS -->
+        {{ bootstrap.load_css() }}
+    {%- endblock styles %}
+    {%- endblock head %}
+  </head>
+  <body{% block body_attribs %}{% endblock body_attribs %}>
+    {% block body -%}
+    {% block navbar %}
+    {%- endblock navbar %}
+    {% block content -%}
+    {%- endblock content %}
 
-<!-- -->
-<!-- ocat page style sheet -->
-<!-- -->
-
-{% block styles %}
-    {{ super() }}
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='ocat_style.css') }}">
-{% endblock %}
-
-{% block content %}
-
-<!-- -->
-<!-- a title bar at the top of the page -->
-<!-- -->
-
-    <div style='padding-top: 15px;padding-bottom:40px;'>
-    <table border=0 style='background-color: rgb(3, 252, 48, 0.4);width:95%;
-                           margin-left:auto; margin-right:auto;text-align:center;'>
-        <tr style='width:100; line-height:250%;'>
-        <th style='font-size:200%;'>
-            {% block main_title %}
-                {% if main_title %}{{ main_title }}{% else %}{{ 'USINT Ocat Home Page' }}{% endif %}
-            {% endblock %}
-
-        </th>
-        <td style='text-align:right;'><b>User: {{ current_user.username }} Group: {{ current_user.groups }}</b></td>
-        </tr>
-    </table>
-    </div>
-
-<!-- -->
-<!-- content of each app will be inserted here -->
-<!-- -->
-
-    <div class="container">
-        {% block app_content %}
-        {% endblock %}
-    </div>
-
-<!-- -->
-<!-- closing display -->
-<!-- -->
-
-    <hr style='height: 1px; background:black;opacity:0.5'>
-    <p style='float:right;text-align:right;padding-right:30px;'>
-        {% if config['TEST_DATABASE']%}
-            <b><em>Last Modified: May 29, 2025 (Test Database Version)</em></b>
-        {% else %}
-            <b><em>Last Modified: May 29, 2025</em></b>
-        {% endif %}
-    </p>
-
-    <p style='padding-left:20px;'>
-        If you have any questions about this page, please contact: 
-        Admin: <a href='mailto: bwargelin@cfa.harvard.edu'>bwargelin@cfa.harvard.edu.</a>
-        Tech: <a href='mailto: william.aaron@cfa.harvard.edu'>william.aaron@cfa.harvard.edu.</a>
-    </p>
-
-{% endblock %}
-
-<!-- ###################################################### -->
-
-<!-- -->
-<!-- java scripts are kept here -->
-<!-- -->
-
-{% block scripts %}
-    {{ super() }}
-    <script>
-        function WindowOpener(h_file, name='popup', x=0, y=0) {
-            //
-            //--- if name is given other than 'popup', the popup window will use
-            //--- the same targeted  named popup window. otherwise, this script
-            //--- will open a new popup page every time
-            //
-            //--- first, set a window size accroding to the user's screen size
-            //
-            if(x == 0){
-                y = screen.height * 0.9;
-                x = y * 0.8;
-            }
-            //
-            //--- if the name is the default 'popup', set name of each popup window 
-            //--- differently so that multiple windows can be opened 
-            //
-            if(name == 'popup'){
-                var date = new Date();
-                var mSec = date.getTime();
-                name     = 'popup' + mSec;
-            }
-
-            var w = window.open(h_file, name, "width=500, height=500, scrollbars=yes, resizable=yes");
-            w.resizeTo(x, y);
-        }
-        function openTab(html, name){
-            window.open(html,name,'',true);
-        }
-        function ImageOpener(img) {
-            var w = window.open(img, 'sky map', "width=700, height=700, scrollbars=no, resizable=no");
-            w.resizeTo(700, 700);
-        }
-
-    </script>
-
-{% endblock %}
+    {% block scripts %}
+        {{ bootstrap.load_js() }}
+    {%- endblock scripts %}
+    {%- endblock body %}
+  </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}

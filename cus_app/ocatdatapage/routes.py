@@ -24,18 +24,18 @@ import os
 import json
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
-from flask import current_app, render_template, request, flash, session, redirect, url_for
+from flask import current_app, render_template, request, flash, redirect, url_for
+from flask import session as web_session
 from flask_login    import current_user
 
-from cus_app import db
-import cus_app.emailing as mail
-from cus_app.models import register_user
-from cus_app.ocatdatapage import bp
-from cus_app.ocatdatapage.forms import ConfirmForm, OcatParamForm
-import cus_app.supple.read_ocat_data as rod
-import cus_app.supple.database_interface as dbi
-import cus_app.ocatdatapage.format_ocat_data as fod
-from cus_app.supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list
+from ..extensions import db
+from .. import emailing as mail
+from . import bp
+from .forms import ConfirmForm, OcatParamForm
+from ..supple import read_ocat_data as rod
+from ..supple import database_interface as dbi
+from . import format_ocat_data as fod
+from ..supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list
 
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
@@ -43,11 +43,6 @@ with open(os.path.join(stat_dir, 'labels.json')) as f:
     _LABELS = json.load(f)
 with open(os.path.join(stat_dir, 'parameter_selections.json')) as f:
     _PARAM_SELECTIONS = json.load(f)
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 
 @bp.route("/", methods=["GET", "POST"])
@@ -82,7 +77,7 @@ def index(obsid=None):
             else:
                 #: Form submitted, send form data to session and go to confirmation page
                 ocat_form_dict = fod.format_POST(form.data)
-                session[f'ocat_form_dict_{obsid}'] = ocat_form_dict
+                web_session[f'ocat_form_dict_{obsid}'] = ocat_form_dict
                 return redirect(url_for('ocatdatapage.confirm', obsid=obsid))
         elif form.refresh.data:
             clear_session_data(obsid)
@@ -185,8 +180,8 @@ def confirm(obsid=None):
             #: SQLAlchemy prepared all database transactions successfully. Now to prepare notifications.
             msgs = determine_msgs(ocat_data, main_rev, multi_rev, multi_ocat_data)
             mail.send_msg(msgs)
-            session[f'kind_{obsid}'] = kind
-            session[f'multi_dict_{obsid}'] = multi_dict
+            web_session[f'kind_{obsid}'] = kind
+            web_session[f'multi_dict_{obsid}'] = multi_dict
             return redirect(url_for('ocatdatapage.finalize', obsid=obsid))
     return render_template('ocatdatapage/confirm.html',
                            able_to_finalize = able_to_finalize,
@@ -209,8 +204,8 @@ def finalize(obsid=None):
     If successfully redirected, then the confirmation page's database transactions were successful.
     Therefore, we can clear the Flask-Session server side cookie data for this obsid.
     """
-    multi_dict = session.get(f'multi_dict_{obsid}')
-    kind = session.get(f"kind_{obsid}")
+    multi_dict = web_session.get(f'multi_dict_{obsid}')
+    kind = web_session.get(f"kind_{obsid}")
     clear_session_data(obsid)
     return render_template('ocatdatapage/finalize.html',
                            obsid = obsid,
@@ -229,34 +224,34 @@ def clear_session_data(obsid):
     """
     Clear intermediary variables for an observation revision from the server cookie
     """
-    session.pop(f'ocat_data_{obsid}',None)
-    session.pop(f'warning_{obsid}',None)
-    session.pop(f'orient_maps_{obsid}',None)
-    session.pop(f"flag_override_{obsid}",None)
-    session.pop(f'ocat_form_dict_{obsid}',None)
-    session.pop(f'multi_dict_{obsid}',None)
-    session.pop(f"kind_{obsid}", None)
+    web_session.pop(f'ocat_data_{obsid}',None)
+    web_session.pop(f'warning_{obsid}',None)
+    web_session.pop(f'orient_maps_{obsid}',None)
+    web_session.pop(f"flag_override_{obsid}",None)
+    web_session.pop(f'ocat_form_dict_{obsid}',None)
+    web_session.pop(f'multi_dict_{obsid}',None)
+    web_session.pop(f"kind_{obsid}", None)
 
 def fetch_session_data(obsid):
     """
     Possible to get confused midway through a rendering of a form object or storing obsid data
     when working with multiple obsids in a session. This will format them to a specific set related to the input obsid
     """
-    ocat_data = session.get(f'ocat_data_{obsid}')
-    warning = session.get(f'warning_{obsid}')
-    orient_maps = session.get(f'orient_maps_{obsid}')
-    flag_override = session.get(f"flag_override_{obsid}")
+    ocat_data = web_session.get(f'ocat_data_{obsid}')
+    warning = web_session.get(f'warning_{obsid}')
+    orient_maps = web_session.get(f'orient_maps_{obsid}')
+    flag_override = web_session.get(f"flag_override_{obsid}")
     if ocat_data is None:
         #: First Fetch
         ocat_data = rod.read_ocat_data(obsid)
         #: Generate form specific copies of ocat data. Added to ocat data to later change comparison.
         form_additions = fod.generate_additional(ocat_data)
         ocat_data.update(form_additions)
-        session[f'ocat_data_{obsid}'] = ocat_data
+        web_session[f'ocat_data_{obsid}'] = ocat_data
         warning = fod.create_warning_line(ocat_data)
-        session[f'warning_{obsid}'] = warning
+        web_session[f'warning_{obsid}'] = warning
         orient_maps = fod.create_orient_maps(ocat_data)
-        session[f'orient_maps_{obsid}'] = orient_maps
+        web_session[f'orient_maps_{obsid}'] = orient_maps
         #
         # --- Create minor overrides for the form display of certain flags
         #
@@ -266,12 +261,12 @@ def fetch_session_data(obsid):
                 flag_override[flag] = 'Y'
             elif ocat_data.get(flag) is None:
                 flag_override[flag] = 'N'
-        session[f'flag_override_{obsid}'] = flag_override
+        web_session[f'flag_override_{obsid}'] = flag_override
     #
     # --- With the session data related to this specific obsid, we then process whether to 
     # --- generate a new form from the default data or from a previously passed form we are editing again.
     #
-    ocat_form_dict = session.get(f'ocat_form_dict_{obsid}', (ocat_data | flag_override))
+    ocat_form_dict = web_session.get(f'ocat_form_dict_{obsid}', (ocat_data | flag_override))
 
     return ocat_data, warning, orient_maps, ocat_form_dict
 

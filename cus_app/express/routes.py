@@ -8,26 +8,16 @@ Express Approval Page
 :Last Updated: May 12, 2025
 
 """
-import os
-import json
-from datetime import datetime, timedelta
-
-from flask import current_app, render_template, request, flash, session, redirect, url_for, abort
-from flask_login    import current_user
+from flask import render_template, request, flash, redirect, url_for
+from flask import session as web_session
 from sqlalchemy.orm.exc import NoResultFound
 
-from cus_app import db
-from cus_app.models import register_user
-from cus_app.express import bp
-from cus_app.express.forms import ExpressApprovalForm, ConfirmForm
-from cus_app.supple.read_ocat_data import read_basic_ocat_data
-import cus_app.supple.database_interface as dbi
-from cus_app.supple.helper_functions import create_obsid_list
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
+from ..extensions import db
+from . import bp
+from .forms import ExpressApprovalForm, ConfirmForm
+from ..supple.read_ocat_data import read_basic_ocat_data
+from ..supple import database_interface as dbi
+from ..supple.helper_functions import create_obsid_list
 
 @bp.route('/',      methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
@@ -41,7 +31,7 @@ def index():
         try:
             obsid_list = create_obsid_list(express_form.multiobsid.data)
             if obsid_list != []:
-                session['express_approval'] = obsid_list
+                web_session['express_approval'] = obsid_list
                 return redirect(url_for('express.confirm'))
         except (ValueError, TypeError):
             flash("Error in parsing form input. Please verify formatting.")
@@ -61,7 +51,7 @@ def confirm():
         elif confirm_form.finalize.data:
             return redirect(url_for('express.finalize'))
     else:
-        obsid_list = session.pop('express_approval', [])
+        obsid_list = web_session.pop('express_approval', [])
         to_approve = {}
         unapprovable = {}
         for obsid in obsid_list:
@@ -75,7 +65,7 @@ def confirm():
                     to_approve[obsid] = ocat_data
             except NoResultFound:
                 unapprovable[obsid] ={'not_in_ocat': True}
-        session['to_approve'] = to_approve
+        web_session['to_approve'] = to_approve
         return render_template('express/confirm.html',
                             to_approve = to_approve,
                             unapprovable = unapprovable,
@@ -87,7 +77,7 @@ def finalize():
     """
     Perform the approvals and display the completion page.
     """
-    to_approve = session.pop('to_approve', {})
+    to_approve = web_session.pop('to_approve', {})
     try:
         for obsid, ocat_data in to_approve.items():
             revision = dbi.construct_revision(obsid,ocat_data,'asis')

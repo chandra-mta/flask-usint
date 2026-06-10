@@ -11,14 +11,12 @@ Parameter Check Page
 import os
 import json
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import current_user
 
-from cus_app.models import register_user
-from cus_app.chkupdata import bp
-from cus_app.chkupdata.forms import ObsidRevForm
-import cus_app.supple.database_interface as dbi
-import cus_app.supple.read_ocat_data as rod
-from cus_app.supple.helper_functions import reorient_rank , rank_ordr, coerce, OCAT_DATETIME_FORMAT
+from . import bp
+from .forms import ObsidRevForm
+from ..supple import database_interface as dbi
+from ..supple import read_ocat_data as rod
+from ..supple.helper_functions import reorient_rank , rank_ordr, coerce, OCAT_DATETIME_FORMAT
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
 with open(os.path.join(stat_dir, 'labels.json')) as f:
@@ -31,11 +29,6 @@ _FLAG_RANK_COLUMN_ORDR = (
     ('roll_flag', 'roll_ranks', 'roll_columns', 'roll_ordr'),
     ('spwindow_flag', 'window_ranks', 'window_columns', 'window_ordr')
 )
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 @bp.route('/<obsidrev>', methods=['GET'])
 @bp.route('/index/<obsidrev>', methods=['GET'])
