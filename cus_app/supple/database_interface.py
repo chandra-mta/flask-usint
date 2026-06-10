@@ -22,13 +22,13 @@ from datetime import datetime, timedelta
 import json
 from sqlalchemy import select, desc, case, text, or_, delete
 from sqlalchemy.orm.exc import NoResultFound
-from cus_app.extensions import db
-import cus_app.emailing as mail
-from cus_app.models import User, Revision, Signoff, Parameter, Request, Original, Schedule
+from ..extensions import db
+from .. import emailing as mail
+from ..models import User, Revision, Signoff, Parameter, Request, Original, Schedule
 from flask import flash
 from flask_login import current_user
-from cus_app.supple.helper_functions import coerce_to_json, DATETIME_FORMATS, is_open, get_next_weekday, coerce
-from cus_app.supple.read_ocat_data import read_basic_ocat_data
+from .helper_functions import coerce_to_json, DATETIME_FORMATS, is_open, get_next_weekday, coerce
+from .read_ocat_data import read_basic_ocat_data
 from calendar import MONDAY, SUNDAY
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')

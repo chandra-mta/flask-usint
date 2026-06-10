@@ -28,15 +28,14 @@ from flask import current_app, render_template, request, flash, redirect, url_fo
 from flask import session as web_session
 from flask_login    import current_user
 
-from cus_app.extensions import db
-import cus_app.emailing as mail
-from cus_app.models import register_user
-from cus_app.ocatdatapage import bp
-from cus_app.ocatdatapage.forms import ConfirmForm, OcatParamForm
-import cus_app.supple.read_ocat_data as rod
-import cus_app.supple.database_interface as dbi
-import cus_app.ocatdatapage.format_ocat_data as fod
-from cus_app.supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list
+from ..extensions import db
+from .. import emailing as mail
+from . import bp
+from .forms import ConfirmForm, OcatParamForm
+from ..supple import read_ocat_data as rod
+from ..supple import database_interface as dbi
+from . import format_ocat_data as fod
+from ..supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list
 
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
@@ -44,11 +43,6 @@ with open(os.path.join(stat_dir, 'labels.json')) as f:
     _LABELS = json.load(f)
 with open(os.path.join(stat_dir, 'parameter_selections.json')) as f:
     _PARAM_SELECTIONS = json.load(f)
-
-@bp.before_app_request
-def before_request():
-    if not current_user.is_authenticated:
-        register_user()
 
 
 @bp.route("/", methods=["GET", "POST"])

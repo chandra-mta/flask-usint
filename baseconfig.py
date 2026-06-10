@@ -19,7 +19,7 @@ See cus_app/configurations/memo.md for more details.
 import os
 from datetime import timedelta
 
-sqlalchemy_echo = os.getenv('SQLALCHEMY_ECHO') == 'true'
+sqlalchemy_echo = bool(os.getenv('SQLALCHEMY_ECHO'))
 
 class BaseConfig(object):
     """
@@ -29,7 +29,7 @@ class BaseConfig(object):
     #CONFIGURATION_NAME = "baseconfig"
 
     # find way to depend on flask app context variables instead.
-    #HTTP_ADDRESS = "http://127.0.0.1:5000"
+    HTTP_ADDRESS = "http://127.0.0.1:8888"
 
     # store config external to usint app so that startup will also have error handling.
     #ADMINS = ["william.aaron@cfa.harvard.edu"]
