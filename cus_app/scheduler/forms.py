@@ -8,8 +8,8 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, SelectField
 
-from cus_app.extensions import db
-from cus_app.models import User
+from ..extensions import db
+from ..models import User
 from sqlalchemy import select
 from calendar import month_name
 from datetime import datetime
@@ -17,8 +17,6 @@ from datetime import datetime
 #
 # --- Define globals for form
 #
-_TOO_USERS = db.session.execute(select(User).where(User.groups.like('%too%'))).scalars().all()
-_USER_CHOICE = [(None, 'TBD')] + [(user.id, user.full_name) for user in _TOO_USERS]
 #: Iterated over to match
 _MONTH_CHOICE = [(name, name) for name in list(month_name[1:])]
 _DAY_CHOICE = [(f"{i:>02}", f"{i:>02}") for i in range(1,32)]
@@ -33,15 +31,35 @@ class ScheduleRow(FlaskForm):
     :Note: No field is rendered in the schedule page if the time period has already passed.
     """
     #: Rendered if a user is not assigned for a time period entry
-    user = SelectField("Contact", choices=_USER_CHOICE)
+    user = SelectField("Contact", choices=[], coerce=int)
+
     start_month = SelectField("Month", choices=_MONTH_CHOICE)
     start_day = SelectField("Date", choices=_DAY_CHOICE)
     start_year = SelectField("Year", choices=_YEAR_CHOICE)
+
     stop_month = SelectField("Month", choices=_MONTH_CHOICE)
     stop_day = SelectField("Date", choices=_DAY_CHOICE)
     stop_year = SelectField("Year", choices=_YEAR_CHOICE)
+
     update = SubmitField("Update")
     split = SubmitField("Split")
     delete = SubmitField("Delete")
     #: Rendered if a user is assigned to the time period entry
     unlock = SubmitField("Unlock")
+
+    def __init__(self, *args, **kwargs):
+        """
+        The choices for users in the form must be assigned during form instantiation time,
+        because we need to search the database to find TOO personnel, and this search can only occur once the
+        application is instantiated and database connection is established.
+        """
+        super().__init__(*args, **kwargs)
+
+        too_users = db.session.execute(
+            select(User).where(User.groups.like('%too%'))
+        ).scalars().all()
+
+        self.user.choices = (
+            [(0, 'TBD')] +
+            [(user.id, user.full_name) for user in too_users]
+        )

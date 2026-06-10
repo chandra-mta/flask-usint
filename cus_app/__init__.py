@@ -24,8 +24,8 @@ from .ocatdatapage import bp as odp_bp #: OCAT data page for submitting revision
 from .orupdate import bp as oru_bp #: Parameter signoff status pages
 from .express import bp as exp_bp #: Express approval pages
 from .chkupdata import bp as cup_bp #: Read individual revision request data and status page
-#from .rm_submission import bp as rmv_bp #: Remove accidental revision submission
-#from .scheduler import bp as sch_bp #: TOO POC duty scheduler
+from .rm_submission import bp as rmv_bp #: Remove accidental revision submission
+from .scheduler import bp as sch_bp #: TOO POC duty scheduler
 
 
 from sqlalchemy.engine import Engine
@@ -109,8 +109,6 @@ def create_app(config_object='baseconfig.BaseConfig'):
     #: Register the login handler functions.
     init_login()
 
-    #app.app_context().push() #: Suspect. Investigate more.
-
     #: Register all subpages stored in the Flask Blueprints as URL routes
     register_blueprints(app)
     
@@ -189,6 +187,6 @@ def register_blueprints(app):
     app.register_blueprint(oru_bp, url_prefix="/orupdate") #: Parameter signoff status pages
     app.register_blueprint(exp_bp, url_prefix="/express") #: Express approval pages
     app.register_blueprint(cup_bp, url_prefix="/chkupdata") #: Read individual revision request data and status page
-    #app.register_blueprint(rmv_bp, url_prefix="/rm_submission") #: Remove accidental revision submission
-    #app.register_blueprint(sch_bp, url_prefix="/scheduler") #: TOO POC duty scheduler
+    app.register_blueprint(rmv_bp, url_prefix="/rm_submission") #: Remove accidental revision submission
+    app.register_blueprint(sch_bp, url_prefix="/scheduler") #: TOO POC duty scheduler
 
