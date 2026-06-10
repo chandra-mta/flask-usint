@@ -35,7 +35,12 @@ import os
 import logging
 #: This logger is very similar to the native RotatingFileHandler class,
 #: but implements multi-process handling, necessary due to multiple server workers.
-from logging.handlers import RotatingFileHandler
+from logging.handlers import RotatingFileHandler, SMTPHandler
+from datetime import datetime
+
+_formatter = logging.Formatter(
+        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
+    )
 
 def build_rotating_handler(path, level):
     handler = RotatingFileHandler(
@@ -44,10 +49,31 @@ def build_rotating_handler(path, level):
         backupCount=4
     )
 
-    formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
+    handler.setFormatter(_formatter)
+    handler.setLevel(level)
+
+    return handler
+
+def build_smtp_handler(level):
+    """
+    This mail handler emails all code errors passed the the gunicorn.error logger,
+    which includes both server process errors and the running application code errors.
+
+    :NOTE: HEAD computer systems run with a trusted local mail-transfer-agent (MTA) to run as a mail server for each host.
+        This means that our server and application code doesn't need to run a mail server ourselves, we just sent SMTP messages to the
+        default TCP port 25. Note that the configuration of this MTA on a cxc machine running the gunicorn server is under the 
+        purview of Syshelp network administrators. Confer with Syshelp for mail needs.
+    """
+    handler = SMTPHandler(
+        mailhost=("localhost", 25),
+        fromaddr="UsintErrorHandler",
+        toaddrs=[os.getenv("USINT_ADMIN")],
+        subject=f"Usint Error-[{datetime.now().strftime('%c')}]",
+        credentials=None,
+        secure=None
     )
-    handler.setFormatter(formatter)
+
+    handler.setFormatter(_formatter)
     handler.setLevel(level)
 
     return handler
@@ -86,6 +112,12 @@ def server_logging_setup(app_root):
         )
     error_handler.set_name('error')
     gunicorn_error.addHandler(error_handler)
+
+    #: Add the SMTP error handler to the gunicorn error logger so that server and application errors will be mailed to Usint Admin.
+    email_handler = build_smtp_handler(logging.ERROR)
+    email_handler.set_name('email_error')
+    gunicorn_error.addHandler(email_handler)
+
     gunicorn_error.setLevel(logging.INFO)
 
 def application_logging_setup(app):

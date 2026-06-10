@@ -44,26 +44,7 @@ Because server-level configuration is controlled externally (SysHelp),
 this entrypoint provides an application-level mechanism for configuring
 runtime behavior with minimal reliance on system-level changes.
 """
-import os
-try:
-    #: Normal startup for app configuration and creation
-    from cus_app import create_app
-    application = create_app()
 
-except Exception as e:
-    #: Failure in startup, notify Usint Error handlers and raise exception for logging in Gunicorn error log
-    import traceback
-    from subprocess import Popen, PIPE
-    from email.mime.text import MIMEText
-    from datetime import datetime
-    USINT_ADMIN = os.getenv("USINT_ADMIN", "mtadude@cfa.harvard.edu")
-
-
-    msg = MIMEText(traceback.format_exc())
-    msg["From"] = "UsintErrorHandler"
-    msg["To"] = USINT_ADMIN
-    msg["Subject"] = f"Usint Error-[{datetime.now().strftime('%c')}]"
-    p = Popen(["/sbin/sendmail", "-t", "-oi"], stdin=PIPE)
-    p.communicate(msg.as_bytes())
-
-    raise e
+#: Normal startup for app configuration and creation
+from cus_app import create_app
+application = create_app()
