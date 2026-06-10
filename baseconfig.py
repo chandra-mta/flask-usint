@@ -66,6 +66,7 @@ class BaseConfig(object):
     OBS_SS = "/data/mta4/obs_ss/"
 
     #: Flask Mail Parameters
+    MAIL_DEFAULT_SENDER = "cus@cfa.harvard.edu"
     #: HEAD system hosts all run locally trusted mail-transfer-agents
     MAIL_SERVER = "localhost"
     MAIL_PORT = 25

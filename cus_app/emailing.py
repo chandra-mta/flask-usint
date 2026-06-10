@@ -32,19 +32,17 @@ def _split_addresses(field):
         return list(field)
     return [addr.strip() for addr in field.split(",")]
 
-def construct_msg(content, subject, to, sender = None, cc = None):
-    """
-    Construct Email Instance for flask_mail
-    """
+def construct_msg(content, subject, to, sender=None, cc=None):
+    if sender is None:
+        sender = current_app.config.get("MAIL_DEFAULT_SENDER")
+
     if cc is not None:
-        if isinstance(cc,list):
-            _cc = [CUS] + cc
-        elif isinstance(cc, set):
+        if isinstance(cc, (list, set)):
             _cc = [CUS] + list(cc)
         else:
-            _cc = [CUS] + [cc]
+            _cc = [CUS, cc]
     else:
-        _cc = CUS
+        _cc = [CUS]
 
     msg = Message(
         subject=subject,
@@ -77,7 +75,7 @@ def send_email(content, subject, to, sender = None, cc = []):
     :NOTE: This functionality is split only to allow cases in which we'd like to prepare sending emails in bulk before actually sending them.
     In typical usage, the send_email() function will be used across the board.
     """
-    msg = construct_msg(content, subject, to, sender = None, cc = [])
+    msg = construct_msg(content, subject, to, sender = sender, cc = [])
     send_msg(msg)
 
 #

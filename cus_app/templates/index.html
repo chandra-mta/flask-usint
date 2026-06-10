@@ -299,16 +299,16 @@ via either the cxc or icxc servers. Links for icxc only are marked with
       window.open(html,'Ocatdatapage'+obsid);
   } 
   function OpenOrupdate(){
-    window.open("{{url_for('index')}}",'Orupdate')
+    window.open("{{url_for('orupdate.index')}}",'Orupdate')
   }
   function OpenExpress(){
-    window.open("{{url_for('index')}}",'Express')
+    window.open("{{url_for('express.index')}}",'Express')
   }
   function OpenRemove(){
-    window.open("{{url_for('index')}}",'Remove')
+    window.open("{{url_for('rm_submission.index')}}",'Remove')
   }
   function OpenScheduler(){
-    window.open("{{url_for('index')}}",'Schedule')
+    window.open("{{url_for('scheduler.index')}}",'Schedule')
   }
 </script>
 {% endblock %}
