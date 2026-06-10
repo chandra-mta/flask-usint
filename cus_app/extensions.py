@@ -14,8 +14,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_session import Session
 from flask_bootstrap import Bootstrap5
+from flask_mail import Mail
 
 db = SQLAlchemy()
 login = LoginManager()
 web_session_instance = Session()
 bootstrap = Bootstrap5()
+mail = Mail()

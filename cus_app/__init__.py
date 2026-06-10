@@ -13,7 +13,7 @@ from setup_logging import application_logging_setup
 
 #: Import Flask Extensions from sibling module.
 #: Flask Extensions expand functionality for the application
-from .extensions import db, login, web_session_instance, bootstrap
+from .extensions import db, login, web_session_instance, bootstrap, mail
 from .auth import init_login
 
 from .supple.helper_functions import rank_ordr, approx_equals, get_more, IterateRecords, coerce_from_json
@@ -175,6 +175,7 @@ def bind_flask_extensions(app):
     app.config['SESSION_SQLALCHEMY'] = db #: Must set after connection construction but before binding extensions to the app.
     db.init_app(app)
     web_session_instance.init_app(app)
+    mail.init_app(app)
 
 def register_blueprints(app):
     """

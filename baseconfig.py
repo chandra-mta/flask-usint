@@ -65,5 +65,14 @@ class BaseConfig(object):
     #
     OBS_SS = "/data/mta4/obs_ss/"
 
-    #: Logging Parameters
+    #: Flask Mail Parameters
+    #: HEAD system hosts all run locally trusted mail-transfer-agents
+    MAIL_SERVER = "localhost"
+    MAIL_PORT = 25
+    #: Unsecured protocol usage since security implemented by HEAD system host MTA's
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = None
+    MAIL_PASSWORD = None
+    MAIL_SUPPRESS_SEND = True
     
