@@ -4,15 +4,14 @@ Error Handlers
 
 **errors/handlers.py**: Error Redirection Handlers
 
-:Author: T. Isobe (tisobe@cfa.harvard.edu)
-:Maintainer: W. Aaron (william.aaron@cfa.harvard.edu)
+:Author: W. Aaron (william.aaron@cfa.harvard.edu)
 :Last Updated: May 02, 2025
 
 """
-from flask      import render_template
-from cus_app.errors import bp
-from cus_app.extensions import db
-from cus_app.emailing import send_error_email
+from flask import render_template
+from . import bp #: import the blueprint from error/__init__.py
+from ..extensions import db
+
 #
 #--- use blueprint error handler to take care the error
 #
@@ -30,5 +29,4 @@ def internal_error(error):
     Error Handling for Interval Server Error.
     """
     db.session.rollback()
-    send_error_email()
     return render_template('errors/500.html'), 500
