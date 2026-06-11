@@ -1,0 +1,231 @@
+<HTML>
+<HEAD>
+<TITLE>Search Help</TITLE>
+</HEAD>
+<!--#include virtual="/incl/header.html"--> 
+<BR>
+<H1 ALIGN="CENTER">Search Help</H1>
+
+A complete listing of target information can be accessed by the Target
+Search Form for your
+inspection.  Targets can be sorted by sequence number or RA.  For each
+target there is: 
+<ul>
+<LI> A summary page giving general information.
+<LI> A listing of all parameters, which has been extracted from Obscat.
+<LI>The instrument field of view overlaid on the Digital Sky Survey.
+  Guide stars and fiducial lights are also indicated.
+<LI>The instrument field of view overlaid on the X-ray field (usually a
+  deep ROSAT PSPC image).  Be warned that sometimes the X-ray data were
+  not available
+<LI>A plot showing allowed value of roll angle as a function of date.
+  Also "visibility" as a function of date.  If the target is too close
+  to the sun to be observed, visibility drops to zero.
+</UL>
+
+<P>
+This is a brief summary intended to give users help on searching the
+ObsCat database with  <A HREF="search.html">Target Search
+Form</A>.  With this form you can find all your observations and
+obtain target information.  Alternatively one could find, for instance,
+all observations of a favorite target using a particular instrument
+and grating configuration.  Cone searches can also be performed in
+conjunction with any combination of other parameters.  Furthermore,
+multiple fields can be used to narrow down a search.  For example,
+selecting "HRC-S" in the Science Instrument field and "LETG" in the
+Grating field will find all observations using the HRC-S/LETG
+combination.  Selecting "Murray" in the PI field, "00:20" in the RA
+field, "-72:" in the Dec field, "5" in the Radius field and "degrees"
+in the Units pull down menu will find all of Murray's observations
+within a 5 degree radius centered on RA 00:20, Dec -72:.  Any
+questions beyond the scope of this page should be directed to the 
+HelpDesk</A>.
+<HR>
+
+<A HREF="#RANGE">Range Searches</A><BR>
+<A HREF="#LIST">List Searches</A><BR>
+<A HREF="#COORDINATES">Coordinate searches</A><BR>
+<A HREF="#SEQUENCE">Sequence Number</A><BR>
+<A HREF="#PROPOSAL">Proposal Number</A><BR>
+<A HREF="#PINAME">PI Name</A><BR>
+<A HREF="#OBSERVER">Observer</A><BR>
+<A HREF="#TARGET">Target</A><BR>
+<A HREF="#SIMBAD">Using Simbad</A><BR>
+<A HREF="#CATEGORY">Category</A><BR>
+<a href="#OBSID">ObsID</a><br>
+<a href="#OBS_CYCLE">Observing Cycle</a><br>
+<a href="#PROP_CYCLE">Proposal Cycle</a><br>
+<A HREF="#RA">RA</A><BR>
+<A HREF="#DEC">Dec</A><BR>
+<A HREF="#RADIUS">Radius</A><BR>
+<A HREF="#UNITS">Units</A><BR>
+<A HREF="#SCIENCE">Science Instrument</A><BR>
+<A HREF="#ACISMODE">ACIS Mode</A><BR>
+<A HREF="#GRATING">Grating</A><BR>
+<A HREF="#TYPE">Type</A><BR>
+<A HREF="#STATUS">Status</A><BR>
+<A HREF="#JOINT">Joint Proposals</A><BR>
+<A HREF="#SORT">Sort</A><BR>
+<HR>
+
+<TABLE CELLPADDING="5">
+<TR><TD valign="top"><B><A NAME="RANGE">Range Searches<B></TD>
+<TD>Range searches can be performed using the following format: # -- # e.g. entering "100000 -- 100009" in the Sequence Number field will find all searches matching or between these specified values.  Range searches can be performed on the Sequence Number, Proposal Number and Obs ID fields.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="LIST">List Searches</B></TD>                                      
+<TD>Comma separated list searches can be performed using the                                       
+following format: Entering "#, #, #, etc." in the Obs ID field will                                
+perform an exact match on every Obs ID in the list. List searches can
+be performed on the Sequence Number, Proposal Number and Obs ID
+fields.</TD></TR> 
+
+<TR><TD valign="top"><B><A NAME="COORDINATES">Coordinate Searches</B></TD>
+<TD>There are two types of coordinate searches: Cone and
+Exact.</TD></TR>
+
+<TR><TD></TD><TD>A cone search searches for all observations within a
+certain search radius.  The user specifies the center point in the RA
+and Dec fields and then a radius in either minutes or degrees.  For
+example, selecting "05:37:45.38" in the RA field, "-65:38:49.87" in
+the Dec field, "10" in the Radius field and "degrees" in the Units
+pull down menu will find all observations within 10 degrees of the
+specified coordinates.</TD></TR>
+
+<TR><TD></TD><TD>An exact search can be performed by entering exact
+coordinates in the RA and Dec fields and leaving the Units pull down
+menu blank.  For example, selecting "20:02:49.60" in the RA field,
+"+25:14:11.30" in the Dec field and leaving the Units pull down menu
+blank will find any observations with those exact coordinates if they
+exist.</TD></TR>
+
+<TR><TD><B><H2>Fields</H2></B></TD></TR>
+
+<TR><TD valign="top"><B><A NAME="SEQUENCE">Sequence Number<B></TD>
+<TD>The sequence number of an observation. 
+<a href="#RANGE">Range</a> and <a href="#LIST">List</a> searches can be performed on this field.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="PROPOSAL">Proposal Number<B></TD>
+<TD>The proposal number of an observation.  
+<a href="#RANGE">Range</a> and <a href="#LIST">List</a> searches can be performed on this field.</TD></TR>
+
+
+<TR><TD valign="top"><B><A NAME="PINAME">PI Name<B></TD>
+<TD>The last name of the Principal Investigator for an observation.
+Entering "ha" will retrieve observations from PI's with an "ha" in
+their last name.  eg. Sharp, Hayes, etc. The Observer field is searched
+simultaneously.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="OBSERVER">Observer<B></TD>
+<TD>The last name of the Observer for an observation.  Entering "ki"
+will retrieve observations from Observers with a "ki" in their last
+name.  eg.  Akins, Kilgard, etc.  The PI Name field is searched simultaneously.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="TARGET">Target<B></TD>
+<TD>The name of the Target for an observation.  Entering "NGC"
+will retrieve observations of Targets with an "NGC" in their name.
+searching for GC3256 will find nothing.  It is recommended that
+<a href="#SIMBAD">Simbad</a> name resolving be used if you do not know EXACTLY how your
+target is entered in the Chandra database.
+</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="SIMBAD">Simbad<B></TD>
+<TD>Check this box if you wish to
+  use Simbad
+  (really <a href="http://cds.u-strasbg.fr/cgi-bin/Sesame">sesame</a> with
+  Simbad first) </a> for name resolving.  The
+search will be done using the coordinates returned by Simbad and a
+cone of radius 4 arcmin.  The size of this cone may be changed by
+entering a <A HREF="#RADIUS">radius</A> and <A HREF="#UNITS">units</A>.</TD></TR> 
+
+<TR><TD valign="top"><B><A NAME="CATEGORY">Science Category<B></TD>
+<TD>The Science Category of the Observation.  This field is the
+Science Category selected at the time of proposal submission.
+Selecting "ALL" will search all categories; selecting an individual
+category will exclude targets from all other categories.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="OBSID">Obs ID<B></TD>
+<TD>The Observation ID of the target.  
+<a href="#RANGE">Range</a> and <a href="#LIST">List</a> searches can be performed on this field.</TD></TR>
+
+
+<TR><TD valign="top"><B><A NAME="OBS_CYCLE">Observing Cycle<B></TD>
+<TD>The intended observing cycle of an observation. (targets.obs_ao_str)</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="PROP_CYCLE">Proposal Cycle<B></TD>
+<TD>The cycle during which an observation was proposed. (prop_info.ao_str)</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="RA">RA<B></TD>
+<TD>The Right Ascension for an observation.  Must be used in
+conjunction with a Declination.  Cone and exact searches are
+available.  Please see <A HREF="#COORDINATES">Coordinate searches</A>
+for more details.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="DEC">Dec<B></TD>
+<TD>The Declination for an observation.  Must be used in conjunction
+with a Right Ascension.  Cone and exact searches are available.
+Please see <A HREF="#COORDINATES">Coordinate searches</A> for more
+details.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="RADIUS">Radius<B></TD>
+<TD>The Radius of the search in either degrees or minutes.  Used in
+conjunction with the Units pull down menu in cone searches.  Please
+see <A HREF="#COORDINATES">Coordinate searches</A> for more
+details.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="UNITS">Units<B></TD>
+<TD>The units of radii.  Choices are blank, degrees or minutes.
+Default is blank, which specifies an exact search.  Used in
+conjunction with a radius in cone searches.  Please see <A
+HREF="#COORDINATES">Coordinate searches</A> for more details.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="SCIENCE">Science Instrument<B></TD>
+<TD>Specifies which detector will be on the optical axis during the
+observation.  Choices are blank, ACIS-I, ACIS-S, HRC-I or HRC-S.
+</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="ACISMODE">ACIS Mode<B></TD>
+<TD>Specifies what ACIS mode the observation was done in.  Note that
+selecting one of these modes will de facto limit your search to ACIS
+observations.</TD></TR> 
+
+<TR><TD valign="top"><B><A NAME="GRATING">Grating<B></TD>
+<TD>Specifies which grating to use.  Options are blank, HETG, LETG or
+none.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="TYPE">Observation Type<B></TD>
+<TD>Type of observation.  Choices are blank, GO, GTO, CAL, DDT, or TOO.
+</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="STATUS">Status<B></TD>
+<TD>Status of observation.  Choices are Unobserved, Scheduled, Partially
+Observed, Observed, Archived, Canceled, or Discarded.  If this is a
+hyperlink in the output, clicking on
+it will take you to the Processing Status Table for that observation.</TD></TR>
+
+<TR><TD valign="top"><B><A NAME="JOINT">Joint Proposal<B></TD>
+<TD>Observatory used jointly with observation.  Choices are blank,
+NOAO, HST, XMM, SRAO, RXTE, and Spitzer.
+</TD>  
+
+<TR><TD valign="top"><B><A NAME="SORT">Sorting<B></TD>
+<TD>One can choose to sort the output of their query by either
+Sequence Number or RA.  Default is Sequence Number.  The output table
+is also sortable by its headers.</TD></TR>
+
+</TABLE>
+
+<BR>
+<HR>
+<!--PLEASE DO NOT MODIFY THIS LINE OR ANYTHING BELOW!-->
+<BR><BR>
+<!-- Optional -->
+<P ALIGN="RIGHT">
+Last modified:
+<!--#CONFIG TIMEFMT="%x"-->
+<!--#flastmod file="$DOCUMENT_NAME"-->
+</P>
+<BR><BR>
+<!--#include virtual="/incl/footer.html"--> 
+<!--footer end-->
+</BODY>
+</HTML>
