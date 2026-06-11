@@ -1,0 +1,229 @@
+<HTML>
+<HEAD>
+<TITLE>Internal Target Search Form</TITLE>
+</HEAD>
+
+<BR>
+<H1 align="center">Internal Target Search Form </H1>
+<P>
+Use this form to find your observation(s).  You can search by PI,
+sequence number, observation type and perform a cone search.  <A
+HREF="./search_help.html#RANGE">Range</A> and <A HREF="./search_help.html#LIST">List</A>
+searches can also be performed on the Sequence Number, Proposal
+Number, and Obs ID fields. <A HREF="./search_help.html">Click here for
+additional information.</A> </P>
+
+<b>Note:</b> Cycle 1 DDT observations may be classified as TOOs.<BR>
+
+<FORM NAME="orform" ACTION="./sot_answer_direct.cgi" METHOD="post">
+<CENTER><TABLE cellpadding="6" width="95%" border>
+<TR align="center"><TD colspan="6">
+ <A HREF="./search_help.html#SORT">Sort
+ by</A>:
+ <SELECT NAME="sorted">
+     <OPTION>Sequence Number</OPTION>
+     <OPTION>RA</OPTION>
+     <OPTION>Sched. Start Time</OPTION>
+     </SELECT>
+     <INPUT TYPE="submit" value="Search">
+     <INPUT TYPE="reset" value="Clear-Form">
+</TD></TR>
+<TR><TD colspan="3">
+     <A HREF="./search_help.html#SEQUENCE">Sequence Number</A>: <INPUT TYPE="text" NAME="seqnbr" MAXLENGTH="100"
+     SIZE="20"></TD>
+<TD colspan="3">
+     <A HREF="./search_help.html#PROPOSAL">Proposal Number</A>: <INPUT TYPE="text" NAME="pronbr" MAXLENGTH="100"
+     SIZE="25"></TD></TR>
+<TR><TD colspan="3">
+     <A HREF="./search_help.html#PINAME">PI Name</A>: <INPUT TYPE="text" NAME="piname" MAXLENGTH="30"
+     SIZE="30"></TD>
+<TD colspan="3">
+     <A HREF="./search_help.html#OBSERVER">Observer</A>: <INPUT TYPE="text" NAME="observ" MAXLENGTH="30"
+     SIZE="30"></TD></TR>
+<TR><TD colspan="3">
+     <A HREF="./search_help.html#TARGET">Target</A>: <INPUT TYPE="text" NAME="target" MAXLENGTH="100"
+     SIZE="20">&nbsp&nbsp&nbsp<a href="./search_help.html#SIMBAD">Use
+     Simbad?</a>&nbsp&nbsp<INPUT type="checkbox" name="simbad"
+     value="useSimbad">&nbsp&nbsp&nbsp<font size="-1">Note: default
+     search radius is 4 arcmin; this may be changed by
+     entering "Radius" and "Units" below.</font></TD>
+<TD colspan="3">
+     <A HREF="./search_help.html#CATEGORY">Science Category</A>: <SELECT name="category">
+         <OPTION value="">ALL</OPTION>
+         <OPTION value="10">Solar System and Misc</OPTION>
+         <OPTION value="20">Normal Stars and WD</OPTION>
+         <OPTION value="30">WD Binaries and CVs</OPTION>
+         <OPTION value="40">BH and NS Binaries</OPTION>
+         <OPTION value="50">SN, SNR, and Isolated NS</OPTION>
+         <OPTION value="60">Normal Galaxies</OPTION>
+         <OPTION value="70">Active Galaxies and Quasars</OPTION>
+         <OPTION value="80">Clusters of Galaxies</OPTION>
+         <OPTION value="90">Extragalactic Diffuse Emission & Surveys</OPTION>
+         <OPTION value="91">Galactic Diffuse Emission & Surveys</OPTION>
+    </SELECT></TD>
+</TR>
+<TR>
+<TD colspan="3">
+     <A HREF="./search_help.html#OBSID">Obs ID</A>: <INPUT TYPE="text" NAME="obsid" MAXLENGTH="100"
+     SIZE="20"></TD>
+<TD colspan="1">
+     <A HREF="./search_help.html#OBS_CYCLE">
+     Observing Cycle</A>: <SELECT name="obs_cycle">
+<!-- for future cycles, add a line following this example.  -->
+<!-- It is not necessary to modify the source -->
+         <OPTION value="">ALL</OPTION>
+         <OPTION value="01">AO1</OPTION>
+         <OPTION value="02">AO2</OPTION>
+         <OPTION value="03">AO3</OPTION>
+	 <OPTION value="04">AO4</OPTION>
+	 <OPTION value="05">AO5</OPTION>
+	 <OPTION value="06">AO6</OPTION>
+	 <OPTION value="07">AO7</OPTION>
+	 <OPTION value="08">AO8</OPTION>
+	 <OPTION value="09">AO9</OPTION>
+	 <OPTION value="10">AO10</OPTION>
+	 <OPTION value="11">AO11</OPTION>
+	 <OPTION value="12">AO12</OPTION>
+	 <OPTION value="13">AO13</OPTION>
+	 <OPTION value="14">AO14</OPTION>
+	 <OPTION value="15">AO15</OPTION>
+	 <OPTION value="16">AO16</OPTION>
+	 <OPTION value="17">AO17</OPTION>
+	 <OPTION value="18">AO18</OPTION>
+	 <OPTION value="19">AO19</OPTION>
+	 <OPTION value="20">AO20</OPTION>
+	 <OPTION value="21">AO21</OPTION>
+	 <OPTION value="22">AO22</OPTION>
+         <OPTION value="23">AO23</OPTION>
+         <OPTION value="24">AO24</OPTION>
+         <OPTION value="25">AO25</OPTION>
+         <OPTION value="26">AO26</OPTION>
+    </SELECT></TD>
+<TD colspan="1">
+     <A HREF="./search_help.html#PROP_CYCLE">
+     Proposal Cycle</A>: <SELECT name="prop_cycle">
+<!-- for future cycles, add a line following this example.  -->
+<!-- It is not necessary to modify the source -->
+         <OPTION value="">ALL</OPTION>
+         <OPTION value="01">AO1</OPTION>
+         <OPTION value="02">AO2</OPTION>
+         <OPTION value="03">AO3</OPTION>
+	 <OPTION value="04">AO4</OPTION>
+	 <OPTION value="05">AO5</OPTION>
+	 <OPTION value="06">AO6</OPTION>
+	 <OPTION value="07">AO7</OPTION>
+	 <OPTION value="08">AO8</OPTION>
+	 <OPTION value="09">AO9</OPTION>
+	 <OPTION value="10">AO10</OPTION>
+	 <OPTION value="11">AO11</OPTION>
+	 <OPTION value="12">AO12</OPTION>
+	 <OPTION value="13">AO13</OPTION>
+	 <OPTION value="14">AO14</OPTION>
+	 <OPTION value="15">AO15</OPTION>
+	 <OPTION value="16">AO16</OPTION>
+	 <OPTION value="17">AO17</OPTION>
+	 <OPTION value="18">AO18</OPTION>
+	 <OPTION value="19">AO19</OPTION>
+	 <OPTION value="20">AO20</OPTION>
+	 <OPTION value="21">AO21</OPTION>
+	 <OPTION value="22">AO22</OPTION>
+         <OPTION value="23">AO23</OPTION>
+         <OPTION value="24">AO24</OPTION>
+         <OPTION value="25">AO25</OPTION>
+    </SELECT></TD></TR>
+<TR><TD colspan="6">
+     <A HREF="./search_help.html#COORDINATES">Coordinate Search</A>: <A HREF="./search_help.html#RA">RA</A>: <INPUT TYPE="text" NAME="ra" MAXLENGTH="15"
+     SIZE="15"> <A HREF="./search_help.html#DEC">Dec</A>: <INPUT TYPE="text" NAME="dec" MAXLENGTH="15"
+     SIZE="15"> 
+
+     <A HREF="./search_help.html#RADIUS">Radius</A>: <INPUT TYPE="text" NAME="radius" MAXLENGTH="5"
+     SIZE="5"> <A HREF="./search_help.html#UNITS">Units</A>: <SELECT NAME="radcho">
+     <OPTION>
+     <OPTION>degrees
+     <OPTION>arcmin
+     </SELECT>
+</TR></TD>
+<TR align="center"><TD colspan="6">
+     The above option performs a cone search.  Coordinates are J2000
+     in Decimal or HMS ( ###.## or ##:##:##.## or ## ## ##.## )<BR>
+     For exact searches leave Units pull down menu
+     blank.
+</TD></TR>
+<TR><TD align="center" valign="top" colspan="1">
+     <A HREF="./search_help.html#SCIENCE">Science Instrument</A><BR>
+     <INPUT type="checkbox" name="sciins1" value="ACIS-I">ACIS-I<BR>
+     <INPUT type="checkbox" name="sciins2" value="ACIS-S">ACIS-S<BR>
+     <INPUT type="checkbox" name="sciins3" value="HRC-I">HRC-I<BR>
+     <INPUT type="checkbox" name="sciins4" value="HRC-S">HRC-S<BR></TD>
+
+<TD align="center" valign="top" colspan="1"><A HREF="./search_help.html#ACISMODE">ACIS Mode</A><BR>
+     <INPUT type="checkbox" name="mode1" value="TE">Timed Exposure<BR>
+     <INPUT type="checkbox" name="mode2" value="CC">Continuous Clocking<BR></TD>
+
+<TD align="center" valign="top" colspan="1"><A HREF="./search_help.html#GRATING">Grating</A><BR>
+     <INPUT type="checkbox" name="grating1" value="HETG">HETG<BR>
+     <INPUT type="checkbox" name="grating2" value="LETG">LETG<BR>
+     <INPUT type="checkbox" name="grating3" value="NONE">NONE<BR></TD>
+
+<TD align="center" valign="top" colspan="1"><A HREF="./search_help.html#TYPE">Observation Type</A><BR>
+     <INPUT type="checkbox" name="type1" value="GO">GO<BR>
+     <INPUT type="checkbox" name="type2" value="GTO">GTO<BR>
+     <INPUT type="checkbox" name="type3" value="CAL">CAL<BR>
+     <INPUT type="checkbox" name="type4" value="TOO">TOO<BR>
+     <INPUT type="checkbox" name="type5" value="DDT">DDT<BR></TD>
+
+<TD align="center" valign="top" colspan="1"><A HREF="./search_help.html#STATUS">Status</A><BR>
+     <INPUT type="checkbox" name="status1" value="Unobserved">Unobserved<BR>
+     <INPUT type="checkbox" name="status8" value="Untriggered">Untriggered<BR>
+     <INPUT type="checkbox" name="status2" value="Scheduled">Scheduled<BR>
+     <INPUT type="checkbox" name="status3" value="Partially Observed">Partially Observed<BR>
+     <INPUT type="checkbox" name="status4" value="Observed">Observed<BR>
+     <INPUT type="checkbox" name="status5" value="Archived">Archived<BR>
+     <INPUT type="checkbox" name="status6" value="Canceled">Canceled<BR>
+     <INPUT type="checkbox" name="status7" value="Discarded">Discarded<BR>
+<TD align="center" valign="top" colspan="1"><A HREF="./search_help.html#JOINT">Joint Proposals</A><BR> 
+     <INPUT type="checkbox" name="joint1" value="NOAO">NOAO<BR>
+     <INPUT type="checkbox" name="joint2" value="HST">HST<BR>
+     <INPUT type="checkbox" name="joint3" value="XMM">XMM<BR>
+     <INPUT type="checkbox" name="joint4" value="NRAO">NRAO<BR>
+     <INPUT type="checkbox" name="joint5" value="RXTE">RXTE<BR>
+     <INPUT type="checkbox" name="joint6" value="Spitzer">Spitzer<BR>
+     </TD>
+</TD></TR>
+<TR align=center><TD colspan=6>
+The checkbox searches above do not limit a search unless something
+     is selected within the category, <BR>e.g. not selecting any
+     Science Instrument is equivalent to selecting all of them.
+</TD></TR>
+
+
+
+
+<TR align="center"><TD colspan="6">
+     <INPUT TYPE="submit" value="Search">
+     <INPUT TYPE="reset" value="Clear-Form">
+</TD></TR>
+</TABLE></CENTER>
+</FORM>
+<HR>
+
+
+<!--PLEASE DO NOT MODIFY THIS LINE OR ANYTHING BELOW!-->
+<BR><BR>
+<!-- Optional -->
+<P ALIGN="RIGHT">
+Last modified:
+<!--#CONFIG TIMEFMT="%x"-->
+<!--#flastmod file="$DOCUMENT_NAME"-->
+<br>
+Page maintained by <a href="mailto:lpulgarinduque@cfa.harvard.edu">Lina Pulgarin-Duque</A>
+</P>
+</BODY>
+</HTML>
+
+
+
+
+
+
+
