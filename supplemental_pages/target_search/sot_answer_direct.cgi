@@ -1,13 +1,12 @@
-#!/home/ascds/DS.release/bin/perl
+#! /home/ascds/DS.release/bin/perl
+# The above absolute path is necessary to invoke the most recent DS release perl installation
+# To use the running web server perl invoke the shebang line with (/usr/bin/env perl), no parentheses
 
 use strict;
 use CGI qw{ :standard fatalsToBrowser};
 use CGI::Carp;
 #use Carp;
 use Data::Dumper;
-BEGIN {
-    $ENV{SYBASE} = '/soft/SYBASE16.0';
-}
 
 use DBI;
 use DBD::Sybase;
@@ -16,11 +15,8 @@ use POSIX;
 
 # Paths
 # expects to find the simcoord clicoord scripts in
-my $program_dir = '/proj/web-cxc-secure/cgi-bin/target_search/';
-# expects to find ".targpass" in the $pass_dir
-#my $pass_dir = $program_dir;
-#my $pass_dir = "/proj/web-icxc/cgi-bin/obs_ss/.Pass_dir/";
-my $pass_dir = "/proj/web-cxc-secure/htdocs/mta/CUS/Usint/Pass_dir";
+my $program_dir = '/proj/web-cxc/cgi-bin/target_search/';
+my $auth_dir = '/proj/web-cxc/CUS';
 # to redirect back in case of failure
 my $location = './search.html';
 
@@ -69,10 +65,8 @@ sub get_dbh{
 
     my $db_user = 'mtaops_internal_web';
     my $server = 'sqlsao';
-    #if ( not -r "$pass_dir/.targpass"){
-    #    croak("database password file not found at $pass_dir/.targpass");
-    #}
-    my $db_passwd = (-r ".targpass") ? `cat .targpass` : `cat $pass_dir/.targpass`;
+    #: If the CWD .targpass file cannot be read, read the internal file instead
+    my $db_passwd = (-r ".targpass") ? `cat .targpass` : `cat $auth_dir/.targpass`;
     chomp $db_passwd;
     my $dbh = DBI->connect("DBI:Sybase:server=$server;database=axafocat",
                            $db_user, $db_passwd, { PrintError => 0, RaiseError => 1});
