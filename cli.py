@@ -158,14 +158,64 @@ def set_groups(username, group, add_group, remove_group):
 
     click.secho("Groups updated successfully.", fg="green")
 
+@click.command("find-user")
+@click.option("--id", "user_id", type=int, help="User ID")
+@click.option("--username", help="Username")
+@click.option("--email", help="Email address")
+@click.option("--full-name", help="Full name (partial match allowed)")
+@with_app_context
+def find_user(user_id, username, email, full_name):
+    """
+    Query the database for a specific user/
+    """
+
+    if (user_id is None) and\
+        (username is None) and\
+        (email is None) and\
+        (full_name is None):
+        click.secho(
+            "Must provide at least one search option (--id, --username, --email, --full-name).",
+            fg="red"
+        )
+        return
+
+    query = User.query
+
+    if user_id is not None:
+        query = query.filter(User.id == user_id)
+
+    if username is not None:
+        query = query.filter(User.username == username)
+
+    if email is not None:
+        query = query.filter(User.email == email)
+
+    if full_name is not None:
+        # partial match (case-insensitive)
+        query = query.filter(User.full_name.ilike(f"%{full_name}%"))
+
+    results = query.all()
+
+    # --- Output results ---
+    if not results:
+        click.secho("No users found.", fg="yellow")
+        return
+
+    click.echo(f"\nFound {len(results)} user(s):\n")
+
+    for user in results:
+        click.echo(user)
+
 @click.group()
 def cli():
     """
-    Group together multiple functions callable from the CLI
+    CLI for interfacing with the usint Database
     """
+    #: This group pulls together all command functions to be callable from the command line
     pass
 cli.add_command(create_user)
 cli.add_command(set_groups)
+cli.add_command(find_user)
 
 if __name__ == "__main__":
     cli()
