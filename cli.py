@@ -47,7 +47,10 @@ def with_app_context(f):
 @click.option("--inactive", is_flag=True, help="Mark user as inactive (default: active)")
 @with_app_context
 def create_user(username, email, full_name, group, inactive):
-    """Create a new user in the database."""
+    """
+    Create a new user in the database.
+    User ID numbers are automatically assigned by the database upon injection.
+    """
 
     # --- Validate uniqueness ---
     existing = User.query.filter(
@@ -78,11 +81,91 @@ def create_user(username, email, full_name, group, inactive):
     db.session.commit()
     click.secho("User created successfully.", fg="green")
 
+@click.command("set-groups")
+@click.option("--username", prompt=True, help="Username to update")
+@click.option(
+    "--group",
+    multiple=True,
+    help="Specify groups (repeat for multiple, replaces existing groups. e.g. --group usint --group too)"
+)
+@click.option(
+    "--add-group",
+    multiple=True,
+    help="Add group(s) without removing existing ones"
+)
+@click.option(
+    "--remove-group",
+    multiple=True,
+    help="Remove group(s) from existing groups"
+)
+@with_app_context
+def set_groups(username, group, add_group, remove_group):
+    """
+    Change the group assignments for a user.
+    """
+    #: Query for the User ORM
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        click.secho(f"User '{username}' not found.", fg="red")
+        return
+
+    # --- parse current groups ---
+    current = []
+    if user.groups:
+        current = [g.strip().lower() for g in user.groups.split(":") if g.strip()]
+
+    new_groups = current.copy()
+
+    # --- replace mode ---
+    if group:
+        new_groups = [g.strip().lower() for g in group if g.strip()]
+
+    # --- additive changes ---
+    if add_group:
+        for g in add_group:
+            g = g.strip().lower()
+            if g and g not in new_groups:
+                new_groups.append(g)
+
+    # --- removal ---
+    if remove_group:
+        new_groups = [g for g in new_groups if g not in remove_group]
+
+    # deduplicate (safe guard)
+    new_groups = list(dict.fromkeys(new_groups))
+
+    new_group_string = ":".join(new_groups)
+
+    # --- show diff ---
+    click.echo("\nUpdating user groups:")
+    click.echo(f"User: {username}")
+    click.echo(f"Current groups: {user.groups or '(none)'}")
+    click.echo(f"New groups:     {new_group_string or '(none)'}")
+
+    if current == new_groups:
+        click.secho("No changes detected.", fg="yellow")
+        return
+
+    # --- confirmation ---
+    if not click.confirm("\nProceed with group changes?", default=False):
+        click.secho("Aborted. No changes made.", fg="yellow")
+        return
+
+    # --- commit ---
+    user.groups = new_group_string
+    db.session.commit()
+
+    click.secho("Groups updated successfully.", fg="green")
+
 @click.group()
 def cli():
+    """
+    Group together multiple functions callable from the CLI
+    """
     pass
-
 cli.add_command(create_user)
+cli.add_command(set_groups)
 
 if __name__ == "__main__":
     cli()
