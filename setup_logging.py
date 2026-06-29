@@ -32,6 +32,7 @@ This module handles the setup of three distinct python loggers for each distinct
 """
 
 import os
+import sys
 import logging
 #: This logger is very similar to the native RotatingFileHandler class,
 #: but implements multi-process handling, necessary due to multiple server workers.
@@ -120,7 +121,7 @@ def server_logging_setup(app_root):
 
     gunicorn_error.setLevel(logging.INFO)
 
-def application_logging_setup(app):
+def app_files_logging_setup(app):
     """
     This function reconfigures a created Flask application to use the gunicorn server logger
     for errors, and fetches / creates a logger for normal operations.
@@ -131,16 +132,11 @@ def application_logging_setup(app):
 
     #: Route default Flask logger into gunicorn server error logs.
     gunicorn_error = logging.getLogger("gunicorn.error")
+    #: Configure default application logger to use gunicorn error handlers
+    app.logger.handlers = gunicorn_error.handlers
+    app.logger.setLevel(gunicorn_error.level)
+    app.logger.propagate = False
 
-    if gunicorn_error.handlers:
-        #: Running in a Gunicorn Server. Configure default application logger to use gunicorn error handlers
-        app.logger.handlers = gunicorn_error.handlers
-        app.logger.setLevel(gunicorn_error.level)
-        app.logger.propagate = False
-    else:
-        #: No Gunicorn Server error logger. Test run in which error -> stderr
-        pass
-    
     #: Initialize the operations flask logger.
     #: Note that this logger is not accessible by any internal flask library functions.
     #: This is only accessible with the app.op_logger or current_app.op_logger attributes
@@ -159,3 +155,34 @@ def application_logging_setup(app):
         operations_logger.addHandler(operations_handler)
     
     app.op_logger = operations_logger
+
+def app_console_logging_setup(app):
+    """
+    This function configures a created Flask application to log without a pre-existing Gunicorn server logger.
+    All basic flask application initialize with an error logger in the app.logger attribute using StreamHandler <stderr>
+    Thus, we only need to create the operations logger for stdout.
+    """
+    operations_logger = logging.getLogger("operations")
+    
+    #: If the fetched logger exists, then it will have a configured handler. Otherwise, create one.
+    if not operations_logger.handlers:
+        operations_logger.setLevel(logging.INFO)
+
+        operations_handler = logging.StreamHandler(stream=sys.stdout)
+        operations_handler.setLevel(logging.INFO)
+        operations_handler.set_name("operation")
+        operations_handler.setFormatter(_formatter)
+        operations_logger.addHandler(operations_handler)
+    
+    app.op_logger = operations_logger
+
+def application_logging_setup(app):
+    """
+    Check app configuration for logging mode and run corresponding setup function.
+    """
+    if app.config['LOGGING_MODE'] == "files":
+        app_files_logging_setup(app)
+    elif app.config['LOGGING_MODE'] == "console":
+        app_console_logging_setup(app)
+    else:
+        raise ValueError(f"Unknown Application Logging Mode: logging_mode={app.config['LOGGING_MODE']}")

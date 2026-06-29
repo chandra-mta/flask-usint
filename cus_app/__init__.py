@@ -59,7 +59,10 @@ function_dict = {
     'get_more': get_more,
     'IterateRecords': IterateRecords
 }
-def create_app(config_object='baseconfig.BaseConfig'):
+def create_app(
+        config_object='baseconfig.BaseConfig',
+        logging_mode=None
+):
     """
     Function for instantiating the entire application.
 
@@ -99,6 +102,9 @@ def create_app(config_object='baseconfig.BaseConfig'):
     app.config.from_object(config_object)
     #: Read this installation's specific instance folder for configuration overrides. Relative pathing from the instance_relative_config argument.
     app.config.from_pyfile('config.py', silent=True)
+    #: Set the app config logging mode if altered by the factory function
+    if logging_mode is not None:
+        app.config["LOGGING_MODE"] = logging_mode
 
     #: Bind the imported Flask Extensions to the initialized application.
     bind_flask_extensions(app)

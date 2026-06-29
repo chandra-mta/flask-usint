@@ -25,16 +25,9 @@ class BaseConfig(object):
     """
     Base Class for the configuration of the Usint application
     """
-    #remove need for this
-    #CONFIGURATION_NAME = "baseconfig"
-
     # find way to depend on flask app context variables instead.
     HTTP_ADDRESS = "http://127.0.0.1:8888"
 
-    # store config external to usint app so that startup will also have error handling.
-    #ADMINS = ["william.aaron@cfa.harvard.edu"]
-
-    TEST_NOTIFICATIONS = True
     TEST_DATABASE = True
     #
     # --- Database and CSRF secret key
@@ -77,3 +70,7 @@ class BaseConfig(object):
     MAIL_PASSWORD = None
     MAIL_SUPPRESS_SEND = True
     
+    #: Logging Mode
+    #: 'files' -> access.log, error.log with SMTP alerts, operations.log (Normal Operation, Gunicorn Server)
+    #: 'console' -> stdout, stderr (Minimal Logging, No Gunicorn Server, Typically CLI Usage)
+    LOGGING_MODE = 'files'
