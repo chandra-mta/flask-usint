@@ -23,14 +23,14 @@ Starting at the root folder of the application, `/proj/web-cxc/wsgi-scripts/cus`
 
 - **access:** This contains a log of the HTTP requests made to the server. Here you can see what URL's are requested by which user and other HTTP request header information
 - **error:** This contains runtime errors for both the gunicorn server running the flask application, and runtime errors within the flask application.
-- **operation:** This is a log for noromal operational messages, such as a revision being submitted, or a signoff being performed.
+- **operation:** This is a log for normal operational messages, such as a revision being submitted, or a signoff being performed.
 
 ## Structure
 
 The top level of this project is the application root, containing the server entrypoint modules, base configuration settings, the instance directory containing file relevant to this application installation's specific runtime, and the cus_app package containing our source code.
 
 * **`usint.py`**  
-  Python module entrypoint for the Gunicorn server which determine application creation and configuration.
+  Python module entrypoint for the gunicorn server which determine application creation and configuration.
   By acting as an entrypoint, MTA can perform file edits to the application configuration and creation without necessarily requiring a
   gunicorn server restart. Conceptually, the application could still run if gunicorn called the cus_app package create_app() function directly.
   
@@ -40,9 +40,6 @@ The top level of this project is the application root, containing the server ent
 
 * **`instance/`**  
   Instance folder for storing application-specific files such as logs and the `usint.db` database.
-
-  * **`logs/`**  
-    Contains `ocat.log` files for logging application runtime information. Used by web server processes.
 
 * **`cus_app/`**  
   Main Flask application folder containing relevant page generation scripts:
