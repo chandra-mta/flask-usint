@@ -2,6 +2,12 @@
 
 For supporting the day-to-day operation of an installation of the Usint Flask application, for example the live installation served by the main cxc web servers and installed at `/proj/web-cxc/wsgi-scripts/cus`, we have a few CLI tools which can update or fetch from that installation's database.
 
+## IMPORTANT NOTE
+All of the command line functions are designed to create an application object with the cus_app.create_app() factory function by using the within_app_context function decorator. This means that any command line function must include this decorator to safely interface with the app context.
+
+This also means that you can design any CLI tool that works with the flask application context by making use of the flask current_app proxy.
+For example, a CLI tool could fetch the configuration options of the running application by using current_app.config
+
 ## General Usage
 
 Use of the CLI tools requires two conditions for correct operation.
@@ -52,4 +58,21 @@ Options:
 
 #: Example Cronjob
 0 2 * * * cd /proj/web-cxc/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py schedule maintain-schedule
+```
+
+## Info Category
+Commands to show a given app installation's information.
+
+```
+(test_python_web_apps) [waaron@scrapper-17:18:flask-usint]$ cli.py info --help
+Usage: cli.py info [OPTIONS] COMMAND [ARGS]...
+
+  App installation information commands
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  print-config  Print the configuration of the application.
+  root          Print the absolute path of the configured application root.
 ```
