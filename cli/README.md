@@ -34,3 +34,22 @@ Commands:
   groups  Change the group assignments for a user.
   search  Query the database for a specific user.
 ```
+
+## Schedule Category
+
+These commands edit the TOO duty schedule table.
+Some commands are called via a cronjob, such as the maintain schedule command which injects additional time period table entries to maintain a rolling schedule horizon.
+
+```
+(test_python_web_apps) [waaron@scrapper-15:33:flask-usint]$ cli.py schedule maintain-schedule --help
+Usage: cli.py schedule maintain-schedule [OPTIONS]
+
+  Inject additional schedule time period entries into the schedule table up to
+  a point in the future
+
+Options:
+  --help  Show this message and exit.
+
+#: Example Cronjob
+0 2 * * * cd /proj/web-cxc/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py schedule maintain-schedule
+```
