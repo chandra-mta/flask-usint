@@ -64,7 +64,7 @@ Options:
 Commands to show a given app installation's information.
 
 ```
-(test_python_web_apps) [waaron@scrapper-17:12:flask-usint]$ cli.py info --help
+(test_python_web_apps) [waaron@scrapper-17:18:flask-usint]$ cli.py info --help
 Usage: cli.py info [OPTIONS] COMMAND [ARGS]...
 
   App installation information commands
@@ -74,4 +74,5 @@ Options:
 
 Commands:
   print-config  Print the configuration of the application.
+  root          Print the absolute path of the configured application root.
 ```

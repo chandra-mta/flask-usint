@@ -5,7 +5,7 @@ CLI interface groupings
 import click
 from .user import create_user, set_groups, find_user
 from .schedule import maintain_schedule
-from .info import print_config
+from .info import print_config, app_root_path
 
 @click.group()
 def cli():
@@ -35,6 +35,7 @@ user.add_command(find_user)
 
 schedule.add_command(maintain_schedule)
 info.add_command(print_config)
+info.add_command(app_root_path)
 
 # Attach subgroup to root CLI
 cli.add_command(user)

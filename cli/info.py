@@ -17,3 +17,11 @@ def print_config():
     click.echo(
         pformat(dict(current_app.config), indent=4, width=80)
     )
+
+@click.command("root")
+@with_app_context
+def app_root_path():
+    """
+    Print the absolute path of the configured application root.
+    """
+    click.echo(current_app.root_path)
