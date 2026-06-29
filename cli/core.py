@@ -37,7 +37,7 @@ def with_app_context(f):
     """
     @wraps(f)
     def wrapper(*args, **kwargs):
-        app = create_app()
+        app = create_app(logging_mode='console')
         with app.app_context():
             return f(*args, **kwargs)
     return wrapper
