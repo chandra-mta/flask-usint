@@ -66,6 +66,11 @@ def send_msg(msg):
         if current_app.config['MAIL_SUPPRESS_SEND']:
             print(msg.as_string())
         else:
+            if current_app.config['TEST_DATABASE']:
+                #:If Mail is not suppressed, yet we are configured to the test database, then update message before sending.
+                msg.subject = "TEST!!! " + msg.subject
+                msg.cc = ''
+                msg.recipients = [current_user.email]
             mail.send(msg)
 
 def send_email(content, subject, to, sender = None, cc = []):
