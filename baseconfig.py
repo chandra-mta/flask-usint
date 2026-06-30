@@ -8,7 +8,7 @@ for configurations available to all installations of the app.
 
 As of 2026-06-03, only the BaseConfig is available to all installations.
 
-Installation specific configurtation options, handling the differences between localhost, cxc-web, cxc-test,
+Installation specific configuration options, handling the differences between localhost, cxc-web, cxc-test,
 will be stored in instance config.py files which override the BaseConfig.
 - `app.config.from_pyfile('config.py', silent=True)`
 
