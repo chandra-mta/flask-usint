@@ -15,6 +15,15 @@ gunicorn -c <server_config_name>.conf.py usint:application
 The gunicorn server configuration file handles settings to allow the cxc web servers to send requests to the application server.
 Flask application specific settings, such as database connections and email settings, exists as flask config files, and thus within MTA file ownership.
 
+## Supplemental Scripts
+Using the CLI, we also run a set of support scripts and commands to performs tasks such as database backups, maintenance, and retaining legacy data files
+
+**cus@r2d2-v**
+```
+#: Add rolling schedule horizon to the TOO schedule
+0 2 * * * cd /proj/web-cxc/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py schedule maintain-schedule
+```
+
 ## Logging
 
 Syshelp uses a separate setup for processing logs which relate to their Apache web server operations. For Flask Usint on the Gunicorn sever,
