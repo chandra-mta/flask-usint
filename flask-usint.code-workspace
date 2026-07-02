@@ -9,6 +9,9 @@ Such a config is typical in this dev work flow. This file is not necessary for t
 		},
 		{
 			"path": "../python-server-configs"
+		},
+		{
+			"path": "../Ocat_Flask_App"
 		}
 	],
 	"settings": {}
