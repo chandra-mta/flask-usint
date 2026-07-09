@@ -15,6 +15,46 @@ gunicorn -c <server_config_name>.conf.py usint:application
 The gunicorn server configuration file handles settings to allow the cxc web servers to send requests to the application server.
 Flask application specific settings, such as database connections and email settings, exists as flask config files, and thus within MTA file ownership.
 
+## Installation of an application
+
+In this context, installation is a loose term in which the USINT admin updates/edits the application root directory so that it contains the application source code.
+An application root directory should contain the following files from the Github Repo.
+The file copies can also be performed by using the `install.sh` bash script using predetermined application roots.
+
+- cli
+- cus_app
+- __create_tables.py
+- baseconfig.py
+- cli.py
+- README.md
+- setup_logging.py
+- usint.py
+
+Then, following the copy of the application source code files, a few additional setup tasks should be done to ensure that the particular installation is ready.
+
+- Create the `instance` subdirectory for containing files pertaining to the installation. In this instance subdirectory, you should consider creating the following files and subdirectories
+  - `config.py` (Configuration values which override the baseconfig.py file. This is good for changing the default dev behavior to official testing or production behavior.)
+    - SQLALCHEMY_DATABASE_URI
+    - HTTP_ADDRESS
+    - MAIL_SUPPRESS_SEND
+    - TEST_DATABASE
+    - SECRET_KEY
+  - log subdirectories (For containing the rotating log files)
+    - `log/access`
+    - `log/error`
+    - `log/operation`
+
+- Activate the conda environment supporting the app installation (`/proj/sot/mta/envs`) and run the __create_tables.py script to ensure data tables and flask session tables are instantiated in the database configured for this install.
+
+## Supplemental Scripts
+Using the CLI, we also run a set of support scripts and commands to performs tasks such as database backups, maintenance, and retaining legacy data files
+
+**cus@r2d2-v**
+```
+#: Add rolling schedule horizon to the TOO schedule
+0 2 * * * cd /proj/web-cxc/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py schedule maintain-schedule
+```
+
 ## Logging
 
 Syshelp uses a separate setup for processing logs which relate to their Apache web server operations. For Flask Usint on the Gunicorn sever,
