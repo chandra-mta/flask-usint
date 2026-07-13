@@ -1,0 +1,406 @@
+Dear Chandra Observer,
+
+   A CXC scientific staff member will be assigned to each scheduled
+observation to aid the observer in planning and executing the
+observation.
+
+#part1#
+
+#obj_name# Seq: #seq_num# ObsId: #obsid#
+Title: #prop_title#
+
+#part2#
+
+(***In addition to your scientific contact, please COPY ALL 
+CORRESPONDENCE TO cus@head.cfa.harvard.edu***)
+
+#part3#
+
+In order to ensure the success of your program, your
+participation in the planning process is essential.  Please review
+your instrumental setup as it appears in our data base and confirm it,
+or request changes, by reply email to me, no later than #deadline#.
+
+You may link to your current observational setup by going to the
+following URL:
+
+http://cda.cfa.harvard.edu/chaser/startViewer.do?obsid=#obsid#   
+(note the new location)
+
+When the page loads, go to the left column and click on "Details". 
+Please review all the entries, except for the SI_Mode.
+
+Alternatively, you may search the OCAT by going to
+
+http://cda.cfa.harvard.edu/chaser/mainEntry.do
+
+Enter your obsid or other search criteria.  After the search, "select
+all" and choose "view observation information".
+
+When reviewing your setup, please consider the several important
+issues discussed below.
+
+In particular:
+    * the target name,
+    * the exposure time (in kilo-seconds),
+    * the target offset (in arcminutes) if applicable,
+    * the defocus (in mm) if applicable,
+    * the SIM-Z offset (in mm) if applicable,
+    * optional CCDs.
+
+Observer MUST verify that the target coordinates are correct.
+                                
+-------------------------------------------------------------------
+
+***Updated in Cycle 13:*** PLEASE REVIEW THIS SECTION
+
+RESPONSE TO USINT SUPPORT: As Chandra ages, the thermal constraints on
+scheduling observations increase. Observations that are approved for
+flight without constraints can be pulled into a schedule at
+anytime. Please help our planning team by PROMPTLY responding to
+your USINT contact to confirm or change parameters as this will ensure
+that your observation is approved for flight as soon as possible. This
+allows our planning team to have a large pool of observations to
+schedule (and you might get your observations completed sooner!).
+
+
+AIMPOINT: A recent shift in the Chandra aimpoint was documented in
+Chandra bulletin 75:
+
+http://cxc.harvard.edu/announcements/announce_75.html
+
+The main concern is that a target could cross a CCD node.  We have
+updated the OCAT offsets to mitigate against this possibility. The
+astrometry and pointing remain excellent.  Astrometrically, the 90%
+error radius is about 0.6" and the 99% error radius is about 1.0".
+As a reminder, when working with sub arrays or near the chip edges,
+the total pointing budget is about 20" (including absolute pointing,
+known thermal shifts in the guide camera, dither, the size of the
+"event island" and background).
+
+
+OPTIONAL CCD POLICY: As of Cycle 13, observers should review their CCD selections
+carefully and select 5 or fewer CCDs if the science objectives can
+be achieved with 5 or fewer CCDs.  Using 5 or fewer CCDs is beneficial
+in keeping the ACIS focal plane (FP) and electronics temperatures within
+the desired operating ranges. The observer should ONLY SPECIFY 6 CCDs
+if the science objectives REQUIRE 6 CCDs. This is a change from the
+previous recommendation of the CXC to use as many CCDs as possible to
+allow serendipitous science. At this point in the mission, it is more
+important to use fewer CCDs to keep the FP and electronics cooler.
+The observer may specify that a given CCD must be on for an
+observation by entering "Y" for that CCD, must be off by entering "N",
+or that the CCD may be on depending on the predicted thermal
+environment by specifying a rank-ordering of optional CCDs by
+entering "OPT1-OPT5". The CCD specified as "OPT1" would be the first
+optional CCD to be turned off if necessary.  The CCD specified as
+"OPT5" would be the last optional CCD to be turned off if necessary.
+At this point in the mission, the CXC has only turned off one optional
+CCD based on the thermal predictions. If the optimal spectral response provided by a
+cold and stable FP temperature is important to the observer, the
+observer should select 4 or fewer CCDs to be on by entering "Y" and 6
+or more CCDs to be off by entering "N". If the optimal spectral
+response is not important for the science objectives, the observer may
+specify that 4 CCDs must be on by entering "Y", 1 CCD may be on by
+entering "OPT1", and 5 CCDs must be off be entering "N".  GOs are
+still encouraged to specify one or more optional CCDs if 5 total
+(required+optional) CCDs are requested for an observation.  GOs are
+discouraged from specifying 5 CCDs as required and one CCD as optional.
+Starting in Cycle 13, the CXC may decide to turn off an optional CCD if
+6 CCDs total are requested (where total is the sum of required and
+optional CCDs) for observations that are scheduled at a pitch angle
+larger than 130 degrees. If you have difficulty in assessing the best
+CCDs to select as optional, please contact your Uplink Support person.
+
+GOs may still require that 6 CCDs be on for their observation,
+but this may require that the observation be scheduled at a different
+time during which the thermal environment is more favorable or
+that the observation be split into multiple pieces.  In general, GOs
+should specify 5 or fewer CCDs unless the science objectives require 6 CCDs.
+
+For observations using the VF mode, observers should take note that as
+the Solar activity is close to the peak for Solar Cycle 24, the Chandra
+background rates are decreasing. This means that the risk of telemetry
+saturation is decreasing. It is suggested to use a background count
+rate of ~36 cts/s for 6 CCDs and ~30 cts/s for 5 CCDs using an energy
+filter of 0.1-12.1 keV (specified in RPS parameters as
+energy filter lower=0.1 keV and energy filter range=12.0keV) to
+compare to the telemetry saturation limit of 68 cts/s in VF mode.
+If no energy filter is specified, a filter from 0.1 to 13.1 keV will
+be used by default. Please refer to the POG or contact your USINT
+personnel for estimating your risk of telemetry saturation.
+
+If the observer selects a subarray, they should read section 6.12 of
+the Proposers Observatory Guide:
+
+http://cxc.cfa.harvard.edu/proposer/POG/html/chap6.html#tth_sEc6.12
+
+to fully understand how the selection of the number of operational CCDs
+and the size of the subarray affects the minimum frametime.  In
+general, using fewer CCDs will permit a faster readout.  For example,
+using the smallest subarray of 128 rows in the middle of the CCD with
+1 CCD has a minimum frametime of 0.4s and with 6 CCDs has a minimum
+frametime of 0.7s.  In almost all cases, the observer should leave the
+parameter on the RPS target form that asks if the most efficient
+frametime should be used to the default value of "Y".  This parameter
+should only be changed if the observer fully understands the impact on
+the efficiency of their observation and if they have discussed the
+
+
+***End of updated for cycle 13***
+
+------------------------------------------------------------------------
+
+You should have already been contacted by the Chandra Director's office
+concerning the key parameters:
+Instrument Grating Coordinates    Optional Chips    Preferences    Constraints
+
+
+Comments given to CDO during this contact have been transferred to
+USINT --
+but DO NOT ASSUME USINT IS COMPLETELY AWARE OF THEM UNTIL YOU HAVE
+CONFIRMATION FROM YOUR CONTACT.
+
+Due to the thermal budget of the orbit worked into the long term schedule,
+new preferences and constraints are very difficult to accommodate at this time.
+If the situation is dire or has a very strong science driver we can contact the
+director's office on your behalf.
+
+
+SPLIT OBSIDS
+Due to the thermal budget of each orbit, some obsids are split into
+multiple obsids during the 32 days leading up to the observation. The
+policy is that when an approved observation is split, both ends are
+approved so long as they are being done in the same week or are pool
+targets. Observers will only be notified if both portions of the split
+do not end up in the same week and the target was not a pool target.
+
+--------------------------------------------------------------------
+
+Important issues to consider:
+NUMBER OF CCDs:
+
+As stated above, using 5 or fewer CCDs is beneficial in reducing the
+temperatures of the focal plane and electronics. GOs should only
+specify 6 CCDs if the science objectives require 6 CCDs. If the
+optimal spectral response is important to the science objectives, the
+GO should consider using 4 or fewer CCDs. If the optimal spectral
+response is not necessary, the GO should consider specifying 4 CCDs as
+required and one CCD as optional.
+
+
+SELECTION OF OPTIONAL CCDS
+
+GOs are now required to specify at least one optional CCD when
+completing the target forms in RPS at the time of proposal submission.
+As stated above GOs are encouraged to specify two or more optional
+CCDs and five or fewer total CCDs (where total is the sum of
+required+optional CCDs). If the science objectives require 6 CCDs, the
+GO should specify five as required and one as optional at the time of
+proposal submission. If the proposal is accepted, the GO can then work
+with their USINT contact scientist to change the one optional CCD to a
+sixth, required CCD.
+
+USE OF OPTIONAL CCDS
+
+The CXC may decide at the point when the detailed schedule is generated
+for a week that an optional CCD must be turned off to satisfy thermal
+constraints.  The specification of optional CCDs by the GO gives the
+CXC the authority to turn off these CCDs without any further contact
+with the GO.
+
+
+IS SENSITIVITY BELOW 1.0 keV IMPORTANT TO YOUR SCIENCE?
+
+It was discovered during Cycle 3 that the low-energy sensitivity of the
+ACIS instrument has been decreasing throughout the life of the
+mission.  For more detail on this effect, please consult the web page
+at:
+
+http://cxc.harvard.edu/cal/Acis/detailed_info.html#obf_contam
+
+The decrease in efficiency is presumably due to a layer of
+contamination on the filters and/or CCDs.  The GO should make use of
+the tools referenced on this web page to evaluate the impact of this
+decreased sensitivity on their science.
+
+IS ENERGY RESOLUTION CRITICAL TO YOUR SCIENTIFIC GOALS?
+
+Because of radiation damage to the FI devices, their effective energy
+resolution has degraded, and is strongly dependent on the distance of
+the event from the readout node. Because of the focal plane geometry,
+the detected energy resolution is worst near the aim point of the
+imaging array, where the mirror performance is best. The performance
+of the FI devices is considerably better at -120 C than at -110 C.
+The ACIS CCDs have been operated at -120 C since January 2000, but
+many spacecraft orientations in recent years have resulted in
+observations with FP temperatures warmer than -120 C.  Since December
+2010, the CTI correction has included a temperature-dependent correction to
+partially account for the strong temperature dependence of the CTI for
+the FI CCDs. The temperature dependent correction recovers part of the
+performance lost as the temperature varies, but not all of it.  So, if
+the optimal spectral response is required, it is still preferable to
+have a cold and stable FP temperature for the observation. The CTI
+correction is applied by default in the standard processing of the FI
+CCD data.
+
+The BI CCDs had small, but significant CTI at launch and the CTI has
+increased slowly over the mission. The CTI of the BI CCDs has a much
+weaker temperature dependence than the FI CCDs.  Nevertheless, the BI
+CCD CTI correction now includes a temperature-dependent correction
+that is also applied in the standard processing.
+
+For a general discussion of the ACIS energy resolution the GO is
+advised to review the information on the CXC Calibration page:
+
+http://cxc.harvard.edu/cal/Acis/detailed_info.html
+
+Then select "Energy Resolution" from the menu on the left.
+
+For further improvement in effective energy resolution, you may
+consider moving your target closer to the readout nodes on the imaging
+array by offset pointing (at the expense of spatial resolution).
+Targets  can be imaged closer to the readout nodes on the S-array by a
+SIM-Z translation, without compromising image quality.
+
+IS YOUR TARGET AN EXTENDED X-RAY SOURCE?
+
+If your target is spatially extended, and your science depends on the
+correct background subtraction, consider the following:
+
+   (1) The back illuminated (BI) devices (S1 and S3) may be affected
+by particle background flares. In the past, the BI background rate
+(after the standard event screening) was greater than twice the
+quiescent rate for up to 30% of the time.  This flare fraction has
+declined with time, and is practically zero at present. We do not know
+if/when the flares will return. The front illuminated (FI) devices have
+always been little affected by flares.  Note that a re-observation
+request will be considered only in the most extreme cases (if the
+background rate was greater than five times the quiescent
+rate for more than half of the exposure).
+
+   (2) The quiescent background rate, after the standard event
+screening, is larger by a factor of 1.5-3 for the BI devices compared
+to the FI devices  depending upon the bandpass of interest. The
+quiescent background rate increased from 2001 until 2010, reached a
+peak in 2010 and has declined since 2010. The quiescent background
+rate in 2013 is ~25% higher than that in 2001.  It is not clear if the
+background rate will continue to decline in 2014, stay about the same,
+or increase, as this depends on the Solar cycle.  For more details,
+check the relevant section of the calibration web page.
+
+http://cxc.harvard.edu/cal/Acis/detailed_info.html#background
+
+In choosing the appropriate device, consider the relative target count
+rates using the FI and BI chips (the latter have significantly higher
+low energy sensitivity), the relative background  rates, the risk of
+flares, the spectrum of your source relative to the background
+spectrum, and the desired spectral resolution.  If S3 will be the main
+chip and the target substantially fills that chip, consider using S1
+for background flare detection.
+
+
+USE OF VERY FAINT MODE
+
+Studies of ACIS background (see
+http://cxc.harvard.edu/cal/Acis/Cal_prods/vfbkgrnd) have shown that for
+weak or extended sources a significant reduction of background at low and
+high energies may be made by using the information from 5 x 5 pixel
+islands, i.e.  Very Faint mode, instead of the Faint mode 3 x 3
+island.  This screening results in a 1-2% loss of good events.  CIAO
+2.2 and  later provides a tool to utilize the VF mode for screening
+background events.  See
+
+http://cxc.harvard.edu/ciao/why/aciscleanvf.html
+
+Please note that the RMF generation is the same for Very Faint mode
+as it is for Faint mode.
+
+It is important to realize that VF mode uses more telemetry; the limit
+is ~68 cts/s, which includes the target flux and the full background
+from all chips. Check the calibration web page for a discussion of
+background flares and the telemetry limit.
+
+http://cxc.harvard.edu/cal/Acis/detailed_info.html#background
+
+Review section 1.3 of "General discussion of the quiescent and flare
+components of the ACIS background".
+
+In order to reduce the total background rate and the likelihood of
+telemetry saturation, VF observations should consider using 5 or fewer
+CCDs and an energy filter with a 12 keV upper cutoff. If no energy
+filter is specified, a filter from 0.1 to 13.1 keV will be used by
+default.  If the target is brighter than 5-10 cts/s, one may have to
+take more drastic steps, such as turning off more chips or using Faint
+mode. The energy filter specified above is even more important if the
+S1 & S3 CCDs are used.
+
+The VF mode background screening can amplify the pileup effect.
+Therefore,  this mode cannot be used to reduce background in the
+region of bright, i.e. piled-up, sources.  However, there is no
+intrinsic increase of pileup in the data, and the software can be
+applied to selected regions excluding bright sources.
+
+IS YOUR TARGET AN X-RAY POINT SOURCE?
+
+If your target is a point source, be sure you have estimated your
+count rate correctly. Take appropriate measures to avoid event pileup
+at levels that may compromise your scientific goals.  Because of the
+Poisson nature of pileup, its effects can compromise your observations
+with even a small event flux per frame.  For example, roughly 4% of
+your events will experience pileup for a count rate of 0.1 events per
+readout frame.  Pileup can affect both the shape of the PSF and the
+observed spectral energy distribution of your source.  See the
+calibration webpage for information regarding pileup, and the
+Proposers Guide section 6.14, at
+
+http://cxc.harvard.edu/proposer/POG/html/chap6.html#tth_sEc6.14
+
+for steps that can be taken to mitigate the effects of pileup.
+The GO is also advised to become familiar with the SW which models the
+effect of pileup on the observed spectrum:
+
+http://space.mit.edu/CXC/analysis/davis/head2002/index.html .
+
+
+HIGH TELEMETRY RATES
+
+Beware of high telemetry rates.  The limiting telemetry rate that
+avoids data loss (saturation) is a function of ACIS mode.  Estimate
+the count rate of all sources in your field (using the PIMMS software,
+for example) and the potential increase in count rate due to
+background flares on the BI devices.  If you do not need the BI
+device, and you are approaching telemetry saturation, consider turning
+off the BI device(s).  See Tables 6.10 and 6.11 in the Proposers'
+Guide for telemetry saturation rates for the available ACIS
+modes.
+
+OPTIONAL CONSIDERATIONS
+
+If your observation does not use gratings, is greater than 30 ks, at a
+high Galactic latitude and free of large extended sources, it may be
+useful for background calibration and monitoring.  Provided it does
+not interfere with your science goals, consider the following:
+    (1) Use Very Faint mode, telemetry capacity permitting.  VF is a
+superset of Faint mode and all existing calibration products apply
+when you use default processing, which only considers the 3 x 3 island
+data (i.e., when you do not use the special tool to screen the 5 x 5
+island to reduce background).
+    (2) If your main chip is S3, consider also using S1 to help background
+modeling.
+
+
+CALIBRATION
+
+Please consult the calibration webpage for additional information.
+
+http://cxc.harvard.edu/cal/Acis/
+
+CHANGES NOT PERMITTED
+
+Be advised, the following changes in your observing program are not
+usually permitted:
+a) Adding constraints (e.g. roll angle or a time constraint).
+b) A change in exposure time or target, or instrument switches that would
+deviate from, or be inconsistent with, your proposed scientific goals.
+

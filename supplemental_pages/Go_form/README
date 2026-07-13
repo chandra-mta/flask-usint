@@ -1,0 +1,41 @@
+Dir:  /proj/web-icxc/htdocs/cal/go_form/    
+Also see: https://cxc.cfa.harvard.edu/mta_days/mta_script_list/USINT/ti_go_form.html
+
+
+Updating letter generator for new AO (usually done in Sep/Oct each
+year):
+
+e.g. for cycle 15
+
+cp AO14.html AO15.html
+
+edit AO15.html changing cycle 14 references to cycle 15
+
+cp cycle14.cgi cycle15.cgi
+
+edit cycle15.cgi:
+
+     *make any changes that people want to the text of the ACIS, HRC,
+      and LETG letters.  (Note:  HETG letter is not used, can ignore.)
+      HRC letter is reviewed by Vinay Kashyap and Mike Juda.  LETG
+      letter is reviewed by Brad Wargelin and Jeremy Drake.  ACIS
+      letter is usually reviewed by Scott Wolk, Paul Plucinksy, and
+      Dan Schwartz.
+
+     *change 14 to 15 in this line: print "<form action=\"cycle14.cgi\">\n";
+      
+go to AO15.html page and test form.  Also make sure that links in
+letters are still valid.  
+
+If everything looks good, point index.html to AO15.html.
+
+If there is a new USINT person, or if a USINT's contact information
+has changed, edit cxc_data.txt .
+
+internal (icxc) version: /proj/web-icxc/htdocs/cal/go_form/
+
+secure server version: /proj/web-cxc-secure/htdocs/usg/
+  
+
+
+

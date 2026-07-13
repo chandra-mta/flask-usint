@@ -1,0 +1,412 @@
+Dear Observer,
+
+We are writing to let you know that we will be supporting
+the planning of your Chandra HETGS observation.
+
+Some changes to the Chandra instruments since launch as
+well as experience with flight data suggest that all HETGS
+instrument configurations should be re-examined and possibly changed
+slightly in order to enhance the observations' scientific value.
+
+Attachment #1 summarizes some of the most important
+changes you may wish to consider.
+
+We want to make sure that the best science is obtained
+with the Chandra HETGS.
+Please take a look at the attachment and contact us
+about specific observation parameters and any adjustments you
+want to make. Your HETGS observation parameters, as they now appear
+in our observation data base (OBSCAT) can be viewed starting on the
+web at 
+
+     http://cxc.harvard.edu/targets
+
+As appropriate, you will also find links so you may see the
+the HETGS orientation for the roll angle that would be used
+given the placement of the observation in the long term schedule.
+For further information about the instrument status and calibration
+you may want to consult the following web sites:
+
+     http://cxc.harvard.edu/
+      which includes these links in particular:
+          Instruments & Calibration       /cal
+          User Documents                  /udocs/docs/docs.html
+          Chandra inflight status report  /udocs/status.html        
+
+     http://space.mit.edu/HETG/
+  
+Attachment #2 to this e-mail is a list of AO1 HETG observations and
+a contact scientist to support the planning for each observation.
+
+If Schulz is your contact scientist, use the contact priority:
+
+  1.  Norbert S. Schulz    nss\@space.mit.edu, phone: 617 258 5767
+  2.  Herman L. Marshall   hermanm\@space.mit.edu, phone: 617 253 8573
+
+If Marshall is your contact scientist, use the contact priority:
+
+  1.  Herman L. Marshall   hermanm\@space.mit.edu, phone: 617 253 8573
+  2.  Norbert S. Schulz    nss\@space.mit.edu, phone: 617 258 5767
+
+In case you have a TOO observation you may contact Herman (primary)
+or Norbert (secondary) for observation planning at any time as well as
+when the TOO scheduling begins.
+  
+In the mean time if you have any questions or thoughts please feel
+free to contact us.
+
+     Sincerely,
+
+     Norbert S. Schulz
+     Herman L. Marshall
+
+     HETGS Chandra Planning Support Scientists
+
+
+ - - - Attachement #1 :
+
+                Observation Planning Considerations
+                  for Chandra HETGS Observations
+                          February 1, 2000
+
+
+OBSERVING SCHEDULES AND TIMESCALES
+
+If your target is in the long term schedule
+(http://cxc.harvard.edu/target_lists/longsched.html) information is needed by 
+7 weeks in advance. The target will not be scheduled earlier, but
+could be scheduled later if necessary due to other demands on the
+scheduling process. Note that all time/roll constraints will be
+honored. If your target is in sections 49, 50, 51, it means it is
+in a pool of observations which have no constraints and are
+visible any time. These are used to fill-in the weekly schedules
+to increase observing efficiency. Because these can be scheduled
+at any time, we request review of the configuration as soon as
+possible, so that we might use them. (We regret that there will
+inevitably be some of these not done until almost the very end of
+the AO cycle).
+
+Events leading up to your observation are summarized briefly
+here:      
+
+    Obs - 7 weeks    : Observer contact to review his observation 
+    Obs - 3 weeks    : Notification of observation in OR list
+    Obs + few days   : Notification of completion of observation
+
+Note, that some time near the Obs - 3 weeks deadline is reserved
+for emergency changes only and changes proposed after that
+deadline have good  probablility to be rejected. Therefore please
+contact us NEAR the Obs - 7 weeks period. Also, please allow for
+possible delays for the notification of completion.
+
+ACIS RELATED ISSUES
+
+1) Radiative degradation of FI devices:
+Because of radiation damage to the FI devices, their detectable 
+energy resolution has degraded, and is strongly dependent on the
+distance of the event from the readout node. Because of the
+focal plane geometry, the detected energy resolution is worst near the
+aim point of the imaging array where the mirror performance is
+best. We expect the performance of the FI devices to improve
+when we cool the focal plane to -120 C or below (currently
+targeted for February 2000). 
+
+2) Background:
+The quiescent background flux is larger for the BI
+devices compared to the FI devices for ACIS grades 02346
+between 0.3--10 keV, and background flares
+with amplitudes of 5-50 times the quiescent rate occur
+over roughly 30% of a moderate to long observation (>20 ksec). 
+The background flares are usually not seen when the HETG is inserted
+but are seen when the LETG is inserted.
+
+3) Telemetry:
+Be aware of telemetry rates.  The limiting telemetry rate that
+avoids data loss (dropout) is a function of ACIS mode. Estimate
+the count rate of all sources in your field and the potential
+increase in count rate due to background flares on the BI
+devices. If you do not need the 0th order image in the S3 BI
+device and you are approaching telemetry saturation, consider
+blocking the 0th order with a custom window (pref. 150x150
+pixels).  We are recommending the use of TE/F not TE/VF in
+almost all cases, given the cosmic ray and particle background
+rates. For currently valid limits see Table 5.5 in October 1997
+AXAF Proposers' Guide for telemetry saturation rates.
+
+4) Front End Processor 0 (FEP0)
+During the early phase of the mission, an intermittent problem was
+discovered with one of the Front End Processors (FEPs) which
+processes pixel data from the ACIS CCDs.  Specifically, FEP0
+would suddenly experience a corruption in the bias map from rows
+512 to 1024 at an indeterminate point in the observation.  This
+would lead to many spurious events being reported from the top
+half of that CCD for the remainder of the observation, flooding
+the telemetry stream.
+
+A patch has been developed and installed which detects when such
+an error has occurred and prevents data from the top half of the
+CCD from being telemetered from that point in the observation. 
+GOs should be aware that they might see the event data from the
+top half of one CCD suddenly stop during an observation sue to
+this effect. The error is intermittent and appears to occur only
+during long observations (longer than 40 ks).  FEP0 should
+therefore be assigned to the CCD which produces the least useful
+data in its upper half of rows for an observation.  By default,
+FEP0 will be assigned to the S0 CCD when CCDs S0 through S5 are
+in use. The GO may request that FEP0 be assigned to a CCD other
+than the defaults but there must be a compelling scientific
+reason to do so.
+
+HETG RELATED ISSUES
+
+There are a few issues specific to the observations with the
+High Energy Transmission Grating (HETG).  These derive primarily
+from the dispersion pattern that is unique to the HETG.
+
+1) Although the FI CCD energy resolution has not yet degraded
+sufficiently to cause concern for discriminating between orders
+in the dispersed spectra, it is still advisable to set up the
+observation in order to minimize the impact of this change.
+The main reason is that smaller pulse height windows may be used
+in the data analysis so that background can be reduced.  This
+step is particularly important when the source is faint.  For
+point sources, we suggest moving the location of the 0th order
+on the S3 array along the readout direction using the Science
+Instrument Module (SIM).  A SIM motion of 3 mm will give not
+compromise the science of any observation, there will still be
+about 100 pixels before the end of the array for a spatial
+background region; there is an allowance for an initial
+acquisition error of 30\" as well as the +/- 16\" dither pattern.
+
+The user may wish to increase this shift in order to improve
+background rejection if the target is particularly hard.  The
+smallest energy of interest determines the maximum dispersion
+distance and, consequently, the maximum height of the dispersion
+pattern (along columns).
+
+2) Pulse pileup has been found to cause a greater impact on
+dispersed spectra than expected.  The effect is most noticeable
+for MEG spectra in the 1-2 keV range where the effective area
+photon spectra often peaks.  At a level of about 0.05 photon per
+pixel per frame, we have observed a 50% loss of events in the
+first order spectrum.  Some of these events can be recovered by
+examining the higher order spectra but some events have \"migrated\"
+out of the standard grade set, so the standard calibration curves
+no longer apply.  See the Proposer's Guide for ways to mitigate
+the effect of pileup.
+
+3) There are a few special concerns regarding diffuse sources.
+Clearly, one must take the extent of the source into account
+when considering possible SIM shifts.  Perhaps less obvious is
+the potential difficulty of combining spectra when two or more
+roll angles are used.  Observers may wish to specify that long
+observations are not split into pieces because the optimization
+of observatory constraints would normally decouple the roll angles
+of the pieces.  Finally, it should be noted that if the observer
+has a choice of which CCD to connect to FEP0 (and thereby risk
+data loss), then we recommend against risking S3, where zeroth
+order will be obtained.  The information in zeroth order is
+complementary to that of the dispersed images and may well be
+necessary for unambiguously differentiating spatial from spectral
+variations.
+
+PARAMETER CROSS REFERENCE LIST
+
+The following is a list of the key parameters
+which may be considered in optimizing an HETGS observation with
+reference to specific issues described in detail above.
+
+SI Mode            - This code for ACIS is determined by the ACIS
+                     parameters selected and may be identical
+                     to previously used ACIS SI Modes.
+
+Offset Y           - Used to offset point along the dispersion
+                     direction to fine tune chip-gap locations, etc.
+
+Offset Z           - generally preferable to use \"Z-Sim\" instead of
+                     \"Offset Z\".
+
+Z-Sim              - Useful to move aim point on ACIS-S array closer
+                     to framestore area to reduce FI CTI effects.
+
+ACIS Exposure Mode - TE or CC selection: useful for pileup reduction.
+
+Event TM Format    - For telemetry reasons, generally
+                     recommend \"Faint\" instead of \"Very Faint\";
+                     \"Graded\" only if required by telemetry rate.
+
+Frame Time         - Generally 3.2 sec for HETGS; may be reduced for
+                     pileup reduction and/or consider CC mode.
+
+Standard Chips     - \"N\" for ACIS-S array operation.
+
+I0 - I3            - \"N\" for ACIS-S array operation.
+
+S0 - S5            - \"Y\" for ACIS-S array operation.
+
+Subarry Type       - Generally \"None\" for HETGS observations.
+
+Duty Cycle         - For use in Alternating Frame mode.  This
+Number               mode must be selected and used with care.
+Tprimary             
+Tsecondary
+
+Event Filter      - Events may be vetoed from the telemetry based
+Lower               on energy.  This may be useful for telemetry
+Range               reduction on e.g., known-to-be-cutoff sources.
+
+Window Filter     - Spatial window parameters may be useful for
+Start Row           reducing telemetry rate on a bright source;
+Start Column        note that \"sample rate\" allows some events
+Height              to be telemtered, e.g., from zero-order region.
+Width
+Lower Energy
+Energy Range
+Sample Rate
+
+
+ - - - Attachement #2 :
+
+             Chandra HETG User Support Contacts
+
+Segment:   2  12-Dec-1999 00h to 19-Dec-1999 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support
+-----------------------------------------------------------------------------------
+200030                UX ARI    50.0   51.648   28.715            Drake        DONE
+880333          PKS 0745-191    38.1  116.880  -19.294             Wise    Marshall
+470406               CYG X-3     3.8  308.106   40.958          Paerels        DONE
+200034            LAMBDA AND   100.0  354.391   46.458           Dupree        DONE
+
+Segment:   5  02-Jan-2000 00h to 09-Jan-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support 
+-----------------------------------------------------------------------------------
+700004              NGC 1068    50.0   40.670   -0.013         Marshall    Marshall
+700165              NGC 3227    50.0  155.879   19.865           George        DONE
+
+Segment:   6  09-Jan-2000 00h to 16-Jan-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+790020                3C 273    40.0  187.278    2.052         Marshall        DONE
+
+Segment:   9  30-Jan-2000 00h to 06-Feb-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+700142              NGC 5548    80.0  214.498   25.137           Yaqoob        DONE
+
+Segment:  13  27-Feb-2000 00h to 05-Mar-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+290026               CAPELLA    30.0   79.176   45.998      CALIBRATION    Marshall
+590037           CRAB PULSAR    10.0   83.633   22.014         Marshall    Marshall
+400005               LMC X-3    20.0   84.735  -64.084        Feigelson      Schulz
+400072               CEN X-3    40.0  170.313  -60.623          Liedahl      Schulz
+400073               CIR X-1    30.0  230.171  -57.167           Brandt      Schulz
+
+Segment:  15  12-Mar-2000 00h to 19-Mar-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+200035              ZETA ORI    75.0   85.190   -1.943          Waldron    Marshall
+700178           MARKARIAN 3   100.0   93.900   71.035             Kahn    Marshall
+200054              HD 68273    65.0  122.383  -47.337          Skinner    Marshall
+
+Segment:  17  26-Mar-2000 00h to 02-Apr-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+200029                 ALGOL    50.0   47.042   40.956            Drake    Marshall
+200065              ZETA PUP    75.0  120.896  -40.003       Cassinelli      Schulz
+200039      FK COM/HD 117555    40.0  202.695   24.233           Buzasi    Marshall
+400082              GX 349+2    10.0  256.435  -36.424           Levine      Schulz
+
+Segment:  18  02-Apr-2000 00h to 09-Apr-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+400015              VELA X-1    30.0  135.528  -40.555           Schulz      Schulz
+700007              NGC 4151    50.0  182.636   39.406         Marshall    Marshall
+700105          MCG -6-30-15   125.0  203.974  -34.296         Marshall    Marshall
+300018             V1223 SGR    50.0  283.760  -31.164            Mukai    Marshall
+
+Segment:  21  23-Apr-2000 00h to 30-Apr-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+400027          GRS 1915+105    30.0  288.798   10.946              Lee    Marshall
+
+Segment:  23  07-May-2000 00h to 14-May-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+600000              NGC 1399    58.0   54.622  -35.450             Wise    Marshall
+400016              GX 301-2    40.0  186.657  -62.770           Schulz      Schulz
+700117           PG 1404+226    80.0  211.591   22.396           Nandra    Marshall
+200066      PROXIMA CENTAURI    46.0  217.429  -62.680           Linsky    Marshall
+400071            4U 1735-44    25.0  264.738  -44.450          Vrtilek      Schulz
+700043          PKS 1830-211    50.0  278.417  -21.061        Feigelson    Marshall
+
+Segment:  28  11-Jun-2000 00h to 18-Jun-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+700046       CIRCINUS GALAXY    80.0  213.292  -65.339        Feigelson    Marshall
+200013                TZ CRB    85.0  243.673   33.860    Krishnamurthi    Marshall
+400067           SERPENS X-1    80.0  279.988    5.035            Swank      Schulz
+700168               ARK 564    50.0  340.664   29.725          Leighly    Marshall
+
+Segment:  31  02-Jul-2000 00h to 09-Jul-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+700045              NGC 3783    55.0  174.757  -37.739        Feigelson    Marshall
+600001              NGC 4486    40.0  187.705   12.391             Wise    Marshall
+800019            ABELL 1835   140.0  210.258    2.859             Wise    Marshall
+200015                AU MIC    60.0  311.289  -31.340    Krishnamurthi    Marshall
+
+Segment:  33  16-Jul-2000 00h to 23-Jul-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+500008                 N132D   100.0   81.259  -69.650        Canizares      Schulz
+200003                TW HYA    50.0  165.467  -34.704        Canizares      Schulz
+400083                GX 5-1    10.0  270.284  -25.079           Levine      Schulz
+300015              SS CYGNI    50.0  325.675   43.586         Wheatley    Marshall
+
+Segment:  35  30-Jul-2000 00h to 06-Aug-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+500070             0509-67.5   100.0   77.383  -67.521             Kahn      Schulz
+400070            4U 1728-16    20.0  262.929  -16.961          Vrtilek      Schulz
+400084                GX 9+1    10.0  270.384  -20.529           Levine      Schulz
+400038            4U 1822-37    40.0  276.445  -37.105             Kahn      Schulz
+
+Segment:  38  20-Aug-2000 00h to 27-Aug-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+400024            4U 1700-37    40.0  255.986  -37.844          Boroson      Schulz
+
+Segment:  41  10-Sep-2000 00h to 17-Sep-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+700167           1H 0707-495   100.0  107.173  -49.552          Leighly    Marshall
+300016                 U GEM   100.0  118.772   22.002           Szkody    Marshall
+400017            4U 1626-67    40.0  248.070  -67.462           Schulz      Schulz
+200006  AR LAC-3 LAST QUAD       7.5  332.170   45.742        Canizares      Schulz
+200004  AR LAC-1  ECLIPSE       35.0  332.170   45.742        Canizares      Schulz
+200005  AR LAC-2 FIRST QUAD      7.5  332.170   45.742        Canizares      Schulz
+
+Segment:  42  17-Sep-2000 00h to 24-Sep-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+200061              HD 45348   100.0   95.988  -52.696            Brown    Marshall
+300013       RX J0925.7-4758    60.0  141.442  -47.971         Hartmann    Marshall
+200063               TAU SCO    80.0  248.970  -28.216            Cohen      Schulz
+200007  AR LAC-4 ECLIPSE        35.0  332.170   45.742        Canizares      Schulz
+200009  AR LAC-6 LAST QUAD       7.5  332.170   45.742        Canizares      Schulz
+200008  AR LAC-5 FIRST QUAD      7.5  332.170   45.742        Canizares      Schulz
+
+Segment:  49  05-Nov-2000 00h to 12-Nov-2000 00h
+Seq#                  Target  Time(ks)  RA        Dec          Observer    Support   
+-----------------------------------------------------------------------------------
+400006               LMC X-1    20.0   84.912  -69.743        Feigelson      Schulz
+400068              X0918-54    30.0  140.111  -55.206         Angelini      Schulz
+200057               ETA CAR   100.0  161.258  -59.680         Corcoran    Marshall
+400069              X1543-62    30.0  236.978  -62.568         Angelini      Schulz
+
+Targets of opportunity (TOOs):
+All TOOs will be supported by Marshall with Schulz as backup when Marshall is
+unavailable.  These include sequence #s: 300017 (PI:Mauche), 300032 (PI:Starrfield),
+300034 (PI:Starrfield), 400045 (PI: Lewin, DONE), 400046-67 (PI:Lewin),
+400074 (PI:Liedahl), 500082 (PI:Piro, DONE) and 500084,86,88 (PI:Piro).

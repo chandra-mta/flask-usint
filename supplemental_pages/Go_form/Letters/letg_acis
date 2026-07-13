@@ -1,0 +1,110 @@
+Dear #prop_name#,
+
+#part1#
+
+Your confirmation ensures that your observation set-up will be ready when
+the satellite command loads are built.  It is important to note that after
+the above date it will not be possible to change any of the observation
+parameters (unless your observation is a TOO and updates are inherently
+unavoidable).  The scheduling process becomes more complicated each year
+because of the increasing number of thermal control issues, and Mission
+Planning needs all observation configurations confirmed early in the Cycle.
+
+If you have any questions concerning your observation or its set-up, please
+do not hesitate to contact me. Correspondence via email is preferred (cc to
+"cus@head.cfa.harvard.edu"), but you may also contact me by phone or FAX
+(see below).  If the set-up is correct as it is, I still require your
+confirmation.
+
+#part2#
+
+You can check your observation parameters in the on-line OBSCAT by going to
+
+http://cda.cfa.harvard.edu/chaser/mainEntry.do
+
+Enter your obsid or other search criteria.  After the search, "select
+all" and choose "view observation information". Or, follow this link:
+
+    http://cda.cfa.harvard.edu/chaser/startViewer.do?obsid=#obsid#   
+    (note the new location)
+
+When the page loads, go to the left column and click on "Details". 
+Please review all the entries, except for the SI_Mode.
+
+Please check ALL parameters carefully, especially the following:
+
+        * the target name,
+        * the target coordinates (in decimal degrees, including corrections 
+          for proper motion),
+        * the exposure time (in kiloseconds),
+        * the target offset (in arc minutes),
+        * the defocus (in mm),
+        * the SIM-Z (detector translation, in mm),
+        * the roll constraint (in degrees),
+        * the time constraint,
+        * the ACIS mode.
+
+Once this Cycle's preliminary Long Term Schedule has been created, you can 
+view the orientation of the detector on the sky in the optical and X-ray bands 
+by clicking on the "DSS" (Digital Sky Survey), "ROSAT" (pointed observation, 
+if any), and "RASS" (ROSAT All-Sky Survey) buttons at the bottom of the 
+"Summary of Sequence Number" page.  Please note that if your observation is 
+a TOO, the roll angle will of course be unknown; the DSS, ROSAT, and RASS 
+images will be shown assuming a roll angle of 0 degrees.  The range of 
+permitted roll angles vs date is illustrated via the "Roll/Visibility" link.
+
+I strongly urge you to consult the "Checking your LETG/ACIS-S Obscat setup" 
+page at http://cxc.harvard.edu/cal/Letg/ACIS_params/, which contains helpful 
+and up-to-date information on optional chips (see below), subarrays (useful
+to reduce pileup), and pointing/wavelength offsets.  Observers are especially 
+advised to check the Y offset: the observatory aimpoint slowly drifts over
+time, which affects where 0th order and dispersed spectral features fall 
+with respect to ACIS chip edges.
+
+You have probably already been asked by the Chandra Director's Office to 
+consider marking one or more ACIS CCDs as Optional.  Please note that chips 
+S0 and S5 are useless for providing 1st order LETG data; those outermost 
+chips are only useful if you intend to analyze higher-order spectra, or 
+perhaps in other very special circumstances.  The LETG/ACIS-S Obscat setup
+web page (http://cxc.harvard.edu/cal/Letg/ACIS_params/) and the Spectrum
+Visualization Tool (http://cxc.harvard.edu/cgi-gen/LETG/alp.cgi) are helpful 
+in determining which CCDs may be unnecessary.
+
+Also note that observations using fewer CCDs are less likely to be split into 
+multiple pieces because of their greater scheduling flexibility.  Further 
+information is available in the POG, section 6.20.1/Choosing Optional CCDs
+(http://cxc.harvard.edu/proposer/POG/html/ACIS.html#tth_sEc6.20.1).
+
+Please be advised that the following changes in your observing program are
+not generally permitted:
+
+        * adding any constraints,
+        * changing exposure time or target,
+        * adding or removing a grating, or
+        * switching between ACIS and HRC or LETG and HETG so that
+          the target and instrument configuration end up being the same
+          as in someone else's observing proposal.
+
+If you request any changes to your set-up, I will confirm these with you 
+by e-mail (or telephone), and after about two days you should see these 
+updated parameters in the on-line OBSCAT database.
+
+Again, if you have any questions at all about the set-up and execution
+of your LETGS observation please do not hesitate to contact me. 
+
+Best wishes,
+
+#cxc_name#
+e-mail: #cxc_email#
+Phone:  #cxc_phone#
+FAX:    #cxc_fax#
+
+I am often in e-mail contact out of office hours and at weekends.  If
+you cannot reach me for any reason and need immediate assistance, my
+colleague #other# will also be happy to answer any questions and
+offer advice and help.  He can be reached at
+
+e-mail: #other_email#
+Phone:  #other_phone#
+FAX:    #other_fax#
+

@@ -1,0 +1,108 @@
+Dear #prop_name#,
+
+#part1#
+
+Your confirmation ensures that your observation set-up will be ready when 
+the satellite command loads are built.  It is important to note that after 
+the above date it will not be possible to change any of the observation 
+parameters (unless your observation is a TOO and updates are inherently 
+unavoidable).  The scheduling process becomes more complicated each year 
+because of the increasing number of thermal control issues, and Mission 
+Planning needs all observation configurations confirmed early in the Cycle.
+
+If you have any questions concerning your observation or its set-up, please 
+do not hesitate to contact me. Correspondence via email is preferred (cc to 
+"cus@head.cfa.harvard.edu"), but you may also contact me by phone or FAX 
+(see below).  If the set-up is correct as it is, I still require your 
+confirmation.
+
+#part2#
+
+You can check your observation parameters in the on-line OBSCAT by going to
+
+http://cda.cfa.harvard.edu/chaser/mainEntry.do
+
+Enter your obsid or other search criteria.  After the search, "select
+all" and choose "view observation information". Or, follow this link:
+
+    http://cda.cfa.harvard.edu/chaser/startViewer.do?obsid=#obsid#   
+    (note the new location)
+
+When the page loads, go to the left column and click on "Details". 
+Please review all the entries, except for the SI_Mode.
+
+Please check that page for accuracy of the following in particular:
+        * the target name,
+        * the target coordinates (in decimal degrees, including corrections 
+             for proper motion),
+        * the exposure time (in kilo-seconds),
+        * the target offset (in arcminutes),
+        * the defocus (in mm),
+        * the SIM-Z (detector translation, in mm),
+        * the roll constraint (in degrees),
+        * the time constraint
+        * the HRC configuration
+
+You can view the orientation of the detector on the sky in the optical
+and X-ray bands by clicking on the "DSS" (Digital Sky Survey),
+"ROSAT" (pointed observation, if any), and "RASS" (ROSAT All-Sky
+Survey) buttons at the bottom of the page.  Please note that if your
+observation is a TOO, the roll angle will of course be unknown; the
+DSS, ROSAT, and RASS images are shown assuming a roll angle of 0
+degrees.  The range of permitted roll angles vs date is illustrated
+via the "Roll/Visibility" button.
+
+Please be advised that the following changes in your observing program are
+not generally permitted: 
+        * adding any constraints, 
+        * changing exposure time or target, 
+        * adding or removing a grating, or 
+        * switching between ACIS and HRC or LETG and HETG so that 
+          the target and instrument configuration end up being the same 
+          as in someone else's observing proposal.
+
+If you request changes, I will confirm these with you by e-mail (or
+telephone), and after about two days you should see these updated 
+parameters in the on-line OBSCAT database.
+
+In considering your observation set-up, I draw your attention to
+aspects of the current in-flight performance of the LETG/HRC-S
+that you might need to consider when deciding your final set-up.
+These issues are discussed in detail in the Chandra Proposer's 
+Observatory Guide.  Links to the relevant chapters are listed on 
+the LETGS Observer Information page (http://cxc.harvard.edu/cal/Letg/).
+
+As a reminder:
+1) In order to avoid telemetry saturation, the HRC-S is running with 
+        a cross-dispersion width of 6 coarse taps (slightly less than 10mm, 
+        corresponding to about 3.2 arcmin, or half of its active area); 
+        this could be relevant if you are observing an extended source.  A 
+        different readout area can be specified if necessary.
+2) Telemetry saturation may be a concern if you are observing a bright
+        source with > 40 counts per second total and if accurate
+        absolute or relative photometry as a function of time is of
+        interest.
+3) If timing resolution of better than a few milliseconds is required, 
+        the HRC-S must be used in a special configuration.  Please contact 
+        me for more information after reading "Instrument Anomalies" at
+        http://asc.harvard.edu/proposer/POG/html/HRC.html#tth_sEc7.11
+
+Again, if you have any questions at all about the set-up and execution
+of your LETGS observation please do not hesitate to contact me. 
+
+Best wishes,
+
+#cxc_name#
+e-mail: #cxc_email#
+Phone:  #cxc_phone#
+FAX:    #cxc_fax#
+
+I am often in e-mail contact out of office hours and at weekends.  If
+you cannot reach me for any reason and need immediate assistance, my
+colleague #other# will also be happy to answer any questions and
+offer advice and help.  He can be reached at
+
+e-mail: #other_email#
+Phone:  #other_phone#
+FAX:    #other_fax#
+

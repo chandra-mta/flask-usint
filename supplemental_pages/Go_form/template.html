@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cycle 23 Letter Generator</title>
+
+    <script>
+        function OpenOcatPage(){
+            var  obsid = document.getElementById('obsid').value;
+            var  html  = 'https://cxc.harvard.edu/mta/CUS/Usint/ocatdata2html.cgi?' + obsid;
+            window.open(html, '_blank');
+        }
+    </script>
+
+</head>
+<body bgcolor="#FFFFFF">
+
+<center><h1>Cycle 23 Letter Generator</h1></center><P>
+
+To generate a GO letter, please enter the following information:<P>
+
+<form>
+
+<input type=hidden name="stage" value="preview">
+<table>
+    <tr>
+        <td>
+            <b>4 or 5 digit *ObsID*: </b> 
+        </td>
+        <td>
+            <input type=text   name="seqnum"    id="obsid">
+            <input type=submit name='ocat_page' value='Open Ocat Data Page' formaction='javascript:OpenOcatPage()'>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Your last name: </b>
+        </td>
+        <td>
+            <input type=text name="cxcname">
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <b>Choose your form letter: </b>
+                </td>
+                <td>
+                    <input type=radio name="letter" value="hrc_23"> HRC (I or S, w/o grating)<br>
+                    <input type=radio name="letter" value="acis_23"> ACIS Long Form<br>
+                    <input type=radio name="letter" value="acis_st_23" checked="true"> ACIS Short Form<br>
+                    <input type=radio name="letter" value="acis_st_early_23"> ACIS Short Form (Early Submission)<br>
+                    <input type=radio name="letter" value="letg"> LETG (w/ HRC or ACIS)<br>
+                    <input type=radio name="letter" value="hetg"> HETG [a static page from AO1]
+                </td>
+            </tr>
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <b>Deadline for response: </b>
+                </td>
+                <td>
+                    <input type=radio name="datetype" value="auto" checked="true"> Auto deadline (7 days from today)
+                    <br>
+                    <input type=radio name="datetype" value="setdate"> Assign the following deadline (e.g. 18-Sep-2021): 
+                    <input type=text  name="deadline">
+                    <br>
+                    <input type=radio name="datetype" value="unscheduled"> Observation is not yet in LTS 
+                    (deadline will be 14 days from today)
+                    <br>
+                </td>
+            </tr>
+        </td>
+    </tr>
+</table>
+
+<input type="submit" name='draft' value="Generate Draft for Review" formaction='cycle23.cgi'>
+<input type="reset"  value="Clear Form">
+
+</form>
+
+<p style='padding-top:20px;margn-left:10px; margin-right:20px;'>
+    Suggested addition for <b>Early Submission letters</b>, before or during the IPPS process
+    (This text is included in the "ACIS Short Form: Early Submission" form letter):
+
+    <br />
+
+    <div style=margin-left:30px;margin-right:110px;padding-bottom:10px;'>
+        Mission Planning has identified your observation(s) as possibly being
+        scheduled very soon and/or over a wide range of dates, and we would like
+        to finalize your observation setup(s) as soon as possible.  You may or may
+        not have already been contacted by the Chandra Director's Office regarding
+        the Initial Proposal Parameters Signoff (IPPS) process.  In either case,
+        this communication with you supersedes that process and you may disregard
+        any IPPS emails for these specific observations.
+    </div>
+</p>
+
+<hr>
+
+<small><i>Updated for Cycle 23 by <a href=mailto:isobe@.head.cfa.harvard.edu>T. Isobe</a></i></small>
+<p>
+    Letter generators from previous observing cycles:<br>
+    <a href="AO21.html">AO-21</a><br>
+    <a href="AO22.html">AO-22</a><br>
+<p>
+</body>
+</html>
+

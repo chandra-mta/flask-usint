@@ -1,0 +1,107 @@
+Dear #prop_name#
+
+As part of CXC support of operation of the Chandra mission, we are
+assigning interface contacts for all observers. I will be that contact
+for you throughout the uplink cycle (i.e., from acceptance of the
+observing proposal until the observational data has been received on 
+the ground) of the subject observation.
+
+Your proposed observation of #obj_name# 
+(#prop_title#, 
+ Sequence # #seq_num#, ObsId #obsid#) 
+
+#big_ole_string#
+
+To prepare the command load for your observation, it would be helpful
+for you to participate in the planning process.  To this end, please
+review and confirm the various settings of the instrument by checking
+the following page:
+
+    http://cda.cfa.harvard.edu/chaser/startViewer.do?obsid=#obsid# 
+    (note the new location)
+
+When the page loads, go to the left column and click on "Details". 
+Please review all the entries, except for the SI_Mode.
+
+Please check these pages for overall accuracy, and the following in
+particular:
+        * the Target Name,
+        * the target coordinates [RA and Dec] 
+            (in decimal degrees or sexagesimal),
+        * the Exposure Time (in kilo-seconds),
+        * the target offset [Offset Y, Z] (in arcminutes),
+        * the defocus [Focus] (in mm),
+        * the focal plane position [Sim-Focus; esp. HRC-S/No Grating] 
+            (in mm),
+        * the translational position of the detector [Z-SIM] (in mm),
+        * the roll constraint [Roll Angle] (in degrees),
+        * the time constraint [Temporal Window]
+        * the operational mode of the detector [SI Mode]
+
+In the event that you discover anything is incorrect in the
+observation set-up, please inform me of the appropriate changes. 
+To assist you in the review process, information on the calibration of
+the HRC can be found at:
+
+    http://cxc.harvard.edu/cal/Hrc/detailed_info.html
+
+Because this information is periodically updated, we recommend that
+you familiarize yourself with the various applicable models
+available there each time you review an observation. If everything is
+correct, please let me know that you are satisfied with the current
+set-up. (Please also email a copy of all correspondence to the Chandra
+Uplink Support archive at cus@head.cfa.harvard.edu.) Please return any
+such corrections or confirmation your satisfaction by #deadline#.
+
+We also would like to make you aware-- if you are not already-- of
+relevant information which may or may not affect your observation.
+
+There is a wiring error in the HRC that can lead to incorrect times
+being assigned to events. The HRC team has developed an operating mode
+using the HRC-S that recovers the ~16 microsecond resolution given in
+the Proposal Guide. When the HRC is not in this new timing mode the
+timing resolution is given by the inverse of the total event rate. The
+new timing mode for HRC consists of using the HRC-S detector in what
+is called S_TIMING Mode.  In this mode, only the center segment of the
+HRC-S is active, and the on-board event filtering is disabled. While
+the lack of on-board filtering increases the telemetered background
+count density compared to the HRC-I, the use of only the center
+segment mediates the overall amount of background events collected
+such that the background contribution to the total and telemetered
+event rates is ~50-70 counts per sec. The HRC-S, when used in
+S_TIMING, provides about 7 arc minutes Field of View in one direction,
+and 30 arc minutes along the long axis of the segment. The center
+segment of HRC-S has about the same sensitivity as the HRC-I (see the
+Proposal Guide for details). Note that due to the nominal use of the
+LETG with the HRC-S, S_TIMING Mode requires a Sim-Focus offset of -0.1
+mm to be in focus. For more information on the HRC timing error and
+its fix see:
+
+    http://cxc.harvard.edu/cal/Hrc/detailed_info.html#timing
+
+We would also like to remind you that there is a limit of events that
+can be telemetered of 184 cts/s on the total counting rate in the
+detector-- from your source, background and any sources coincidentally
+within the field. This is due to the telemetry throughput.  The
+primary impact is on the photometric accuracy, as the dead time
+corrections themselves are only accurate to ~10% for "mild"
+saturation (i.e., 184 - ~250 counts per second). The HRC count rate
+response to point sources becomes non-linear at rates much less than
+this (i.e. at ~20 - 30 counts per second).
+
+In order to assist in the identification and analysis of the sources, we 
+have recently developed an RMF for the HRC-I, see
+
+    http://cxc.harvard.edu/cal/Hrc/detailed_info.html#rmf
+
+If any of these issues affect the viability of your observation, or if
+the details of the observing plan are incorrect or inadequate, please
+contact me at the CXC as soon as possible.
+
+
+Regards,
+
+#cxc_name#
+#cxc_email#
+#cxc_phone#
+
