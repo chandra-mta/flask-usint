@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#!/bin/bash
+SOURCE_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 case "$1" in
   prod)
@@ -9,10 +9,15 @@ case "$1" in
   test)
     APP_ROOT=/proj/web-cxc-dmz-test/wsgi-scripts/cus
     ;;
+  home)
+    APP_ROOT="$HOME/cus"
+    ;;
   *)
-    echo "Usage: $0 {prod|test}"
+    echo "Usage: $0 {prod|test|home}"
     exit 1
     ;;
 esac
 
-rsync -av --delete --exclude-from=deploy-exclude.txt ./ "$APP_ROOT/"
+#: Make the APP_ROOT directory if it doesn't exist. (only for home setting)
+mkdir -p $APP_ROOT
+rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude.txt" "$SOURCE_DIR/" "$APP_ROOT/"

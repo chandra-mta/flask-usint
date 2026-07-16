@@ -7,5 +7,8 @@ supplemental_pages/
 supplemental_scripts/
 flask-usint.code-workspace
 install.sh
-deploy-exclude.txt
 *pid
+*.txt
+*.conf.py
+*ht*
+environment.yml
