@@ -9,11 +9,14 @@ case "$1" in
   test)
     APP_ROOT=/proj/web-cxc-dmz-test/wsgi-scripts/cus
     ;;
+  r2d2)
+    APP_ROOT=/proj/web-r2d2-v/wsgi-scripts/cus
+    ;;
   home)
     APP_ROOT="$HOME/cus"
     ;;
   *)
-    echo "Usage: $0 {prod|test|home}"
+    echo "Usage: $0 {prod|test|r2d2|home}"
     exit 1
     ;;
 esac
