@@ -31,7 +31,7 @@ def init_login():
         #    return current_user
         #: Request environment is the Apache Web Server Context with LDAp authentication
         #: OS environment is the server process environment (localhost testing user definition)
-        username = req.environ.get("REMOTE_USER") or os.environ.get("REMOTE_USER")
+        username = req.environ.get("HTTP_REMOTE_USER") or req.headers.get("Remote-User") or os.environ.get("REMOTE_USER")
         
         if not username:
             raise Exception("Username is None in both request and server environment")
