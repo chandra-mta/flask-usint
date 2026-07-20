@@ -31,11 +31,10 @@ from flask import current_app
 #
 #--- Set sqsh Parameters
 #
-_SERV = 'ocatsqlsrv'
-_USR = 'mtaops_internal_web'
 #: The authentication for the OCAT database connection is independent of connecting to the revision usint.db database.
 #: Two different databases. OCAT for the true current parameters, USINT for our revision history.
-_AUTHDIR = current_app.config['AUTH_DIR']
+_SERV = 'ocatsqlsrv'
+_USR = 'mtaops_internal_web'
 _DB = 'axafocat'
 
 #
@@ -78,7 +77,7 @@ def get_value_from_sybase(cmd):
     """
     Ska_DBI interface to fetch Sybase data and format into an astropy table.
     """
-    conn = sqsh.Sqsh(dbi='sybase', server=_SERV, database = _DB, user = _USR, authdir = _AUTHDIR)
+    conn = sqsh.Sqsh(dbi='sybase', server=_SERV, database = _DB, user = _USR, authdir = current_app.config['AUTH_DIR'])
     row = conn.fetchall(cmd)
     return row
 
