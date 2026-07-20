@@ -109,8 +109,8 @@ def quick_approval_state_email(ocat_data, rev):
 
     content += f"PAST COMMENTS = \n{ocat_data.get('comments') or ''}\n\n"
     content += f"PAST REMARKS = \n{ocat_data.get('remarks') or ''}\n\n"
-    content += f"Parameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-    content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
+    content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+    content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
     print(to)
     return construct_msg(content, subject, to)
 
@@ -130,8 +130,8 @@ def signoff_notify(ocat_data, rev, sign):
 
             content = f"Editing of General/ACIS entries of {rev.obsidrev()} were finished and signed off.\n"
             content += "Please update SI Mode entries, then sign off.\n"
-            content += f"Parameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-            content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
+            content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+            content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
 
             if ocat_data.get('instrument') in ('HRC-I', 'HRC-S'):
                 to = HRC
@@ -142,8 +142,8 @@ def signoff_notify(ocat_data, rev, sign):
 
             content = f"Editing of SI Mode entries of {rev.obsidrev()} were finished and signed off.\n"
             content += "Please update General/ACIS entries, then sign off.\n"
-            content += f"Parameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-            content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
+            content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+            content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
 
             to = ARCOPS
         elif finished['arcops'] and finished['instrument'] and not finished['usint']:
@@ -151,8 +151,8 @@ def signoff_notify(ocat_data, rev, sign):
 
             content = f"Editing of all entries of {rev.obsidrev()} were finished and signed off.\n"
             content += "Please verify and signoff.\n"
-            content += f"Parameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-            content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
+            content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+            content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
 
             to = [rev.user.email, current_user.email]
         else:

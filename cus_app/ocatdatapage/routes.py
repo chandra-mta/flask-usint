@@ -344,10 +344,10 @@ def parameter_change_log_msg(ocat_data,rev):
         content += f"PAST COMMENTS = \n{ocat_data.get('comments') or ''}\n\n"
         content += f"NEW COMMENTS = \n{json.loads(rev.request[0].value)}\n\n"
         content += f"PAST REMARKS = \n{ocat_data.get('remarks') or ''}\n\n"
-        content += f"Parameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-        content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
-        return mail.construct_msg(content, subject, current_user.email, cc =mail.ARCOPS)
-        
+        content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+        content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
+        return mail.construct_msg(content, subject, current_user.email, cc=mail.ARCOPS)
+
     elif rev.kind == 'norm':
         #: Most common type of notification.
         subject = f"Parameter Change Log: {rev.obsidrev()}"
@@ -390,8 +390,8 @@ def parameter_change_log_msg(ocat_data,rev):
             for param in acis_win:
                 content += f"{param.upper()} ({_LABELS.get(param)}) changed from {org_dict.get(param)} to {req_dict.get(param)}\n"
 
-        content += f"\nParameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-        content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
+        content += f"\nParameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+        content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
         #: Use Signoff to determine CC recipients.
         cc = set()
         if rev.signoff.general_status == "Pending":
@@ -410,9 +410,9 @@ def multi_obsid_msg(main_msg, main_rev, multi_rev):
     """
     _subject = 'Multiple Obsids Are Submitted for Parameter Changes'
     _content = f"Usint User {current_user.username} submitted parameter change requests to multiple obsids: \n\n"
-    _content += f"{main_rev.obsid} : {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = main_rev.obsidrev())}\n"
+    _content += f"{main_rev.obsid} : {url_for('chkupdata.index', obsidrev=main_rev.obsidrev(), _external=True)}\n"
     for _rev in multi_rev.values():
-        _content += f"{_rev.obsid} : {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = _rev.obsidrev())}\n"
+        _content += f"{_rev.obsid} : {url_for('chkupdata.index', obsidrev=_rev.obsidrev(), _external=True)}\n"
     _content += f"\nUpdated parameters for {main_rev.obsid} are:\n\n"
     _body = [x for x in main_msg.get_content().split('\n') if x != '']
     _start = 0
@@ -459,8 +459,8 @@ def mp_notes_msg(revisions):
             if len(v) > 0:
                 content += f"\n{_LABELS.get(k)}\n\n"
                 for rev in v:
-                    content += f"{rev.obsid}: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = rev.obsidrev())}\n"
-        return mail.construct_msg(content, subject, mail.MP, cc = current_user.email)
+                    content += f"{rev.obsid}: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
+        return mail.construct_msg(content, subject, mail.MP, cc=current_user.email)
 
 def too_msg(ocat_data, revision):
     """
@@ -471,9 +471,9 @@ def too_msg(ocat_data, revision):
         content = f"{ocat_data.get('obs_type').upper()} observation {ocat_data.get('obsid')} parameter changes were submitted.\n\n"
         for param in ('tooid', 'too_type', 'too_trig', 'too_remarks'):
             content += f"{_LABELS.get(param) + ':':<12}{ocat_data.get(param)}\n"
-        
-        content += f"\n\nParameter Status Page: {current_app.config['HTTP_ADDRESS']}{url_for('orupdate.index')}\n"
-        content += f"Parameter Check Page: {current_app.config['HTTP_ADDRESS']}{url_for('chkupdata.index',obsidrev = revision.obsidrev())}\n"
+
+        content += f"\n\nParameter Status Page: {url_for('orupdate.index', _external=True)}\n"
+        content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=revision.obsidrev(), _external=True)}\n"
         return mail.construct_msg(content, subject, mail.ARCOPS)
     else:
         return None

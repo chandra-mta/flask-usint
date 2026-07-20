@@ -25,9 +25,6 @@ class BaseConfig(object):
     """
     Base Class for the configuration of the Usint application
     """
-    # find way to depend on flask app context variables instead.
-    HTTP_ADDRESS = "http://127.0.0.1:8888"
-
     TEST_DATABASE = True
     #
     # --- Database and CSRF secret key
