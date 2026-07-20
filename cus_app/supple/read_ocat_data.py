@@ -33,7 +33,9 @@ from flask import current_app
 #
 _SERV = 'ocatsqlsrv'
 _USR = 'mtaops_internal_web'
-_AUTHDIR = "/data/mta4/CUS/authorization"
+#: The authentication for the OCAT database connection is independent of connecting to the revision usint.db database.
+#: Two different databases. OCAT for the true current parameters, USINT for our revision history.
+_AUTHDIR = current_app.config['AUTH_DIR']
 _DB = 'axafocat'
 
 #
