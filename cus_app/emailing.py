@@ -44,6 +44,9 @@ def construct_msg(content, subject, to, sender=None, cc=None):
     else:
         _cc = [CUS]
 
+    if not isinstance(to, (list, set)):
+        to = list(to)
+
     msg = Message(
         subject=subject,
         recipients=to,
