@@ -45,7 +45,7 @@ def construct_msg(content, subject, to, sender=None, cc=None):
         _cc = [CUS]
 
     if not isinstance(to, (list, set)):
-        to = list(to)
+        to = [to]
 
     msg = Message(
         subject=subject,
