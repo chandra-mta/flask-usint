@@ -38,6 +38,7 @@ import logging
 #: but implements multi-process handling, necessary due to multiple server workers.
 from logging.handlers import RotatingFileHandler, SMTPHandler
 from datetime import datetime
+import platform
 
 _formatter = logging.Formatter(
         "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s"
@@ -84,7 +85,8 @@ def server_logging_setup(app_root):
     This function reconfigures the existing gunicorn server loggers to our application needs.
     The `app_root` pathing argument is used to configured logs to be written to the application installation's instance folder.
     """
-    log_dir = os.path.join(app_root, "instance", "logs")
+    _server = platform.node().split('.')[0]
+    log_dir = os.path.join(app_root, "instance", "logs", _server)
     access_dir = os.path.join(log_dir, "access")
     error_dir = os.path.join(log_dir, "error")
 
@@ -126,8 +128,8 @@ def app_files_logging_setup(app):
     This function reconfigures a created Flask application to use the gunicorn server logger
     for errors, and fetches / creates a logger for normal operations.
     """
-
-    operation_dir = os.path.join(app.instance_path, "logs", "operation")
+    _server = platform.node().split('.')[0]
+    operation_dir = os.path.join(app.instance_path, "logs", _server, "operation")
     os.makedirs(operation_dir, exist_ok=True)
 
     #: Route default Flask logger into gunicorn server error logs.

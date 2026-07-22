@@ -25,14 +25,20 @@ class BaseConfig(object):
     """
     Base Class for the configuration of the Usint application
     """
-    # find way to depend on flask app context variables instead.
-    HTTP_ADDRESS = "http://127.0.0.1:8888"
-
     TEST_DATABASE = True
     #
     # --- Database and CSRF secret key
     #
     SECRET_KEY = 'secret_key_for_test'
+    #: The authorization directory is where credentials are stored for fetching data from the ocat database.
+    #: This is used by the read_ocat_data.py module for the ska_dbi.sqsh library module.
+
+    #: CXC web servers cannot connect to /home file disks.
+    #: If we can, then we are running the app locally.
+    AUTH_DIR = "/home/cus/authorization"
+    #: If running on the CXC web servers, test or production, then overwrite the config in the instance/config.py filer
+    #: and use AUTH_DIR="/data/mta4/CUS/authorization"
+
     #
     # --- SQLAlchemy
     #
