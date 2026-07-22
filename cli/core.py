@@ -20,7 +20,7 @@ try:
     #: If fails, likely not running the correct conda environment.
     from cus_app import create_app
     from cus_app.extensions import db
-    from cus_app.models import User, Schedule
+    from cus_app.models import User, Revision, Signoff, Parameter, Request, Original, Schedule
 except ImportError as e:
     _import_fail(e)
 
