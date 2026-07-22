@@ -104,14 +104,12 @@ def quick_approval_state_email(ocat_data, rev):
         approved_revisions = pull_revision(order_by = {'revision_number': 'desc'}, obsid=ocat_data.get('obsid'), kind='asis')
         if len(approved_revisions) > 0:
             #: If undoing a previous approval, also notify the previous approver
-            print(approved_revisions[0])
             to.append(approved_revisions[0].user.email)
 
     content += f"PAST COMMENTS = \n{ocat_data.get('comments') or ''}\n\n"
     content += f"PAST REMARKS = \n{ocat_data.get('remarks') or ''}\n\n"
     content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
     content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
-    print(to)
     return construct_msg(content, subject, to)
 
 def signoff_notify(ocat_data, rev, sign):
