@@ -20,7 +20,8 @@ try:
     #: If fails, likely not running the correct conda environment.
     from cus_app import create_app
     from cus_app.extensions import db
-    from cus_app.models import User, Revision, Signoff, Parameter, Request, Original, Schedule
+    from cus_app.models import User, Schedule
+    import cus_app.models #: Not used directly, but ensures models are registered with SQLAlchemy, which matters for sync.py
 except ImportError as e:
     _import_fail(e)
 
