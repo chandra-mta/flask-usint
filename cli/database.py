@@ -1,5 +1,5 @@
 """
-Database contents synchronization commands
+Database CLI commands
 
 :NOTE: Since the flask-usint application is built to only connect to one database at a time,
     we cannot instantiate the app to directly use its database connections.
@@ -11,7 +11,7 @@ from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import sessionmaker
 import os
 from urllib.parse import urlparse
-from .core import User, Revision, Signoff, Parameter, Request, Original, Schedule
+from .core import db, with_app_context, models
 
 
 def _sqlite_uri_to_fullpath(db_uri: str) -> str:
@@ -56,3 +56,7 @@ def _provide_sessions(
     
     else:
         raise OSError("Missing database file.\n prod: {prod_uri} exists: {_prod_bool}\n test: {test_uri} exists: {_test_bool}")
+
+@with_app_context
+def create_tables():
+    db.create_all()

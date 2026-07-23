@@ -2,6 +2,12 @@
 Core components for the CLI interface.
 """
 
+__all__ = [
+    "create_app",
+    "db",
+    "models"
+]
+
 import sys
 from functools import wraps
 
@@ -9,19 +15,19 @@ def _import_fail(error):
     """
     Internal warning for not activating the runtime application conda environment
     """
-    print("Failed to start CLI due to import error.\n")
-    print(str(error))
-    print("Check that you have conda activated the environment running this application installation.")
-    print(f"Python: {sys.executable}")
-    sys.exit(1)
+    print("Failed to start CLI due to import error.\n", file=sys.stderr)
+    print(str(error), file=sys.stderr)
+    print("Check that you have conda activated the environment before running this app installation CLI.", file=sys.stderr)
+    print(f"Python: {sys.executable}", file=sys.stderr)
+    raise SystemExit(1)
 
 #: Define core variables from app context.
 try:
     #: If fails, likely not running the correct conda environment.
     from cus_app import create_app
     from cus_app.extensions import db
-    from cus_app.models import User, Schedule
-    import cus_app.models #: Not used directly, but ensures models are registered with SQLAlchemy, which matters for sync.py
+    #: Imports everything to ensure full model registration for SQLAlchemy
+    import cus_app.models as models
 except ImportError as e:
     _import_fail(e)
 
