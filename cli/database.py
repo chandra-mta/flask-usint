@@ -7,28 +7,29 @@ Database CLI commands
 """
 
 import click
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker
 import os
 from urllib.parse import urlparse
+from pathlib import Path
 from .core import db, with_app_context, models
 
 
-def _sqlite_uri_to_fullpath(db_uri: str) -> str:
+def _sqlite_uri_to_fullpath(uri: str) -> str:
     """
     Parse a given sqlite URI into a file path
     """
-    if db_uri.startswith("sqlite:////"):
+    if uri.startswith("sqlite:////"):
         #: Four slashes. Absolute Path
         _absolute = True
-    elif db_uri.startswith("sqlite:///"):
+    elif uri.startswith("sqlite:///"):
         #: Three slashes/ Relative Path
         _absolute = False
     else:
         #: Incorrect format
-        raise OSError(f"db_uri invalid. Must be Absolute or Relative \n SQLite URI: {db_uri}")
+        raise OSError(f"SQLite URI invalid (must be absolute or relative) \n URI: {uri}")
     
-    _raw_path = urlparse(db_uri).path.lstrip("/")
+    _raw_path = urlparse(uri).path.lstrip("/")
     
     if _absolute:
         _full_path = os.path.join(os.getcwd(), _raw_path)
@@ -68,3 +69,53 @@ def create_tables():
     then run this script which creates a single application context to generate the tables for this installation.
     """
     db.create_all()
+
+def _runpragcheck(engine):
+    """Run pragma check."""
+    with engine.connect() as conn:
+        integrity = conn.execute(text("PRAGMA integrity_check")).scalar()
+        foreign_key = conn.execute(text("PRAGMA foreign_key_check")).scalar()
+        user_version = conn.execute(text("PRAGMA user_version")).scalar()
+    if foreign_key is None:
+        foreign_key = 'ok'
+    return {
+        'uri': engine.url,
+        'integrity': integrity,
+        'foreign_key': foreign_key,
+        'user_version': user_version
+    }
+
+@with_app_context
+def _pragcheck_default_config():
+    """Pull app default config uri"""
+    uri = db.engine.url
+    engine = create_engine(uri, echo=False)
+    return _runpragcheck(engine)
+
+def _pragcheck_uri(uri):
+    """Format argument uri"""
+    if not uri.startswith("sqlite:///"):
+        uri = f"sqlite:///{Path(uri).resolve()}"
+    engine = create_engine(uri, echo=False)
+    return _runpragcheck(engine)
+
+@click.command("pragma-check")
+@click.option("--uri", default=None, help="SQLite URI (or filepath) to database for check. Defaults to App Default.")
+def pragma_check(uri):
+    """
+    \b
+    Runs SQL pragma statements to check database validity.
+    - integrity_check: checks for low-level database file corruption.
+    - foreign_key_check: checks for logic. missing parent keys, broken references.
+    - user_version: checks usint database version. Defined by admin.
+    """
+
+    if uri is None:
+        pragcheck = _pragcheck_default_config()
+    else:
+        pragcheck = _pragcheck_uri(uri)
+
+    click.echo(f"Database URI: {pragcheck['uri']}")
+    click.echo(f"Integrity Check: {pragcheck['integrity']}")
+    click.echo(f"Foreign Key Check: {pragcheck['foreign_key']}")
+    click.echo(f"User Version: {pragcheck['user_version']}")

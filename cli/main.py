@@ -6,7 +6,7 @@ import click
 from .user import create_user, set_groups, find_user
 from .schedule import maintain_schedule
 from .info import print_config, app_root_path
-from .database import create_tables
+from .database import create_tables, pragma_check
 
 @click.group()
 def cli():
@@ -44,6 +44,7 @@ info.add_command(print_config)
 info.add_command(app_root_path)
 
 database.add_command(create_tables)
+database.add_command(pragma_check)
 
 # Attach subgroup to root CLI
 cli.add_command(user)
