@@ -57,6 +57,14 @@ def _provide_sessions(
     else:
         raise OSError("Missing database file.\n prod: {prod_uri} exists: {_prod_bool}\n test: {test_uri} exists: {_test_bool}")
 
+@click.command("create-tables")
 @with_app_context
 def create_tables():
+    """
+    All database tables must exists before the server starts.
+    Otherwise, the error log will pollute with failed table creation statements as every worker tries to create any missing tables
+
+    If the database tables have been manipulated in some way, or the server-side session table dropped,
+    then run this script which creates a single application context to generate the tables for this installation.
+    """
     db.create_all()
