@@ -25,13 +25,13 @@
     <table border=0 style='background-color: rgb(3, 252, 48, 0.4);width:95%;
                            margin-left:auto; margin-right:auto;text-align:center;'>
         <tr style='width:100; line-height:250%;'>
-        <th style='font-size:200%;'>
+        <th style='text-align:left; font-size:200%; border-width:0px;'>
             {% block main_title %}
                 {% if main_title %}{{ main_title }}{% else %}{{ 'USINT Ocat Home Page' }}{% endif %}
             {% endblock %}
 
         </th>
-        <td style='text-align:right;'><b>User: {{ current_user.username }} Group: {{ current_user.groups }}</b></td>
+        <td style='text-align:right; border-width:0px;'><b>User: {{ current_user.username }} Group: {{ current_user.groups }}</b></td>
         </tr>
     </table>
     </div>
