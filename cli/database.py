@@ -7,7 +7,7 @@ Database CLI commands
 """
 
 import click
-from sqlalchemy import create_engine, inspect, text
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import os
 from urllib.parse import urlparse
@@ -113,6 +113,15 @@ def _pragcheck_uri(uri):
     engine = create_engine(uri, echo=False)
     return _runpragcheck(engine)
 
+def _echo_pragcheck(pragcheck):
+    """
+    Click echo the pragma check
+    """
+    click.echo(f"Database URI: {pragcheck['uri']}")
+    click.echo(f"Integrity Check: {pragcheck['integrity']}")
+    click.echo(f"Foreign Key Check: {pragcheck['foreign_key']}")
+    click.echo(f"User Version: {pragcheck['user_version']}")
+
 @click.command("pragma-check")
 @click.option("--uri", default=None, help="SQLite URI (or filepath) to database for check. Defaults to App Default.")
 def pragma_check(uri):
@@ -129,7 +138,25 @@ def pragma_check(uri):
     else:
         pragcheck = _pragcheck_uri(uri)
 
-    click.echo(f"Database URI: {pragcheck['uri']}")
-    click.echo(f"Integrity Check: {pragcheck['integrity']}")
-    click.echo(f"Foreign Key Check: {pragcheck['foreign_key']}")
-    click.echo(f"User Version: {pragcheck['user_version']}")
+    _echo_pragcheck(pragcheck)
+
+def _can_sync(prod_pragcheck, test_pragcheck):
+    reason = None
+    can_sync = False
+
+    if prod_pragcheck.get('uri') == test_pragcheck.get('uri'):
+        reason = "Production and test database URIs are the same."
+    elif prod_pragcheck.get('integrity') != 'ok':
+        reason = "Production database integrity check failed."
+    elif test_pragcheck.get('integrity') != 'ok':
+        reason = "Test database integrity check failed."
+    elif prod_pragcheck.get('foreign_key') != 'ok':
+        reason = "Production database foreign key check failed."
+    elif test_pragcheck.get('foreign_key') != 'ok':
+        reason = "Test database foreign key check failed."
+    elif prod_pragcheck.get('user_version') != test_pragcheck.get('user_version'):
+        reason = "Production and test database user versions do not match."
+    else:
+        can_sync = True
+    return can_sync, reason
+
