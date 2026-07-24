@@ -46,31 +46,10 @@ def _sqlite_uri_to_fullpath(uri: str) -> str:
     _raw_path = urlparse(uri).path.lstrip("/")
     
     if _absolute:
-        _full_path = os.path.join(os.getcwd(), _raw_path)
-    else:
         _full_path = os.path.join("/", _raw_path)
-    return _full_path
-
-def _provide_sessions(
-        prod_uri = "sqlite:///instance/usint.db",
-        test_uri = "sqlite:///instance/test_usint.db"
-):
-    """
-    Provide production and test database session connections
-    """
-    _prod = _sqlite_uri_to_fullpath(prod_uri)
-    _test = _sqlite_uri_to_fullpath(test_uri)
-    _prod_bool = os.path.exists(_prod)
-    _test_bool = os.path.exists(_test)
-    if _prod_bool and _test_bool:
-        prod_engine = create_engine(prod_uri)
-        test_engine = create_engine(test_uri)
-        ProdSession = sessionmaker(bind=prod_engine)
-        TestSession = sessionmaker(bind=test_engine)
-        return ProdSession(), TestSession()
-    
     else:
-        raise OSError("Missing database file.\n prod: {prod_uri} exists: {_prod_bool}\n test: {test_uri} exists: {_test_bool}")
+        _full_path = os.path.join(os.getcwd(), _raw_path)
+    return _full_path
 
 @click.command("create-tables")
 @with_app_context
@@ -117,10 +96,10 @@ def _echo_pragcheck(pragcheck):
     """
     Click echo the pragma check
     """
-    click.echo(f"Database URI: {pragcheck['uri']}")
-    click.echo(f"Integrity Check: {pragcheck['integrity']}")
-    click.echo(f"Foreign Key Check: {pragcheck['foreign_key']}")
-    click.echo(f"User Version: {pragcheck['user_version']}")
+    click.secho(f"Database URI: {pragcheck['uri']}", fg="cyan")
+    click.secho(f"Integrity Check: {pragcheck['integrity']}", fg="cyan")
+    click.secho(f"Foreign Key Check: {pragcheck['foreign_key']}", fg="cyan")
+    click.secho(f"User Version: {pragcheck['user_version']}", fg="cyan")
 
 @click.command("pragma-check")
 @click.option("--uri", default=None, help="SQLite URI (or filepath) to database for check. Defaults to App Default.")
@@ -140,20 +119,22 @@ def pragma_check(uri):
 
     _echo_pragcheck(pragcheck)
 
+def _integrity_bool(pragcheck):
+    """
+    Return True if integrity and foreign_key checks are 'ok', else False
+    """
+    return pragcheck.get('integrity') == 'ok' and pragcheck.get('foreign_key') == 'ok'
+
 def _can_sync(prod_pragcheck, test_pragcheck):
     reason = None
     can_sync = False
 
     if prod_pragcheck.get('uri') == test_pragcheck.get('uri'):
         reason = "Production and test database URIs are the same."
-    elif prod_pragcheck.get('integrity') != 'ok':
+    elif not _integrity_bool(prod_pragcheck):
         reason = "Production database integrity check failed."
-    elif test_pragcheck.get('integrity') != 'ok':
+    elif not _integrity_bool(test_pragcheck):
         reason = "Test database integrity check failed."
-    elif prod_pragcheck.get('foreign_key') != 'ok':
-        reason = "Production database foreign key check failed."
-    elif test_pragcheck.get('foreign_key') != 'ok':
-        reason = "Test database foreign key check failed."
     elif prod_pragcheck.get('user_version') != test_pragcheck.get('user_version'):
         reason = "Production and test database user versions do not match."
     else:
@@ -172,6 +153,13 @@ def sync_test_database(prod_uri, test_uri, force):
     Note that the tables are not dropped, but all entries are deleted and replaced with the production database entries.
     This preserves schema.
     """
+    _test_filename = os.path.basename(test_uri)
+    _prod_filename = os.path.basename(prod_uri)
+    if not "test" in _test_filename:
+        click.secho(f"Warning: Test database does not contain 'test' substring: {test_uri}", fg="yellow")
+    if "test" in _prod_filename:
+        click.secho(f"Warning: Production database contains 'test' substring: {prod_uri}", fg="yellow")
+
     test_engine = create_engine(test_uri)
     prod_engine = create_engine(prod_uri)
 
@@ -181,7 +169,7 @@ def sync_test_database(prod_uri, test_uri, force):
     can_sync, reason = _can_sync(prod_pragcheck, test_pragcheck)
 
     if not can_sync:
-        click.echo(f"Cannot sync databases: {reason}")
+        click.secho(f"Cannot sync databases: {reason}", fg="red")
         _echo_pragcheck(prod_pragcheck)
         _echo_pragcheck(test_pragcheck)
         prod_engine.dispose()
@@ -192,7 +180,7 @@ def sync_test_database(prod_uri, test_uri, force):
     prod_engine.dispose()
     tables = db.Model.metadata.sorted_tables #: Auto sorted by foreign key dependence
 
-    if force or click.confirm("Are you sure you want to sync the test database with the production database? This will overwrite the test database."):
+    if not force and not click.confirm("Are you sure you want to sync the test database with the production database? This will overwrite the test database."):
         return
 
     with test_engine.begin() as conn:
