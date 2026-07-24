@@ -2,7 +2,7 @@
 Database user table interface commands
 """
 import click
-from .core import with_app_context, db, User
+from .core import with_app_context, db, models
 
 @click.command("create")
 @click.option("--username", prompt="Username (POGO Username)", help="Username (POGO Username)")
@@ -23,8 +23,8 @@ def create_user(username, email, full_name, group, inactive):
     """
 
     # --- Validate uniqueness ---
-    existing = User.query.filter(
-        (User.username == username)
+    existing = models.User.query.filter(
+        (models.User.username == username)
     ).first()
 
     if existing:
@@ -33,7 +33,7 @@ def create_user(username, email, full_name, group, inactive):
 
 
     # --- Create user ---
-    user = User(
+    user = models.User(
         username = username,
         email = email,
         full_name = full_name,
@@ -74,7 +74,7 @@ def set_groups(username, group, add_group, remove_group):
     Change the group assignments for a user.
     """
     #: Query for the User ORM
-    user = User.query.filter_by(username=username).first()
+    user = models.User.query.filter_by(username=username).first()
 
     if not user:
         click.secho(f"User '{username}' not found.", fg="red")
@@ -149,20 +149,20 @@ def find_user(user_id, username, email, full_name):
         )
         return
 
-    query = User.query
+    query = models.User.query
 
     if user_id is not None:
-        query = query.filter(User.id == user_id)
+        query = query.filter(models.User.id == user_id)
 
     if username is not None:
-        query = query.filter(User.username == username)
+        query = query.filter(models.User.username == username)
 
     if email is not None:
-        query = query.filter(User.email == email)
+        query = query.filter(models.User.email == email)
 
     if full_name is not None:
         # partial match (case-insensitive)
-        query = query.filter(User.full_name.ilike(f"%{full_name}%"))
+        query = query.filter(models.User.full_name.ilike(f"%{full_name}%"))
 
     results = query.all()
 

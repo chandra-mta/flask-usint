@@ -2,7 +2,7 @@
 Database schedule table interface commands
 """
 import click
-from .core import with_app_context, db, Schedule
+from .core import with_app_context, db, models
 from datetime import datetime, timedelta
 
 _FUTURE_MONTHS = 8
@@ -19,8 +19,8 @@ def maintain_schedule():
     """Inject additional schedule time period entries into the schedule table up to a point in the future"""
 
     latest = (
-        Schedule.query
-        .order_by(Schedule.order_id.desc())
+        models.Schedule.query
+        .order_by(models.Schedule.order_id.desc())
         .first()
     )
 
@@ -39,7 +39,7 @@ def maintain_schedule():
 
         order_id += 1
 
-        new_entry = Schedule(
+        new_entry = models.Schedule(
             order_id=order_id,
             start=start,
             stop=stop,
