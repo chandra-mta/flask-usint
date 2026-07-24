@@ -197,13 +197,13 @@ def sync_test_database(prod_uri, test_uri, force):
             click.secho(f"Syncing table: {table_name}", fg="yellow")
             conn.execute(text(f"DELETE FROM main.{table_name}"))
             conn.execute(text(f"INSERT INTO main.{table_name} SELECT * FROM prod.{table_name}"))
-        
-        #: Detach the production database and run pragma check again to ensure integrity
-        conn.execute(text("DETACH DATABASE prod"))
+
+        #: Run pragma check again to ensure integrity
         conn.execute(text("PRAGMA foreign_keys=ON"))
-        final_pragcheck = _runpragcheck(test_engine)
-        if not _integrity_bool(final_pragcheck):
-            _echo_pragcheck(final_pragcheck)
-            raise click.ClickException("Test database integrity check failed after sync. Canceling sync.")
-        else:
-            click.secho("Test database synced successfully with production database.", fg="green")
+    
+    final_pragcheck = _runpragcheck(test_engine)
+    if not _integrity_bool(final_pragcheck):
+        _echo_pragcheck(final_pragcheck)
+        raise click.ClickException("Test database integrity check failed after sync was completed. Please check the test database for issues.")
+    else:
+        click.secho("Test database synced successfully with production database.", fg="green")
