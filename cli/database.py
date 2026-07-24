@@ -11,9 +11,23 @@ from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.orm import sessionmaker
 import os
 from urllib.parse import urlparse
-from pathlib import Path
 from .core import db, with_app_context, models
 
+def _file_to_sqlite_uri(filepath: str) -> str:
+    """
+    Convert a given file path to a sqlite URI
+    """
+    if not os.path.exists(filepath):
+        raise OSError(f"Filepath does not exist: {filepath}")
+    
+    _absolute = os.path.isabs(filepath)
+    
+    if _absolute:
+        uri = f"sqlite:///{filepath}"
+    else:
+        uri = f"sqlite:///{os.path.join(os.getcwd(), filepath)}"
+    
+    return uri
 
 def _sqlite_uri_to_fullpath(uri: str) -> str:
     """
@@ -95,7 +109,7 @@ def _pragcheck_default_config():
 def _pragcheck_uri(uri):
     """Format argument uri"""
     if not uri.startswith("sqlite:///"):
-        uri = f"sqlite:///{Path(uri).resolve()}"
+        uri = _file_to_sqlite_uri(uri)
     engine = create_engine(uri, echo=False)
     return _runpragcheck(engine)
 
