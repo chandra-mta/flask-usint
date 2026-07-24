@@ -45,10 +45,6 @@ td {
         padding-bottom:3px;
     }
 
-th, td {
-  border: 1px solid black;
-}
-
 input {
         height: 25px;
         margin: auto;

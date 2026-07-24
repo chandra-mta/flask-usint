@@ -10,6 +10,11 @@
 {% from 'chkupdata/macros.html' import changed_param %}
 {% from 'chkupdata/macros.html' import color_coded %}
 
+{% block style %}
+    {{ super() }}
+    th, td {border: 1px solid black;}
+{% endblock %}
+
 {% block app_content %}
 
 <h1>Observation: {{ revision.obsid }}.{{ str(revision.revision_number).zfill(3) }}</h1>
