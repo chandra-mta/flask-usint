@@ -184,14 +184,26 @@ def sync_test_database(prod_uri, test_uri, force):
         return
 
     with test_engine.begin() as conn:
+        #: Turn off the foreign_key constraint for the duration of the sync. This is necessary because we are deleting and inserting data, which may violate foreign key constraints temporarily.
+        conn.execute(text("PRAGMA foreign_keys=OFF"))
+
         #: Attach the production database to the test database connection
         conn.execute(text(f"ATTACH DATABASE '{_sqlite_uri_to_fullpath(prod_uri)}' AS prod"))
 
         #: Iterate over the tables in reverse order to drop them (to respect foreign key constraints)
-        #: Since we haven't set PRAGMA foreign_keys=ON explicitly, this will transact regardless, but keep reverse order for safety.
+        #: Since we've set PRAGMA foreign_keys=OFF, this will transact regardless, but keep reverse order for safety.
         for table in reversed(tables):
             table_name = table.name
-            click.echo(f"Deleting all entries from test table: {table_name}")
-            #conn.execute(text(f"DELETE FROM {table_name}"))
-
-    #: TODO  include warning if the names for the prod-uri include test and/or the names for the test uri are missing them simple echo before confirmation.
+            click.secho(f"Syncing table: {table_name}", fg="yellow")
+            conn.execute(text(f"DELETE FROM main.{table_name}"))
+            conn.execute(text(f"INSERT INTO main.{table_name} SELECT * FROM prod.{table_name}"))
+        
+        #: Detach the production database and run pragma check again to ensure integrity
+        conn.execute(text("DETACH DATABASE prod"))
+        conn.execute(text("PRAGMA foreign_keys=ON"))
+        final_pragcheck = _runpragcheck(test_engine)
+        if not _integrity_bool(final_pragcheck):
+            _echo_pragcheck(final_pragcheck)
+            raise click.ClickException("Test database integrity check failed after sync. Canceling sync.")
+        else:
+            click.secho("Test database synced successfully with production database.", fg="green")
