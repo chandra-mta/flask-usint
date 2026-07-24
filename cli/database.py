@@ -160,3 +160,50 @@ def _can_sync(prod_pragcheck, test_pragcheck):
         can_sync = True
     return can_sync, reason
 
+@click.command("sync-test-database")
+@click.option("--prod-uri", default="sqlite:///instance/usint.db", help="Production database URI")
+@click.option("--test-uri", default="sqlite:///instance/test_usint.db", help="Test database URI")
+@click.option("-f", "--force", is_flag=True, help="Force sync without confirmation prompt")
+def sync_test_database(prod_uri, test_uri, force):
+    """
+    \b
+    Clear the test database tables to sync with the production database tables.
+    This is a destructive operation and will overwrite the test database.
+    Note that the tables are not dropped, but all entries are deleted and replaced with the production database entries.
+    This preserves schema.
+    """
+    test_engine = create_engine(test_uri)
+    prod_engine = create_engine(prod_uri)
+
+    prod_pragcheck = _runpragcheck(prod_engine)
+    test_pragcheck = _runpragcheck(test_engine)
+
+    can_sync, reason = _can_sync(prod_pragcheck, test_pragcheck)
+
+    if not can_sync:
+        click.echo(f"Cannot sync databases: {reason}")
+        _echo_pragcheck(prod_pragcheck)
+        _echo_pragcheck(test_pragcheck)
+        prod_engine.dispose()
+        test_engine.dispose()
+        return
+
+    #: Pragma check has been passed. Proceed with sync.
+    prod_engine.dispose()
+    tables = db.Model.metadata.sorted_tables #: Auto sorted by foreign key dependence
+
+    if force or click.confirm("Are you sure you want to sync the test database with the production database? This will overwrite the test database."):
+        return
+
+    with test_engine.begin() as conn:
+        #: Attach the production database to the test database connection
+        conn.execute(text(f"ATTACH DATABASE '{_sqlite_uri_to_fullpath(prod_uri)}' AS prod"))
+
+        #: Iterate over the tables in reverse order to drop them (to respect foreign key constraints)
+        #: Since we haven't set PRAGMA foreign_keys=ON explicitly, this will transact regardless, but keep reverse order for safety.
+        for table in reversed(tables):
+            table_name = table.name
+            click.echo(f"Deleting all entries from test table: {table_name}")
+            #conn.execute(text(f"DELETE FROM {table_name}"))
+
+    #: TODO  include warning if the names for the prod-uri include test and/or the names for the test uri are missing them simple echo before confirmation.
