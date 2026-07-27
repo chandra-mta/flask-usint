@@ -18,27 +18,19 @@ Do not develop this script. Only use it for the v1.1 to v2.1 database migration.
 
 """
 
-import sys
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
 import sqlite3 as sq
 from contextlib import closing
 from astropy.table import Table
-import glob
 import numpy as np
 import re
 import itertools
-from math import sqrt
 
+from sqlalchemy import create_engine, select, desc
 
-
-from sqlalchemy import create_engine, ForeignKey, select, insert, delete, func, desc, case, text
-from sqlalchemy.schema import UniqueConstraint, ForeignKeyConstraint
-from sqlalchemy.types import TIMESTAMP
-
-from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
 
@@ -683,7 +675,7 @@ if __name__ == "__main__":
     old_signoff = grab_old_signoff()
 
     new_entry_count = len(old_signoff)
-    
+    print(f"Datetime: {datetime.now().isoformat()}")
     if new_entry_count > 0:
         print(f"Last revision: {last_rev}")
         print(f"Fetched Signoff. Entries: {new_entry_count}")
