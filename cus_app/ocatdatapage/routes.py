@@ -32,6 +32,7 @@ from ..extensions import db
 from .. import emailing as mail
 from . import bp
 from .forms import ConfirmForm, OcatParamForm
+from .check_values import run_flash_checks
 from ..supple import read_ocat_data as rod
 from ..supple import database_interface as dbi
 from . import format_ocat_data as fod
@@ -183,6 +184,8 @@ def confirm(obsid=None):
             web_session[f'kind_{obsid}'] = kind
             web_session[f'multi_dict_{obsid}'] = multi_dict
             return redirect(url_for('ocatdatapage.finalize', obsid=obsid))
+    else:
+        run_flash_checks(ocat_data, org_dict, req_dict)
     return render_template('ocatdatapage/confirm.html',
                            able_to_finalize = able_to_finalize,
                             form = form,
