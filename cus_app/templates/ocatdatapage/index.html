@@ -49,9 +49,9 @@
 <table>
     <tr>
     <th class='link1'>{{ map_image_opener('dss', 'magenta', _LABELS, orient_maps) }}</th>
-    <td>&#160;</td>
+    <td class="borderless-cell">&#160;</td>
     <th class='link1'>{{ map_image_opener('rosat', 'orange', _LABELS, orient_maps) }}</th>
-    <td>&#160;</td>
+    <td class="borderless-cell">&#160;</td>
     <th class='link1'>{{ map_image_opener('rass', 'yellow', _LABELS, orient_maps) }}</th>
     </tr>
 </table>
@@ -88,8 +88,8 @@
     </h2>
     <table border=0>
         <tr>
-        <th>{{_LABELS.get('seq_nbr')}}: </th>
-        <td>
+        <th class="borderless-cell">{{_LABELS.get('seq_nbr')}}: </th>
+        <td class="borderless-cell">
             <a href="javascript:WindowOpener('{{ hlink }}','seq_nbr')">
                 {{ocat_data.get('seq_nbr')}}
             </a>
@@ -127,8 +127,8 @@
         {{ render_value(ocat_data.get('observer'), _LABELS.get('observer')) }}
         </tr>
         <tr>
-        {{ render_value(ocat_data.get('approved_exposure_time'), _LABELS.get('approved_exposure_time')) }}<td style='text-align:left;'>(ksec)</td>
-        {{ render_value(ocat_data.get('rem_exp_time'), _LABELS.get('rem_exp_time')) }}<td>(ksec)</td>
+        {{ render_value(ocat_data.get('approved_exposure_time'), _LABELS.get('approved_exposure_time')) }}<td class="borderless-cell" style='text-align:left;'>(ksec)</td>
+        {{ render_value(ocat_data.get('rem_exp_time'), _LABELS.get('rem_exp_time')) }}<td class="borderless-cell">(ksec)</td>
         </tr>
     </table>
     <table border=0>
@@ -140,17 +140,17 @@
         <table border=0>
             <tr>
             {{ render_value(ocat_data.get('proposal_hst'), _LABELS.get('proposal_hst')) }}
-            <td>&#160;</td>
+            <td class="borderless-cell">&#160;</td>
             {{ render_value(ocat_data.get('proposal_noao'), _LABELS.get('proposal_noao')) }}
             </tr>
             <tr>
             {{ render_value(ocat_data.get('proposal_xmm'), _LABELS.get('proposal_xmm')) }}
-            <td>&#160;</td>
+            <td class="borderless-cell">&#160;</td>
             {{ render_value(ocat_data.get('proposal_rxte'), _LABELS.get('proposal_rxte')) }}
             </tr>
             <tr>
             {{ render_value(ocat_data.get('proposal_vla'), _LABELS.get('proposal_vla')) }}
-            <td>&#160;</td>
+            <td class="borderless-cell">&#160;</td>
             {{ render_value(ocat_data.get('proposal_vlba'), _LABELS.get('proposal_vlba')) }}
             </tr>
         </table>
@@ -188,16 +188,16 @@
     </p>
     <table border=0>
         <tr>
-        {{ render_field(form.y_det_offset) }}<td>(arcmin)</td>
-        {{ render_field(form.z_det_offset) }}<td>(arcmin)</td>
+        {{ render_field(form.y_det_offset) }}<td class="borderless-cell">(arcmin)</td>
+        {{ render_field(form.z_det_offset) }}<td class="borderless-cell">(arcmin)</td>
         </tr>
         <tr>
-        {{ render_field(form.trans_offset) }}<td>(mm, not arcmin!)</td>
-        {{ render_field(form.focus_offset) }}<td>(mm)</td>
+        {{ render_field(form.trans_offset) }}<td class="borderless-cell">(mm, not arcmin!)</td>
+        {{ render_field(form.focus_offset) }}<td class="borderless-cell">(mm)</td>
         </tr>
         <tr>
         {{ render_value(ocat_data.get('raster_scan'), _LABELS.get('raster_scan')) }}
-        <td cellspan=2> &#160;</td>
+        <td class="borderless-cell" cellspan=2> &#160;</td>
         </tr>
     </table>
     <table border=0>
@@ -238,7 +238,7 @@
                 <tr>
                 {{ render_value(ocat_data.get('y_amp'), _LABELS.get('y_amp')) }}
                 {{ render_value(ocat_data.get('y_freq'), _LABELS.get('y_freq')) }}
-                <td colspan=1>&#160;</td>
+                <td class="borderless-cell" colspan=1>&#160;</td>
                 </tr>
                 <tr>
                 {{ render_field(form.z_amp_asec) }}
@@ -248,7 +248,7 @@
                 <tr>
                 {{ render_value(ocat_data.get('z_amp'), _LABELS.get('z_amp')) }}
                 {{ render_value(ocat_data.get('z_freq'), _LABELS.get('z_freq')) }}
-                <td colspan=1>&#160;</td>
+                <td class="borderless-cell" colspan=1>&#160;</td>
                 </tr>
             </table>
         </div>
@@ -273,9 +273,9 @@
                 <th style='padding-left:5px;'>Rank</th>
                 {% for field in form.template_time %}
                     {% if field.type != 'ButtonField' %}
-                        <td style='padding-left:5px;'>{{field.label.text}}</td>
+                        <td class="borderless-cell" style='padding-left:5px;'>{{field.label.text}}</td>
                     {% else %}
-                        <td style='padding-left:5px;'></td>
+                        <td class="borderless-cell" style='padding-left:5px;'></td>
                     {% endif %}
                 {% endfor %}
             </thead>
@@ -308,9 +308,9 @@
                 <th style='padding-left:5px;'>Rank</th>
                 {% for field in form.template_roll %}
                     {% if field.type != 'ButtonField' %}
-                        <td style='padding-left:5px;'>{{field.label.text}}</td>
+                        <td class="borderless-cell" style='padding-left:5px;'>{{field.label.text}}</td>
                     {% else %}
-                        <td style='padding-left:5px;'></td>
+                        <td class="borderless-cell" style='padding-left:5px;'></td>
                     {% endif %}
                 {% endfor %}
             </thead>
@@ -351,8 +351,8 @@
         </tr>
         <tr>
         {% if ocat_data.get('group_id') != None %}
-            <th>Remaining Observations in the Group: </th>
-            <td colspan=3>
+            <th class="borderless-cell">Remaining Observations in the Group: </th>
+            <td class="borderless-cell" colspan=3>
                 {% if ocat_data.get('group_obsid')|length > 0 %}
                     {% for ent in ocat_data.get('group_obsid') %}
                         <span style='padding-left:5px;'></span>
@@ -363,8 +363,8 @@
                 {% endif %}
             </td>
         {% elif form.monitor_flag.data == 'Y' %}
-            <th>Remaining Observation in the Monitoring: </th>
-            <td colspan=3>
+            <th class="borderless-cell">Remaining Observation in the Monitoring: </th>
+            <td class="borderless-cell" colspan=3>
                 {% if ocat_data.get('monitor_series')|length > 0 %}
                     {% for ent in ocat_data.get('monitor_series') %}
                         <span style='padding-left:5px;'></span>
@@ -375,7 +375,7 @@
                 {% endif %}
             </td>
         {% else %}
-            <td></td>
+            <td class="borderless-cell"></td>
         {% endif %}
         </tr>
         <tr>
@@ -383,7 +383,7 @@
             {{ render_field(form.pre_min_lead) }}
         </tr>
         <tr>
-            <td colspan=2>&#160;</td>
+            <td class="borderless-cell" colspan=2>&#160;</td>
             {{ render_field(form.pre_max_lead) }}
         </tr>
         <tr>
@@ -392,11 +392,11 @@
         </tr>
         <tr>
             {{ render_field(form.multitelescope_interval) }}
-            <td colspan=2>&#160;</td>
+            <td class="borderless-cell" colspan=2>&#160;</td>
         </tr>
         <tr>
             {{ render_field(form.split_interval) }}
-            <td colspan=2>&#160;</td>
+            <td class="borderless-cell" colspan=2>&#160;</td>
         </tr>
         </table>
         <hr>
@@ -452,7 +452,7 @@
                 {{ render_field(form.frame_time) }}
                 </tr>
                 <tr>
-                <td colspan=4>&#160;</td>
+                <td class="borderless-cell" colspan=4>&#160;</td>
                 {{ render_field(form.most_efficient) }}
                 </tr>
             </table>
@@ -464,16 +464,16 @@
         
             <table>
                 <tr>
-                <td colspan=4>&#160;</td>
+                <td class="borderless-cell" colspan=4>&#160;</td>
                 {{ render_field(form.ccdi0_on) }}
                 {{ render_field(form.ccdi1_on) }}
-                <td colspan=4>&#160;</td>
+                <td class="borderless-cell" colspan=4>&#160;</td>
                 </tr>
                 <tr>
-                <td colspan=4>&#160;</td>
+                <td class="borderless-cell" colspan=4>&#160;</td>
                 {{ render_field(form.ccdi2_on) }}
                 {{ render_field(form.ccdi3_on) }}
-                <td colspan=4>&#160;</td>
+                <td class="borderless-cell" colspan=4>&#160;</td>
                 </tr>
                 <tr>
                 {{ render_field(form.ccds0_on) }}
@@ -487,7 +487,7 @@
             <table>
                 <tr>
                 {{ render_field(form.subarray) }}
-                <td colspan=4>
+                <td class="borderless-cell" colspan=4>
                 <b>If you select CUSTOM, please fill the lowered entries.</b>
                 </td>
                 </tr>
@@ -498,11 +498,11 @@
                 {% endif %}
                     {{ render_field(form.subarray_start_row) }}
                     {{ render_field(form.subarray_row_count) }}
-                    <td>&#160;</td>
+                    <td class="borderless-cell">&#160;</td>
                     </tr>
                 <tr>
                 {{ render_field(form.duty_cycle) }}
-                <td colspan=4>
+                <td class="borderless-cell" colspan=4>
                 <b>If you select YES, please fill the lowered entries.</b>
                 </td>
                 </tr>
@@ -513,7 +513,7 @@
                 {% endif %}
                     {{ render_field(form.secondary_exp_count) }}
                     {{ render_field(form.primary_exp_time) }}
-                    <td>&#160;</td>
+                    <td class="borderless-cell">&#160;</td>
                     </tr>
                 <tr>
                 {{ render_field(form.onchip_sum) }}
@@ -575,9 +575,9 @@
                         <th style='padding-left:5px;'>Rank</th>
                         {% for field in form.template_window %}
                             {% if field.type != 'ButtonField' %}
-                                <td style='padding-left:5px;'>{{field.label.text}}</td>
+                                <td class="borderless-cell" style='padding-left:5px;'>{{field.label.text}}</td>
                             {% else %}
-                                <td style='padding-left:5px;'></td>
+                                <td class="borderless-cell" style='padding-left:5px;'></td>
                             {% endif %}
                         {% endfor %}
                     </thead>
@@ -611,7 +611,7 @@
                 <tr>
             </table>
             <table>
-                <th colspan=4>
+                <th class="borderless-cell" colspan=4>
                 Exact response window (days):
                 <span style='padding-right:30px;'></span>
                 </th>
@@ -642,8 +642,8 @@
         </p>
         <table>
             <tr>
-            <th>{{ form.remarks.label.text }}:</th>
-            <td>
+            <th class="borderless-cell">{{ form.remarks.label.text }}:</th>
+            <td class="borderless-cell">
                 {{ form.remarks(rows=10, cols=60) }}
             </td>
             </tr>
@@ -660,8 +660,8 @@
         
         <table>
             <tr>
-            <th>{{ form.comments.label.text }}:</th>
-            <td>
+            <th class="borderless-cell">{{ form.comments.label.text }}:</th>
+            <td class="borderless-cell">
                 {{ form.comments(rows=10, cols=60) }}
             </td>
             </tr>
@@ -672,20 +672,20 @@
         {% if ocat_data.get('status') in ['unobserved', 'scheduled', 'untriggered'] or config['TEST_DATABASE']%}
         <table>
             <tr>
-            <th>Normal Change</th>
-            <td>Any changes other than APPROVAL status</td>
+            <th class="borderless-cell">Normal Change</th>
+            <td class="borderless-cell">Any changes other than APPROVAL status</td>
             </tr>
             <tr>
-            <th>Observation is Approved for flight</th>
-            <td>Adds ObsID to the Approved List - nothing else</td>
+            <th class="borderless-cell">Observation is Approved for flight</th>
+            <td class="borderless-cell">Adds ObsID to the Approved List - nothing else</td>
             </tr>
             <tr>
-            <th>ObsID no Longer ready to go</th>
-            <td>REMOVE ObsID from the Approved List - nothing else</td>
+            <th class="borderless-cell">ObsID no Longer ready to go</th>
+            <td class="borderless-cell">REMOVE ObsID from the Approved List - nothing else</td>
             </tr>
             <tr>
-            <th>Split this ObsID</th>
-            <td style='color:deeppink;'>
+            <th class="borderless-cell">Split this ObsID</th>
+            <td class="borderless-cell" style='color:deeppink;'>
                 Please add an explanation why you need<br>
                 to split this observation in the comment area.
             </td>
@@ -695,8 +695,8 @@
         <table>
             <tr>
             {% for subfield in form.submit_choice %}
-                <td>{{ subfield() }}</td>
-                <td>{{ subfield.label }}</td>
+                <td class="borderless-cell">{{ subfield() }}</td>
+                <td class="borderless-cell">{{ subfield.label }}</td>
             {% endfor %}
             </tr>
         </table>

@@ -1,30 +1,30 @@
 <!-- Ocatdatapage Page Macros-->
 {% macro render_rank(i, field) %}
     <tr id="{{ field.id }}">
-        <th style='padding-left:5px;'>{{i}}</th>
+        <th class="borderless-cell" style='padding-left:5px;'>{{i}}</th>
         {% for subfield in field%}
-            <td style='padding-left:5px;'>{{subfield()}}</td>
+            <td class="borderless-cell" style='padding-left:5px;'>{{subfield()}}</td>
         {% endfor %}
     </tr>
 {% endmacro %}
 
 {% macro render_field(field, size=10) %}
-    <th style='padding-left:5px;'> {{ field.label.text }}: </th>
+    <th class="borderless-cell" style='padding-left:5px;'> {{ field.label.text }}: </th>
     {% if field.type in ('StringField', 'FloatField', 'IntegerField', 'TimeRankDateTimeField') %}
-        <td> {{ field(size = size) }} </td>
+        <td class="borderless-cell"> {{ field(size = size) }} </td>
     {% elif field.type in ('SelectField', 'ButtonField', 'SubmitField')%}
-        <td> {{ field() }} </td>
+        <td class="borderless-cell"> {{ field() }} </td>
     {% else %}
-        <td>Unspecified Field Type</td>
+        <td class="borderless-cell">Unspecified Field Type</td>
     {% endif %}
 {% endmacro %}
 
 {% macro render_value(data, label) %}
-    <th style='padding-left:5px;'> {{ label }}: </th>
+    <th class="borderless-cell" style='padding-left:5px;'> {{ label }}: </th>
     {% if data == None %}
-    <td>NA</td>
+    <td class="borderless-cell">NA</td>
     {% else %}
-    <td>{{ data }}</td>
+    <td class="borderless-cell">{{ data }}</td>
     {% endif %}
 {% endmacro %}
 
@@ -51,15 +51,15 @@
 <!-- Confirmation Page Macros-->
 
 {% macro change_block(label,org,req) %}
-<th><span  style='color:red;'>{{ label  }}</span></th>
-<td><span  style='color:red;'>{{ org }}</span></td>
-<td><span  style='color:red;'>{{ req }}</span></td>
+<th class="borderless-cell"><span  style='color:red;'>{{ label  }}</span></th>
+<td class="borderless-cell"><span  style='color:red;'>{{ org }}</span></td>
+<td class="borderless-cell"><span  style='color:red;'>{{ req }}</span></td>
 {% endmacro%}
 
 {% macro no_change_block(label,org) %}
-<th>{{ label }} </th>
-<td>{{ org }}</td>
-<td>No Change</td>
+<th class="borderless-cell">{{ label }} </th>
+<td class="borderless-cell">{{ org }}</td>
+<td class="borderless-cell">No Change</td>
 {% endmacro%}
 
 {% macro compare_param_values(param, org_dict, req_dict, _LABELS) %}
@@ -90,15 +90,15 @@
         {% endif %}
         <tr>
             {% if kind == 'remove' %}
-            <th colspan=7 style='background-color:rgb(255,0,0, 0.2);'>
+            <th class="borderless-cell" colspan=7 style='background-color:rgb(255,0,0, 0.2);'>
                 Order = {{ ns.ordr }} (Deleted)
             </th>
             {% elif kind == 'add' %}
-            <th colspan=7 style='background-color:#16e67b;'>
+            <th class="borderless-cell" colspan=7 style='background-color:#16e67b;'>
                 Order = {{ ns.ordr }} (Created)
             </th>
             {% else %}
-            <th colspan=7 style='background-color:#e6fff2;'>
+            <th class="borderless-cell" colspan=7 style='background-color:#e6fff2;'>
                 Order = {{ ns.ordr }}
             </th>
             {% endif%}
@@ -115,7 +115,7 @@
                 {% if ns.rank_count % 2 == 0 %}
                     </tr>
                 {% else %}
-                    <td> &#160;</td>
+                    <td class="borderless-cell"> &#160;</td>
                 {% endif %}
             {% endfor %}
         {% elif kind == 'remove' %}
@@ -129,7 +129,7 @@
                 {% if ns.rank_count % 2 == 0 %}
                     </tr>
                 {% else %}
-                    <td> &#160;</td>
+                    <td class="borderless-cell"> &#160;</td>
                 {% endif %}
             {% endfor %}
         {% elif kind == 'compare' %}
@@ -143,7 +143,7 @@
                 {% if ns.rank_count % 2 == 0 %}
                     </tr>
                 {% else %}
-                    <td> &#160;</td>
+                    <td class="borderless-cell"> &#160;</td>
                 {% endif %}
             {% endfor %}
         {% endif %}

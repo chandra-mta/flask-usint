@@ -10,7 +10,7 @@
     {% if messages %}
         {% for message in messages %}
             <p style='color:red; font-size:160%;'>
-                {{ message }}
+                {{ message | safe }}
             </p>
         {% endfor %}
     {% endif %}
@@ -39,7 +39,7 @@
                     </tr>
                     <tr>
                 {% endif %}
-                <td>
+                <td class="borderless-cell">
                         <span style='padding-left:5px;'>
                     &#8729;
                     <a href="javascript:WindowOpener(' {{ url_for('ocatdatapage.index', obsid=m_obsid) }} ')"><b>
@@ -80,7 +80,7 @@
                 <th class='cent'>Parameter</th>
                 <th class='cent'>Original Value</th>
                 <th class='cent'>Requested</th>
-                <th>&#160;</th>
+                <th class='borderless-cell'>&#160;</th>
                 <th class='cent'>Parameter</th>
                 <th class='cent'>Original Value</th>
                 <th class='cent'>Requested</th>
@@ -94,7 +94,7 @@
                 {% if ns.param_count % 2 == 0 %}
                     </tr>
                 {% else %}
-                    <td> &#160;</td>
+                    <td class='borderless-cell'> &#160;</td>
                 {% endif %}
             {% endfor %}
         </table>
@@ -105,7 +105,7 @@
                 <th class='cent'>Parameter</th>
                 <th class='cent'>Original Value</th>
                 <th class='cent'>Requested</th>
-                <th>&#160;</th>
+                <th class='borderless-cell'>&#160;</th>
                 <th class='cent'>Parameter</th>
                 <th class='cent'>Original Value</th>
                 <th class='cent'>Requested</th>
@@ -117,10 +117,10 @@
                 {% else%}
                     {% set req_ordr = org_ordr %}
                 {% endif%}
-                <tr><th colspan=7  style='background-color:#a8f0bb;'>{{ _LABELS.get(ranks) }}</th></tr>
+                <tr><th class='borderless-cell' colspan=7  style='background-color:#a8f0bb;'>{{ _LABELS.get(ranks) }}</th></tr>
                 <tr>
                     {{compare_param_values(flag, org_dict, req_dict, _LABELS)}}
-                    <th>&#160;</th>
+                    <th class='borderless-cell'>&#160;</th>
                     {% if org_ordr == req_ordr %}
                         {{ no_change_block(_LABELS.get(ordr), org_ordr) }}
                     {% else %}
