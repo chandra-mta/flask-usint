@@ -98,7 +98,7 @@ The top level of this project is the application root, containing the server ent
   * `color.json` — Maps color names to RGB values
   * `labels.json` — Maps Ocat parameters to visual labels
   * `parameter_selections.json` — Parameter group mappings used across the application
-  * `usint.js` — jQuery library for the Ocat data page
+  * `usint.js` — javascript library for the Ocat data page
   * `ocat_style.css` — CSS styles
   * `ocatdatapage/` — Static files for the Ocat data page
   * `orupdate/` — Static files for the parameter status page

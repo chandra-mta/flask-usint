@@ -43,7 +43,6 @@ def index():
 
     status_page_order_kwarg = web_session.get('status_page_order_kwarg', {}) #: Pull revision orders by descending submission by default
 
-    #: TODO Suggested future development to convert table sorting to a jQuery data table approach to avoid unnecessary queries.
     order_form = OrderForm(request.form, data={'username': current_user.username}) #: default input username is current user
     #: Process the order_form to determine the order of displayed revisions on the status page
     if order_form.order_submission.data:
