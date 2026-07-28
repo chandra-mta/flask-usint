@@ -36,7 +36,7 @@ from .check_values import run_flash_checks
 from ..supple import read_ocat_data as rod
 from ..supple import database_interface as dbi
 from . import format_ocat_data as fod
-from ..supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list
+from ..supple.helper_functions import coerce_from_json, create_obsid_list, construct_notes, check_obsid_in_or_list, special_json_loads
 
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
@@ -345,7 +345,7 @@ def parameter_change_log_msg(ocat_data,rev):
             content += f"{_LABELS.get(param)} = {ocat_data.get(param)}\n"
         content += f"User = {current_user.username}\nVERIFIED CLONE\n"
         content += f"PAST COMMENTS = \n{ocat_data.get('comments') or ''}\n\n"
-        content += f"NEW COMMENTS = \n{json.loads(rev.request[0].value)}\n\n"
+        content += f"NEW COMMENTS = \n{special_json_loads(rev.request[0].value)}\n\n"
         content += f"PAST REMARKS = \n{ocat_data.get('remarks') or ''}\n\n"
         content += f"Parameter Status Page: {url_for('orupdate.index', _external=True)}\n"
         content += f"Parameter Check Page: {url_for('chkupdata.index', obsidrev=rev.obsidrev(), _external=True)}\n"
@@ -363,9 +363,9 @@ def parameter_change_log_msg(ocat_data,rev):
         req_dict = {}
         #: Iterate through list of table entries.
         for entry in rev.original:
-            org_dict[entry.parameter.name] = json.loads(entry.value)
+            org_dict[entry.parameter.name] = special_json_loads(entry.value)
         for entry in rev.request:
-            req_dict[entry.parameter.name] = json.loads(entry.value)
+            req_dict[entry.parameter.name] = special_json_loads(entry.value)
 
         content += f"PAST COMMENTS = \n{org_dict.get('comments') or ''}\n\n"
         if req_dict.get('comments') is not None:

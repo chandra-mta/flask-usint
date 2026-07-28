@@ -16,7 +16,7 @@ from . import bp
 from .forms import ObsidRevForm
 from ..supple import database_interface as dbi
 from ..supple import read_ocat_data as rod
-from ..supple.helper_functions import reorient_rank , rank_ordr, coerce, OCAT_DATETIME_FORMAT
+from ..supple.helper_functions import reorient_rank , rank_ordr, coerce, special_json_loads, OCAT_DATETIME_FORMAT
 
 stat_dir =  os.path.join(os.path.dirname(os.path.abspath(__file__)),'..', 'static')
 with open(os.path.join(stat_dir, 'labels.json')) as f:
@@ -72,10 +72,10 @@ def index(obsidrev):
         requests = [] #: If revision wasn't norm this would be the fetch result regardless, but assigning it on the python side is quicker
     org_dict = {}
     for org in originals:
-        org_dict[org.parameter.name] = coerce(json.loads(org.value), output_time_format=OCAT_DATETIME_FORMAT)
+        org_dict[org.parameter.name] = coerce(special_json_loads(org.value), output_time_format=OCAT_DATETIME_FORMAT)
     req_dict = {}
     for req in requests:
-        req_dict[req.parameter.name] = coerce(json.loads(req.value), output_time_format=OCAT_DATETIME_FORMAT)
+        req_dict[req.parameter.name] = coerce(special_json_loads(req.value), output_time_format=OCAT_DATETIME_FORMAT)
     #: Add record-orientation of rank information if present
 
     for flag, rank_name, columns, order in _FLAG_RANK_COLUMN_ORDR:

@@ -26,6 +26,8 @@ def run_flash_checks(ocat_data, org_dict, req_dict):
     grating_flash(req_dict)
     ra_dec_flash(org_dict, req_dict)
     frame_time_flash(org_dict, req_dict)
+    hrc_si_flash(org_dict, req_dict)
+    flag_change_flash(req_dict)
 
 def targname_flash(req_dict):
     if req_dict.get('targname') is not None:
@@ -91,4 +93,5 @@ def hrc_si_flash(org_dict, req_dict):
 
 def flag_change_flash(req_dict):
     for flag in ('dither_flag', 'window_flag', 'roll_flag', 'spwindow_flag'):
-        flash(f"{_LABELS.get(flag)} was updated, impacting constraints. CDO must approve this change. If approved already, indicate in the comment section.")
+        if flag in req_dict.keys():
+            flash(f"{_LABELS.get(flag)} was updated, impacting constraints. CDO must approve this change. If approved already, indicate in the comment section.")
