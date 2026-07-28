@@ -33,19 +33,25 @@ document.addEventListener('DOMContentLoaded', () =>{
         addRank("template_window_ranks", "window_ranks");
     });
 
-    document.querySelectorAll(".removeRow").forEach(button => {
-        button.addEventListener("click", function() {
-            const removeIDarr = this.id.split("-");
-            const removeID = `${removeIDarr[0]}-${removeIDarr[1]}`;
+    //Event listener for any .removeRow button click.
+    document.addEventListener("click", function(event) {
+        // On any click, check if the clicked element is the remove row button
+        const button = event.target.closest(".removeRow");
+        //Not not a remove row button. exit the listener immediately.
+        if (!button) {
+            return;
+        }
+        // Read the.removeRow button id to find the id of the whole row and remove it.
+        const removeIDarr = button.id.split("-");
+        const removeID = `${removeIDarr[0]}-${removeIDarr[1]}`;
 
-            document.getElementById(removeID)?.remove();
-
-            document
-                .querySelectorAll(`#${removeIDarr[0]} tbody tr`)
-                .forEach((row, index) => {
-                    renameTableRow(row, removeIDarr[0], index);
-                });
-        });
+        document.getElementById(removeID)?.remove();
+        // Edit the row index for all remaining rows.
+        document
+            .querySelectorAll(`#${removeIDarr[0]} tbody tr`)
+            .forEach((row, index) => {
+                renameTableRow(row, removeIDarr[0], index);
+            });
     });
     
   });
