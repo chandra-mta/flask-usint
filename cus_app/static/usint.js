@@ -1,47 +1,11 @@
 document.addEventListener('DOMContentLoaded', () =>{
-    // jQuery goes here;
-    jQuery("#dither_flag").change(function(){
-        if (jQuery(this).val() == 'Y'){
-            jQuery("#ditherDiv").slideDown('fast');
-        } else {
-            jQuery("#ditherDiv").slideUp('fast');
-        };
-    });
-    jQuery("#window_flag").change(function(){
-        if (jQuery(this).val() == 'Y'){
-            jQuery("#timeDiv").slideDown('fast');
-        } else {
-            jQuery("#timeDiv").slideUp('fast');
-        };
-    });
-    jQuery("#roll_flag").change(function(){
-        if (jQuery(this).val() == 'Y'){
-            jQuery("#rollDiv").slideDown('fast');
-        } else {
-            jQuery("#rollDiv").slideUp('fast');
-        };
-    });
-    jQuery("#subarray").change(function(){
-        if (jQuery(this).val() == 'CUSTOM'){
-            jQuery("#subarrayTr").show('fast');
-        } else {
-            jQuery("#subarrayTr").hide('fast');
-        };
-    });
-    jQuery("#duty_cycle").change(function(){
-        if (jQuery(this).val() == 'Y'){
-            jQuery("#dutyTr").show('fast');
-        } else {
-            jQuery("#dutyTr").hide('fast');
-        };
-    });
-    jQuery("#spwindow_flag").change(function(){
-        if (jQuery(this).val() == 'Y'){
-            jQuery("#windowDiv").slideDown('fast');
-        } else {
-            jQuery("#windowDiv").slideUp('fast');
-        };
-    });
+    bindToggle("dither_flag", "ditherDiv");
+    bindToggle("window_flag", "timeDiv");
+    bindToggle("roll_flag", "rollDiv");
+    bindToggle("spwindow_flag", "windowDiv");
+
+    bindToggle("subarray", "subarrayTr", "CUSTOM");
+    bindToggle("duty_cycle", "dutyTr");
 
     jQuery("#instrument").change(function(){
         if (['ACIS-I', 'ACIS-S'].includes(jQuery(this).val())) {
@@ -106,3 +70,10 @@ function renameTableRow(row, rank_list, index){
         });
     });
 };
+
+function bindToggle(selectId, targetId, showValue = "Y") {
+    document.getElementById(selectId).addEventListener("change", function() {
+        document.getElementById(targetId).style.display =
+            this.value === showValue ? "block" : "none";
+    });
+}
