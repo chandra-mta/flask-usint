@@ -33,15 +33,18 @@ document.addEventListener('DOMContentLoaded', () =>{
         addRank("template_window_ranks", "window_ranks");
     });
 
-    jQuery(".removeRow").click(function(){
-        //ID for row removal is substring of clicked remove button id.
-        var removeIDarr = jQuery(this).attr('id').split('-');
-        //Selection of table and row number
-        var removeID = removeIDarr[0] + "-" + removeIDarr[1];
-        jQuery(`#${removeID}`).remove();
-        //Rename all ranks in the table
-        jQuery(`#${removeIDarr[0]} tbody`).find("tr").each(function(index){
-            renameTableRow(jQuery(this),removeIDarr[0], index);
+    document.querySelectorAll(".removeRow").forEach(button => {
+        button.addEventListener("click", function() {
+            const removeIDarr = this.id.split("-");
+            const removeID = `${removeIDarr[0]}-${removeIDarr[1]}`;
+
+            document.getElementById(removeID)?.remove();
+
+            document
+                .querySelectorAll(`#${removeIDarr[0]} tbody tr`)
+                .forEach((row, index) => {
+                    renameTableRow(row, removeIDarr[0], index);
+                });
         });
     });
     
