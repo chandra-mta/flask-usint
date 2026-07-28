@@ -66,23 +66,25 @@ function addRank(template_name, rank_list) {
         .appendChild(rowClone);
 }
 
-function renameTableRow(row, rank_list, index){
-    var rowID = `${rank_list}-${index}`;
-    // Rename the row id
-    row.attr({'id': rowID});
+function renameTableRow(row, rank_list, index) {
+    const rowID = `${rank_list}-${index}`;
+    //rename the row ID
+    row.id = rowID;
+
+    const header = row.querySelector("th");
     // Change the displayed index
-    row.children("th").text(`${index}`);
-    // Rename and ReID the templated form input cells
-    row.find("select, input").each(function(){
-        //Find input type and use to construct new ID and Name
-        var inputTypeArr = jQuery(this).attr('id').split('-');
-        var inputType = inputTypeArr[inputTypeArr.length - 1];
-        jQuery(this).attr({
-            'id': `${rowID}-${inputType}`,
-            'name': `${rowID}-${inputType}`
-        });
+    if (header) {
+        header.textContent = index;
+    }
+    // Rename and reassign the id of the templated form input cells
+    row.querySelectorAll("select, input").forEach(input => {
+        const parts = input.id.split("-");
+        const inputType = parts[parts.length - 1];
+
+        input.id = `${rowID}-${inputType}`;
+        input.name = `${rowID}-${inputType}`;
     });
-};
+}
 
 function bindToggle(selectId, targetId, showValue = "Y") {
     document.getElementById(selectId).addEventListener("change", function() {
