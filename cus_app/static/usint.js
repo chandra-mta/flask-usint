@@ -21,16 +21,16 @@ document.addEventListener('DOMContentLoaded', () =>{
         }
     });
 
-    jQuery("#addTime").click(function(){
-        addRank("template_time_ranks","time_ranks");
+    document.getElementById("addTime").addEventListener("click", () => {
+        addRank("template_time_ranks", "time_ranks");
     });
 
-    jQuery("#addRoll").click(function(){
-        addRank("template_roll_ranks","roll_ranks");
+    document.getElementById("addRoll").addEventListener("click", () => {
+        addRank("template_roll_ranks", "roll_ranks");
     });
 
-    jQuery("#addWindow").click(function(){
-        addRank("template_window_ranks","window_ranks");
+    document.getElementById("addWindow").addEventListener("click", () => {
+        addRank("template_window_ranks", "window_ranks");
     });
 
     jQuery(".removeRow").click(function(){
