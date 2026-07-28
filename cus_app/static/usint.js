@@ -51,14 +51,20 @@ document.addEventListener('DOMContentLoaded', () =>{
   });
 
 function addRank(template_name, rank_list) {
-    //Select set of rows in rank list table
-    var rows = jQuery(`#${rank_list} tbody`).children("tr");
-    var rowCount = rows.length;
-    //Clone a new row from rank list template hidden in div
-    var timeRowClone = jQuery(`#${template_name} table tr`).clone(true, true);
-    renameTableRow(timeRowClone, rank_list, rowCount);
-    jQuery(`#${rank_list} tbody`).append(timeRowClone);
-};
+    // Select set of rows in rank list table
+    const rows = document.querySelectorAll(`#${rank_list} tbody tr`);
+    const rowCount = rows.length;
+    // Clone a new row from the rank list template hidden in the div
+    const rowClone = document
+        .querySelector(`#${template_name} table tr`)
+        .cloneNode(true);
+
+    renameTableRow(rowClone, rank_list, rowCount);
+
+    document
+        .querySelector(`#${rank_list} tbody`)
+        .appendChild(rowClone);
+}
 
 function renameTableRow(row, rank_list, index){
     var rowID = `${rank_list}-${index}`;
