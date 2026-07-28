@@ -7,14 +7,18 @@ document.addEventListener('DOMContentLoaded', () =>{
     bindToggle("subarray", "subarrayTr", "CUSTOM");
     bindToggle("duty_cycle", "dutyTr");
 
-    jQuery("#instrument").change(function(){
-        if (['ACIS-I', 'ACIS-S'].includes(jQuery(this).val())) {
-            jQuery(".ACISDiv").slideDown('fast');
-            jQuery(".HRCDiv").slideUp('fast'); 
-        } else if (['HRC-I', 'HRC-S'].includes(jQuery(this).val())) {
-            jQuery(".HRCDiv").slideDown('fast');
-            jQuery(".ACISDiv").slideUp('fast');
-        };
+    document.getElementById("instrument").addEventListener("change", function() {
+        const acis = document.querySelectorAll(".ACISDiv");
+        const hrc = document.querySelectorAll(".HRCDiv");
+
+        if (["ACIS-I", "ACIS-S"].includes(this.value)) {
+            acis.forEach(el => el.style.display = "block");
+            hrc.forEach(el => el.style.display = "none");
+        }
+        else if (["HRC-I", "HRC-S"].includes(this.value)) {
+            hrc.forEach(el => el.style.display = "block");
+            acis.forEach(el => el.style.display = "none");
+        }
     });
 
     jQuery("#addTime").click(function(){
