@@ -1,6 +1,4 @@
-//Functions with jQuery 1.12 dependence
-jQuery.noConflict();
-jQuery(document).ready(function(){
+document.addEventListener('DOMContentLoaded', () =>{
     // jQuery goes here;
     jQuery("#dither_flag").change(function(){
         if (jQuery(this).val() == 'Y'){
