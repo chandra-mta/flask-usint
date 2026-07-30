@@ -151,5 +151,5 @@
     "target_name_change": "A target name change was requested for the following obsid(s).",
     "large_coordinate_change": "A coordinate shift was requested for the following obsid(s).",
     "obsdate_under10": "A parameter change was requested for the following obsid(s) which are scheduled in less than 10 days.",
-    "on_or_list": "A target name change was requested for the following obsid(s)."
+    "on_or_list": "The following obsid(s) have requested parameter value changes and are on the active OR List"
 }

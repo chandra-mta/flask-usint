@@ -47,13 +47,7 @@ Then, following the copy of the application source code files, a few additional 
 - Activate the conda environment supporting the app installation (`/proj/sot/mta/envs`) and run the __create_tables.py script to ensure data tables and flask session tables are instantiated in the database configured for this install.
 
 ## Supplemental Scripts
-Using the CLI, we also run a set of support scripts and commands to performs tasks such as database backups, maintenance, and retaining legacy data files
-
-**cus@r2d2-v**
-```
-#: Add rolling schedule horizon to the TOO schedule
-0 2 * * * cd /proj/web-cxc/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py schedule maintain-schedule
-```
+Using the CLI, we also run a set of support scripts and commands to performs tasks such as database backups, maintenance, and retaining legacy data files. The Cronjobs to run these supplemental tasks are written in the cronjobs.md file
 
 ## Logging
 

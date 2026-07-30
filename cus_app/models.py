@@ -285,7 +285,7 @@ class Original(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     def __repr__(self) -> str:
-        return f"Original(order_id={self.order_id!r}, revision_id={self.revision_id!r}, parameter_id={self.parameter_id!r}, value={self.value!r})"
+        return f"Original(id={self.id!r}, revision_id={self.revision_id!r}, parameter_id={self.parameter_id!r}, value={self.value!r})"
 
 class Schedule(db.Model):
     """
