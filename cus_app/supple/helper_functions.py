@@ -301,6 +301,14 @@ def approx_equals(first,second):
     else:
         return first == second
 
+def grab_latest(param, org_dict, req_dict):
+    if param in req_dict.keys():
+        #: New value deliberately requested. Possible requested to None value.
+        return req_dict.get(param)
+    else:
+        #: No new request. Check original. If no original value, will still return None.
+        return org_dict.get(param)
+
 def construct_notes(ocat_data, org_dict, req_dict):
     """
     Construct Revision notes and format into a JSON string

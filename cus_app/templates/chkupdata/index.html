@@ -10,11 +10,6 @@
 {% from 'chkupdata/macros.html' import changed_param %}
 {% from 'chkupdata/macros.html' import color_coded %}
 
-{% block style %}
-    {{ super() }}
-    th, td {border: 1px solid black;}
-{% endblock %}
-
 {% block app_content %}
 
 <h1>Observation: {{ revision.obsid }}.{{ str(revision.revision_number).zfill(3) }}</h1>
@@ -31,24 +26,24 @@
 
 <table border=0>
     <tr>
-        <th>Obsid.Rev:  </th><td class='cent'>{{ revision.obsid }}.{{ str(revision.revision_number).zfill(3) }}</td>
-        <td style='padding:5px;'></td>
-        <th>Sequence #: </th><td class='cent'>{{ ocat_data.get('seq_nbr') }}</td>
-        <td style='padding:5px;'></td>
-        <th>Proposal #: </th><td class='cent'>{{ ocat_data.get('proposal_number') }}</td>
+        <th class='borderless-cell'>Obsid.Rev:  </th><td class='cent borderless-cell'>{{ revision.obsid }}.{{ str(revision.revision_number).zfill(3) }}</td>
+        <td class='borderless-cell' style='padding:5px;'></td>
+        <th class='borderless-cell'>Sequence #: </th><td class='cent borderless-cell'>{{ ocat_data.get('seq_nbr') }}</td>
+        <td class='borderless-cell' style='padding:5px;'></td>
+        <th class='borderless-cell'>Proposal #: </th><td class='cent borderless-cell'>{{ ocat_data.get('proposal_number') }}</td>
     </tr>
     <tr>
-        <th>Target Name: </th><td class='cent'>{{ ocat_data.get('targname') }}</td>
-        <td style='padding:5px;'></td>
-        <th>Group ID:   </th><td class='cent'>{{ ocat_data.get('group_id') }}</td>
-        <td style='padding:5px;'></td>
-        <th>Obs AO:     </th><td class='cent'>{{ ocat_data.get('obs_ao_str') }}</td>
+        <th class='borderless-cell'>Target Name: </th><td class='cent borderless-cell'>{{ ocat_data.get('targname') }}</td>
+        <td class='borderless-cell' style='padding:5px;'></td>
+        <th class='borderless-cell'>Group ID:   </th><td class='cent borderless-cell'>{{ ocat_data.get('group_id') }}</td>
+        <td class='borderless-cell' style='padding:5px;'></td>
+        <th class='borderless-cell'>Obs AO:     </th><td class='cent borderless-cell'>{{ ocat_data.get('obs_ao_str') }}</td>
     </tr>
     <tr>
-        <th>PI Name:    </th><td class='cent'>{{ ocat_data.get('pi_name') }}</td>
-        <td style='padding:5px;'></td>
-        <th>Submitted As:</th>
-        <td class='cent' style='background-color:rgb(255,0,0,0.2);'>
+        <th class='borderless-cell'>PI Name:    </th><td class='cent borderless-cell'>{{ ocat_data.get('pi_name') }}</td>
+        <td class='borderless-cell' style='padding:5px;'></td>
+        <th class='borderless-cell'>Submitted As:</th>
+        <td class='cent borderless-cell' style='background-color:rgb(255,0,0,0.2);'>
             {{ revision.kind.upper() }}     
         </td>
     </tr>
@@ -100,10 +95,10 @@
 <h3>All Parameters</h3>
 
 <table border=0 style='text-align:left;' >
-<tr><th>Color Coding: </th></tr>
-<tr> <td style='color:lawngreen;'>Requested value is in the database.</td> </tr>
-<tr> <td style='color:orangered;'>Requested value is not in the database yet.</td> </tr>
-<tr> <td style='color:fuchsia;'>  There was no request for the update, but the database value is changed.</td></tr>
+<tr><th class='borderless-cell'>Color Coding: </th></tr>
+<tr> <td class='borderless-cell' style='color:lawngreen;'>Requested value is in the database.</td> </tr>
+<tr> <td class='borderless-cell' style='color:orangered;'>Requested value is not in the database yet.</td> </tr>
+<tr> <td class='borderless-cell' style='color:fuchsia;'>  There was no request for the update, but the database value is changed.</td></tr>
 </table>
 
 <!-- -->
