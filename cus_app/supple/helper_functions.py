@@ -223,6 +223,16 @@ def coerce(val, output_time_format = STORAGE_FORMAT):
     #: Regular string
     return val
 
+def special_json_loads(val):
+    """
+    Storage of data is JSON strings or None/NULL in SQLite.
+    Therefore allow return on None.
+    """
+    try:
+        return json.loads(val)
+    except TypeError:
+        if val is None:
+            return None
 #
 # --- Fetching Functions
 #
