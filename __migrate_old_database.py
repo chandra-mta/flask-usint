@@ -16,6 +16,8 @@ our real revisions are recorded as they used to be, while these *.db SQLite data
 This script is prototyped for migrating our old format and thus is not written with updates in mind.
 Do not develop this script. Only use it for the v1.1 to v2.1 database migration.
 
+
+TODO: Migration for non-schema text can have errors in the text files. Should have text parsing use app native functions as much as possible.
 """
 
 import os
@@ -37,7 +39,7 @@ from sqlalchemy import event
 #: local imports
 from cus_app.models import User, Revision, Signoff, Parameter, Request, Original, Schedule
 import __chkupdata_read as cr
-from cus_app.supple.helper_functions import is_large_coord_shift
+from cus_app.supple.helper_functions import is_large_coord_shift, coerce_to_json
 
 
 #: Turn on foreign keys anytime there is a connection.
@@ -536,7 +538,7 @@ def construct_entries(Revision_obj):
     return org, req
 
 
-def note_construct(revision):
+def construct_note(revision):
     """
     Pull revision object data and see if notes need to be marked
     """
@@ -583,7 +585,7 @@ def note_construct(revision):
                 notes.update({'large_coordinate_change': True})
         
         if len(notes) >0:
-            return notes
+            return coerce_to_json(notes)
         else:
             return None
         
@@ -607,7 +609,7 @@ def rev_sign_orms(old_signoff_row):
         org, req = construct_entries(new_rev)
         setattr(new_rev, 'request', req)
         setattr(new_rev, 'original', org)
-        note = note_construct(new_rev)
+        note = construct_note(new_rev)
         setattr(new_rev, 'notes', note)
     
     new_sign = Signoff(revision = new_rev)

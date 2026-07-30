@@ -3,6 +3,7 @@
 __pycache__/
 _example/
 instance/
+
 supplemental_pages/
 supplemental_scripts/
 flask-usint.code-workspace
@@ -12,4 +13,5 @@ install.sh
 *.conf.py
 .htaccess
 *ipynb
+.ipynb_checkpoints/
 environment.yml
