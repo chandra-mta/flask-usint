@@ -68,7 +68,6 @@ via either the cxc or icxc servers. Links for icxc only are marked with
 
 <ul>
 <li><a href="https://cxc.cfa.harvard.edu/cus/procedures.html">USINT Procedures</a> 
-
 <li><a href="https://cxc.cfa.harvard.edu/cus/Usint/go_form/AO28.html"> 
 	    Cycle 28 Contact Letter Generator</a>
 (<a href="https://cxc.cfa.harvard.edu/cus/Usint/go_form/AO27.html">27</a>,
@@ -98,9 +97,7 @@ via either the cxc or icxc servers. Links for icxc only are marked with
 <li><a href="https://cxc.cfa.harvard.edu/cus/Usint/APPROVED">
 	ObsIDs approved for flight</a>
 
-<li><a href="https://cxc.cfa.harvard.edu/cus/InstrumentChanges.html">Instrument Changes</a>
 </ul>
-
 <center>
     <form>
 <p>
@@ -144,7 +141,7 @@ via either the cxc or icxc servers. Links for icxc only are marked with
   <li><a href="https://cxc.cfa.harvard.edu/cus/WhenIsMyObservation.txt">
     How to reply to "Why is my observation taking so long?!"
   <li><a href="https://cxc.cfa.harvard.edu/cus/jointprops.html">
-    Joint proposal "coordination" and contact info
+    Joint proposal "coordination" and contact info</a>
 </ul>
 
 <h2><center>ObsVis and Dither</center></h2>
@@ -162,11 +159,8 @@ via either the cxc or icxc servers. Links for icxc only are marked with
     How to determine/change ObsVis version</a>
   <li>obsvis.cal files for each Cycle (version):<br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href="https://cxc.cfa.harvard.edu/soft/obsvis/cycle28/obsvis.cal">
-      28 (1.21)</a>
-      &nbsp;
       <a href="https://cxc.cfa.harvard.edu/soft/obsvis/cycle27/obsvis.cal">
-      27 (1.20)</a>
+      28 and 27 (1.20)</a>
       &nbsp;
       <a href="https://cxc.cfa.harvard.edu/soft/obsvis/cycle26/obsvis.cal">
       26 (1.19)</a>
@@ -185,6 +179,20 @@ via either the cxc or icxc servers. Links for icxc only are marked with
 <tr>
 <td width=48%>
 
+<p>
+  To view the <b>SPLIT CONSTRAINT</b> fields (which are currently not visible in ChaSeR or our Ocat Data Page)...
+</p>
+<center>
+    <form>
+<p>
+     <font color=red><small>[i]</small></font> MP's Ocat Data Page (4 or 5 digit ObsID):
+     <input type=text   name="mp_obsid"    id="mp_obsid" size=10>
+     <input type=submit name='mp_ocat_page' value='Submit' formaction='javascript:OpenMPOcatPage()'>
+      </form>
+</center>
+<p>
+  Split Interval is non-blank only if Split Constraint=Y
+</p>
 <h2> <center> TOO/DDT Stuff </center> </h2>
 
 <ul>
@@ -217,6 +225,9 @@ via either the cxc or icxc servers. Links for icxc only are marked with
 </a>
 <h2><center>Useful Notes and Sites</center></h2>
 <ul>
+<li><a href="https://cxc.cfa.harvard.edu/cus/InstrumentChanges.html">
+  <b><font color=green>Instrument Changes</font></b>
+</a>
 <li> <a href="http://cxc.cfa.harvard.edu/target_lists/longsched.html">
 	Long-Term Schedule</a> (and <font color=red><small>[i]</small></font>
 <a href="https://icxc.cfa.harvard.edu/mp/lts/lts-current.html">with
@@ -228,12 +239,12 @@ via either the cxc or icxc servers. Links for icxc only are marked with
 	past and future STS's</a>)
 
 <li><a href="https://cxc.cfa.harvard.edu/soft/cps/Chandra.help.html">
-    <b><font color=green>CPS Help for required proposal fields</font></b></a>
+    CPS Help for required proposal fields
 
 <li><font color=red><small>[i]</small></font>
    <a href="https://icxc.harvard.edu/mp/cgi/docs/wiki.pl?Constraints_Definitions
 ">
-    <b><font color=green>All about constraints</font></b></a>
+    All about constraints
     (Time, Phase, Monitor, Group, Split, etc.)
 
 <li><a href="http://cxc.cfa.harvard.edu/acis/home.html">ACIS Ops Home Page</a>
@@ -246,7 +257,7 @@ via either the cxc or icxc servers. Links for icxc only are marked with
    the <a href="https://cxc.cfa.harvard.edu/cus/ACISmodeList">SImode list</a>.
 
    <li>ACIS layout:
-	[<a href="https://cxc.cfa.harvard.edu/proposer/POG/html/chap6.html#tth_sEc6.1">POG Figure</a>]
+    [<a href="https://cxc.cfa.harvard.edu/proposer/POG/html/chap6.html#tth_sEc6.1">POG Figure</a>]
 </ul>
 
 <li>
@@ -292,6 +303,11 @@ via either the cxc or icxc servers. Links for icxc only are marked with
       var  obsid = document.getElementById('obsid').value;
       var  html  = "{{url_for('ocatdatapage.index')}}" + obsid;
       window.open(html,'Ocatdatapage'+obsid);
+  } 
+  function OpenMPOcatPage(){
+      var  obsid = document.getElementById('mp_obsid').value;
+      var  html  = "https://icxc.harvard.edu/cgi-bin/mp/target_param.cgi?" + obsid;
+      window.open(html,'MPOcatdatapage'+obsid);
   } 
   function OpenOrupdate(){
     window.open("{{url_for('orupdate.index')}}",'Orupdate')
