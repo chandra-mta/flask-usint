@@ -311,13 +311,6 @@ def process_usint(row):
 
 
 #: Coercion section
-#
-# --- Coercion section. Converting the strings text to the correct data types.
-#
-def coerce_none(val):
-    if val in ALL_NULL_SET:
-        return None
-    return val
 
 def coerce_number(val):
     if not isinstance(val,(int,float)):
