@@ -18,3 +18,9 @@ once the v2.1 application version is live.
 #: Sync the test usint database with the live usint database.
 30 3 * * * cd /proj/web-cxc-dmz-test/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py database sync-test-database -f
 ```
+
+**mta@c3po-v**
+```
+#: Writes the sot_ocat.out and sot_ocat_ra.out files to /data/mta4/obs_ss
+30 * * * * cd /data/mta4/obs_ss/; /data/mta4/obs_ss/sot_data.sh >> $HOME/Logs/sot_data.cron 
+```
