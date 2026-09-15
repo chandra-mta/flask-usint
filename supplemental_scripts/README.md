@@ -9,13 +9,17 @@ Consult the cronjobs.md documentation file for a list of the cronjobs calling th
 ### obs_ss
 This directory contains the scripts for filling the legacy /data/mta4/obs_ss data directory. When time allows, these data directory should be deprecated.
 
-sot_data.sh runs the sot_data.sql SQL statement to fetch the data columns used for sot_answer.cgi
+sot_data.sh runs the sot_data.sql SQL statement to fetch the data columns used for sot_answer.cgi in the sot_ocat.out and sot_ocat_ra.out files. These are also used in other scripts.
+
+find_planned_roll.py writes the mp_long_term file.
 
 Needs Sybase access and ocat authentication login located at `/data/mta4/CUS/authorization`
 #### Script Files
 - /data/mta4/obs_ss/sot_data.sh
     - /data/mta4/obs_ss/sot_data.sql
+- /data/mta4/obs_ss/find_planned_roll.py
 
 #### Data Files
 - /data/mta4/obs_ss/sot_ocat.out
 - /data/mta4/obs_ss/sot_ocat_ra.out
+- /data/mta4/obs_ss/mp_long_term
