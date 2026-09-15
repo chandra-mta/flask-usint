@@ -20,7 +20,7 @@ def parse_schedule_file(data):
     The HTML files does not contain an actual table to display the schedule information, opting instead to use the <pre> tag.
     Thus, we parse by regex searching.
     """
-    line = ''
+    records = []
     for ent in data:
         mc = re.search('LTS changes', ent)
         if mc is not None:
@@ -47,8 +47,9 @@ def parse_schedule_file(data):
                 pl_roll   = atemp[acnt-4]
                 pl_range  = atemp[acnt-3]
 
-                line += f"{obsid}:{pl_roll}:{pl_range}\n"
-    return line
+                #line += f"{obsid}:{pl_roll}:{pl_range}\n"
+                records.append((obsid, pl_roll, pl_range))
+    return records
 
 def read_schedule_file(html_file_path):
     with open(html_file_path, encoding='latin-1') as f:
@@ -58,15 +59,17 @@ def read_schedule_file(html_file_path):
 def find_planned_roll(html_file_path, out_file):
 
     data = read_schedule_file(html_file_path)
-    results = parse_schedule_file(data)
+    records = parse_schedule_file(data)
+
+    output = ''
+    for obsid, pl_roll, pl_range in records:
+        output += f"{obsid}:{pl_roll}:{pl_range}\n"
 
     if hasattr(out_file, "write"):
-        out_file.write("\n".join(results))
-        out_file.write("\n")
+        out_file.write(output)
     else:
-        with open(out_file, "w") as out:
-            out.write("\n".join(results))
-            out.write("\n")
+        with open(out_file, "w") as f:
+            f.write(output)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
