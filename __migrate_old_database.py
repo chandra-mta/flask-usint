@@ -583,7 +583,11 @@ def note_construct(revision):
                 notes.update({'large_coordinate_change': True})
         
         if len(notes) >0:
-            return notes
+            if isinstance(notes, dict):
+                #: Should be the case every time.
+                return json.dumps(notes)
+            else:
+                return notes
         else:
             return None
         
