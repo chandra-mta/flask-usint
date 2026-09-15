@@ -22,5 +22,8 @@ once the v2.1 application version is live.
 **mta@c3po-v**
 ```
 #: Writes the sot_ocat.out and sot_ocat_ra.out files to /data/mta4/obs_ss
-30 * * * * cd /data/mta4/obs_ss/; /data/mta4/obs_ss/sot_data.sh >> $HOME/Logs/sot_data.cron 
+30 * * * * cd /data/mta4/obs_ss/; /data/mta4/obs_ss/sot_data.sh >> $HOME/Logs/sot_data.cron 2>&1
+
+#: Read MP Long Term Web Page and Extract OBSID and Planned Roll Angle
+8 1 * * * cd /data/mta4/obs_ss; /proj/sot/mta/envs/python_web_apps/bin/python find_planned_roll.py >> $HOME/Logs/find_planned_roll.cron 2>&1
 ```
