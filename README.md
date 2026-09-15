@@ -247,7 +247,7 @@ POC duty sign-up sheet.
 
 ## supple
 
-Supplemental scripts used across the application.
+Supplemental modules used across the application. These differ from the cronjob scripts in the supplemental_scripts directory located outside of the cus_app source code directory.
 
 ### Files
 
