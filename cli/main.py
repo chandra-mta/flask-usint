@@ -7,7 +7,7 @@ from .user import create_user, set_groups, find_user
 from .schedule import maintain_schedule
 from .info import print_config, app_root_path
 from .database import create_tables, pragma_check, sync_test_database
-from .signoffs import fetch_pending
+from .signoffs import fetch_pending, send_reminder_emails
 
 @click.group()
 def cli():
@@ -54,6 +54,7 @@ database.add_command(pragma_check)
 database.add_command(sync_test_database)
 
 signoffs.add_command(fetch_pending)
+signoffs.add_command(send_reminder_emails)
 
 # Attach subgroup to root CLI
 cli.add_command(user)

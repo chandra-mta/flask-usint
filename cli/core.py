@@ -5,7 +5,9 @@ Core components for the CLI interface.
 __all__ = [
     "create_app",
     "db",
-    "models"
+    "models",
+    "mail",
+    "emailing"
 ]
 
 import sys
@@ -24,8 +26,8 @@ def _import_fail(error):
 #: Define core variables from app context.
 try:
     #: If fails, likely not running the correct conda environment.
-    from cus_app import create_app
-    from cus_app.extensions import db
+    from cus_app import create_app, emailing
+    from cus_app.extensions import db, mail
     #: Imports everything to ensure full model registration for SQLAlchemy
     import cus_app.models as models
 except ImportError as e:
