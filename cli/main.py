@@ -7,6 +7,7 @@ from .user import create_user, set_groups, find_user
 from .schedule import maintain_schedule
 from .info import print_config, app_root_path
 from .database import create_tables, pragma_check, sync_test_database
+from .signoffs import fetch_pending
 
 @click.group()
 def cli():
@@ -34,6 +35,11 @@ def database():
     """Database CLI commands"""
     pass
 
+@click.group()
+def signoffs():
+    """Signoff table management commands"""
+    pass
+
 # Attach commands to the subgroup
 user.add_command(create_user)
 user.add_command(set_groups)
@@ -47,8 +53,11 @@ database.add_command(create_tables)
 database.add_command(pragma_check)
 database.add_command(sync_test_database)
 
+signoffs.add_command(fetch_pending)
+
 # Attach subgroup to root CLI
 cli.add_command(user)
 cli.add_command(schedule)
 cli.add_command(info)
 cli.add_command(database)
+cli.add_command(signoffs)
