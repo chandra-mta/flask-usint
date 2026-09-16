@@ -1,0 +1,9 @@
+This message is a daily summary of obsid.revs which
+need a signing-off of HRC SI-specific changes:
+
+{% for signoff in pending_signoffs %}
+    {{ signoff.revision.obsidrev }}
+{% endfor %}
+
+These updates may be verified at the Parameter Status Page:
+{{ url_for('orupdate.index', _external=True) }}
