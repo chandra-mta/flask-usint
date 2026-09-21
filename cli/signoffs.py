@@ -11,7 +11,7 @@ uses the app.jinja_env
 
 """
 import click
-from .core import with_app_context, db, mail, models, emailing, add_additional_cli_error_context
+from .core import with_app_context, db, models, emailing, add_additional_cli_error_context
 from sqlalchemy import select
 from flask import current_app
 
@@ -108,7 +108,6 @@ def send_reminder_emails():
         column = 'general_status'
         gen_content =_construct_group_reminder_content(column, pending_results[column])
         to = 'william.aaron@sao.si.edu'
-        #msg = emailing.construct_msg(gen_content, SIGNOFF_COLUMNS[column], to=to)
         emailing.send_email(gen_content, SIGNOFF_COLUMNS[column], to=to)
         
         click.secho("Reminder emails sent for pending signoffs.", fg='green')
