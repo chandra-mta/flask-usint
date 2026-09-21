@@ -11,7 +11,7 @@ uses the app.jinja_env
 
 """
 import click
-from .core import with_app_context, db, mail, models, emailing
+from .core import with_app_context, db, mail, models, emailing, add_additional_cli_error_context
 from sqlalchemy import select
 from flask import current_app
 
@@ -85,7 +85,11 @@ def _construct_group_reminder_content(column, pending_list):
     Note that this internal function must be invoked within an app context, as it uses the current_app.jinja_env to render the email template.
     """
     template = current_app.jinja_env.get_template(f'email/{column}_reminder_email.jinja')
-    content = template.render(pending_list=pending_list)
+    try:
+        content = template.render(pending_list=pending_list)
+    except RuntimeError as e:
+        e = add_additional_cli_error_context(e)
+        raise e
     return content
 
 @click.command("send-reminder-emails")
