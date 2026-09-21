@@ -1,0 +1,7 @@
+This message is a daily summary of obsid.revs which
+need a signing-off of general (non-ACIS) changes:
+{% for signoff in pending_list %}
+    {{ signoff.revision.obsidrev() }}
+{% endfor %}
+These updates may be verified at the Parameter Status Page:
+{{ url_for('orupdate.index', _external=True) }}

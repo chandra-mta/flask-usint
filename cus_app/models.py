@@ -34,8 +34,16 @@ from flask_login import UserMixin
 from .extensions import db
 from typing import Optional, List #: Allows for Mapper to determine nullability of the table column.
 from datetime import datetime
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, inspect
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+def iter_columns(obj, names):
+    """
+    Iterate over the column attributes of a singular ORM.
+    """
+    for attr in inspect(obj).mapper.column_attrs:
+        if attr.key in names:
+            yield attr.key, getattr(obj, attr.key)
 
 class User(db.Model, UserMixin):
     """

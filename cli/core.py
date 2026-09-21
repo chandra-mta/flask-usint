@@ -5,7 +5,9 @@ Core components for the CLI interface.
 __all__ = [
     "create_app",
     "db",
-    "models"
+    "models",
+    "mail",
+    "emailing"
 ]
 
 import sys
@@ -24,8 +26,8 @@ def _import_fail(error):
 #: Define core variables from app context.
 try:
     #: If fails, likely not running the correct conda environment.
-    from cus_app import create_app
-    from cus_app.extensions import db
+    from cus_app import create_app, emailing
+    from cus_app.extensions import db, mail
     #: Imports everything to ensure full model registration for SQLAlchemy
     import cus_app.models as models
 except ImportError as e:
@@ -45,6 +47,21 @@ def with_app_context(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         app = create_app(logging_mode='console')
+        #: Add additional configuration to the CLI invocation of the app creator
+        #: to handle processing requests without the information of an incoming web request.
+        #: Paths via this installation's specific instance folder. Relative pathing from the instance_relative_config argument.
+        app.config.from_pyfile('cli_config.py', silent=True)
         with app.app_context():
             return f(*args, **kwargs)
     return wrapper
+
+def add_additional_cli_error_context(e):
+    """
+    If the python exception has certain commonly encountered problems,
+    add additional notes for the developer
+    """
+    if "SERVER_NAME" in str(e):
+        e.add_note(
+            "Possible CLI configuration issue. Check that the SERVER_NAME variable is defined in the instance/cli_config.py module."
+        )
+    return e

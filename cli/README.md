@@ -2,11 +2,19 @@
 
 For supporting the day-to-day operation of an installation of the Usint Flask application, for example the live installation served by the main cxc web servers and installed at `/proj/web-cxc/wsgi-scripts/cus`, we have a few CLI tools which can update or fetch from that installation's database.
 
-## IMPORTANT NOTE
+## IMPORTANT NOTE ON APPLICATION CONTEXT
 All of the command line functions are designed to create an application object with the cus_app.create_app() factory function by using the within_app_context function decorator. This means that any command line function must include this decorator to safely interface with the app context.
 
 This also means that you can design any CLI tool that works with the flask application context by making use of the flask current_app proxy.
 For example, a CLI tool could fetch the configuration options of the running application by using current_app.config
+
+## IMPORTANT NOTE ON CLI CONFIGURATION
+The CLI tool will also invoke application configuration settings located in the instance folder for the CLI app context.
+```
+instance/cli_config.py
+```
+This is necessary for certain functions which use the web request for certain variables, but the CLI has no web request since functions
+are called from the command line. Configuration is app installation specific.
 
 ## General Usage
 
