@@ -38,6 +38,13 @@ _OTHER_PENDING_COLUMNS = {
     'acis_status' : ('general_status'),
 }
 
+SIGNOFF_RECIPIENTS = {
+    'general_status': ['arcops@cfa.harvard.edu'],
+    'acis_status': ['arcops@cfa.harvard.edu'],
+    'acis_si_status': ['acisdude@cfa.harvard.edu'],
+    'hrc_si_status': ['vkashyap@cfa.harvard.edu', 'hrcdude@cfa.harvard.edu'],
+}
+
 def _fetch_by_column_and_status(column_model, status_value):
     """
     Using one of the five SIGNOFF_COLUMN dictionary values, we query and select all values for that column matching the given status.
@@ -143,17 +150,18 @@ def send_reminder_emails():
     """
     pending_results = _fetch_all_pending()
     categorized_pending = _categorize_pending_signoffs(pending_results)
-    #print(categorized_pending)
     count = 0
     for column, pending_list in categorized_pending.items():
         count += len(pending_list)
 
     if count > 0:
-        column = 'general_status'
-        gen_content =_construct_group_reminder_content(column, categorized_pending[column])
-        to = 'william.aaron@sao.si.edu'
-        emailing.send_email(gen_content, SIGNOFF_COLUMNS[column], to=to)
-        
+        #: Send the non-USINT reminders to group email addresses
+
+        for column, recipients in SIGNOFF_RECIPIENTS.items():
+            _signoffs = categorized_pending[column]
+            if len(_signoffs) > 0:
+                _content =_construct_group_reminder_content(column, _signoffs)
+                emailing.send_email(_content, SIGNOFF_COLUMNS[column], to=recipients)        
         click.secho("Reminder emails sent for pending signoffs.", fg='green')
     else:
         click.secho("No Pending Signoffs. No Emails Sent.", fg='green')
