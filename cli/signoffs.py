@@ -124,7 +124,7 @@ def _categorize_pending_signoffs(pending_results):
             other_pending = _other_pending(signoff, check_list)
             if not other_pending:
                 #: Then include in the matching column category
-                categorized_pending[column_category] += signoff
+                categorized_pending[column_category].append(signoff)
 
     return categorized_pending    
 
@@ -156,12 +156,26 @@ def send_reminder_emails():
 
     if count > 0:
         #: Send the non-USINT reminders to group email addresses
-
         for column, recipients in SIGNOFF_RECIPIENTS.items():
             _signoffs = categorized_pending[column]
             if len(_signoffs) > 0:
                 _content =_construct_group_reminder_content(column, _signoffs)
-                emailing.send_email(_content, SIGNOFF_COLUMNS[column], to=recipients)        
+                emailing.send_email(_content, SIGNOFF_SUBJECTS[column], to=recipients)
+        
+        #: Group USINT reminders by USINT user
+        signoff_by_user = {}
+        for _signoff in categorized_pending['usint_status']:
+            _email = _signoff.revision.user.email
+            if _email not in signoff_by_user.keys():
+                signoff_by_user[_email] = [_signoff]
+            else:
+                signoff_by_user[_email].append(_signoff)
+        
+        #: Iterate over grouping. If no groups, then nothing sent.
+        for _email, _signoffs in signoff_by_user.items():
+            _content = _construct_group_reminder_content('usint_status', _signoffs)
+            emailing.send_email(_content, SIGNOFF_SUBJECTS['usint_status'], to=_email)
+        
         click.secho("Reminder emails sent for pending signoffs.", fg='green')
     else:
         click.secho("No Pending Signoffs. No Emails Sent.", fg='green')
