@@ -87,7 +87,7 @@ def index():
         else:
             #: Limit the retention of closed revisions to the last 1.5 days
             multi_revision_info[rev.obsid]['closed'].append(rev.revision_number)
-            if rev.time >= _36_HOURS_AGO:
+            if sign.usint_time >= _36_HOURS_AGO:
                 closed_revision_signoff.append((rev,sign))
     return render_template("orupdate/index.html",
                            order_form = order_form,
