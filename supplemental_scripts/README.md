@@ -13,13 +13,17 @@ sot_data.sh runs the sot_data.sql SQL statement to fetch the data columns used f
 
 find_planned_roll.py writes the mp_long_term file.
 
+find_scheduled_obs writes upcoming scheduled observations and the matching MP user who listed them in their .or files.
+
 Needs Sybase access and ocat authentication login located at `/data/mta4/CUS/authorization`
 #### Script Files
 - /data/mta4/obs_ss/sot_data.sh
     - /data/mta4/obs_ss/sot_data.sql
 - /data/mta4/obs_ss/find_planned_roll.py
+- /data/mta4/obs_ss/find_scheduled_obs.py
 
 #### Data Files
 - /data/mta4/obs_ss/sot_ocat.out
 - /data/mta4/obs_ss/sot_ocat_ra.out
 - /data/mta4/obs_ss/mp_long_term
+- /data/mta4/obs_ss/scheduled_obs_list

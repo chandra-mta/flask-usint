@@ -26,4 +26,7 @@ once the v2.1 application version is live.
 
 #: Read MP Long Term Web Page and Extract OBSID and Planned Roll Angle
 8 1 * * * cd /data/mta4/obs_ss; /proj/sot/mta/envs/python_web_apps/bin/python find_planned_roll.py >> $HOME/Logs/find_planned_roll.cron 2>&1
+
+#: Find the scheduled obsids through the MP OR Logs.
+35 * * * * cd  /data/mta4/obs_ss/; /data/mta4/obs_ss/find_scheduled_obs.py >> $HOME/Logs/find_scheduled_obs.cron 2>&1
 ```
