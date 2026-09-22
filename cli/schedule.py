@@ -51,8 +51,7 @@ def _inject_schedule_entries():
 
         db.session.add(new_entry)
         previous = new_entry
-
-    db.session.commit()
+    db.session.flush() #: Ensure Primary key ID's are assigned in case later maintenance functions need them
 
 def _set_order_id():
     """
@@ -82,9 +81,6 @@ def _set_order_id():
             #: Future Schedule entry. Increment order_id
             sched.order_id = order_id
             order_id +=1
-    
-    #: Commit order_id updates to table
-    db.session.commit()
 
 @click.command("maintain-schedule")
 @with_app_context
@@ -92,5 +88,10 @@ def maintain_schedule():
     """
     Run all period schedule database maintenance functions
     """
-    _inject_schedule_entries()
-    _set_order_id()
+    try:
+        _inject_schedule_entries()
+        _set_order_id()
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
