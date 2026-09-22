@@ -6,6 +6,9 @@ once the v2.1 application version is live.
 
 **cus@r2d2-v**
 ```
+# Crontab Environment Variables
+ENV_CUS=/proj/sot/mta/envs/python_web_apps
+
 #: Add rolling schedule horizon to the TOO schedule
 #: Disabled at the moment as the __migrate_old_database.py script overrides the schedule table with our live production data set
 #: which means that we don't need this job to add new weekly sign-up periods.
@@ -17,16 +20,15 @@ once the v2.1 application version is live.
 
 #: Sync the test usint database with the live usint database.
 30 3 * * * cd /proj/web-cxc-dmz-test/wsgi-scripts/cus; /proj/sot/mta/envs/python_web_apps/bin/python cli.py database sync-test-database -f
-```
 
-**mta@c3po-v**
-```
+# obs_ss Related
+
 #: Writes the sot_ocat.out and sot_ocat_ra.out files to /data/mta4/obs_ss
-30 * * * * cd /data/mta4/obs_ss/; /data/mta4/obs_ss/sot_data.sh >> $HOME/Logs/sot_data.cron 2>&1
+30 * * * * cd /data/mta4/obs_ss/; /data/mta4/obs_ss/sot_data.sh >> ${HOME}/Logs/sot_data.cron 2>&1
 
 #: Read MP Long Term Web Page and Extract OBSID and Planned Roll Angle
-8 1 * * * cd /data/mta4/obs_ss; /proj/sot/mta/envs/python_web_apps/bin/python find_planned_roll.py >> $HOME/Logs/find_planned_roll.cron 2>&1
+8 1 * * * cd /data/mta4/obs_ss; ${ENV_CUS}/bin/python /data/mta4/obs_ss/find_planned_roll.py >> ${HOME}/Logs/find_planned_roll.cron 2>&1
 
 #: Find the scheduled obsids through the MP OR Logs.
-35 * * * * cd  /data/mta4/obs_ss/; /data/mta4/obs_ss/find_scheduled_obs.py >> $HOME/Logs/find_scheduled_obs.cron 2>&1
+35 * * * * cd  /data/mta4/obs_ss/; ${ENV_CUS}/bin/python /data/mta4/obs_ss/find_scheduled_obs.py >> ${HOME}/Logs/find_scheduled_obs.cron 2>&1
 ```

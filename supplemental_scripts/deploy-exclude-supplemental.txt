@@ -11,3 +11,12 @@ install.sh
 *ipynb
 .ipynb_checkpoints/
 environment.yml
+.htaccess
+.htgroup
+.htpasswd
+.Pass_dir/
+mp_long_term
+scheduled_obs_list
+sot_ocat.out
+sot_ocat_ra.out
+README
