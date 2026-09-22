@@ -1,0 +1,13 @@
+.git/
+.gitignore
+__pycache__/
+_example/
+flask-usint.code-workspace
+install.sh
+*pid
+*.txt
+*.conf.py
+.htaccess
+*ipynb
+.ipynb_checkpoints/
+environment.yml
