@@ -178,18 +178,20 @@ def find_user(user_id, username, email, full_name, groups, is_active, json_forma
 
     results = query.all()
 
-    # --- Output results ---
-    if not results:
-        click.secho("No users found.", fg="yellow")
-        return
-
+    #: Output results
     if json_format:
-        formatted_result = []
-        for user in results:
-            formatted_result.append(user.to_dict())
-        click.echo(json.dumps(formatted_result, indent=2))
+        if not results:
+            click.echo(json.dumps(None))
+        else:
+            formatted_result = []
+            for user in results:
+                formatted_result.append(user.to_dict())
+            click.echo(json.dumps(formatted_result, indent=2))
     else:
-        click.echo(f"\nFound {len(results)} user(s):\n")
 
-        for user in results:
-            click.echo(user)
+        if not results:
+            click.secho("No users found.", fg="yellow")
+        else:
+            click.secho(f"Found {len(results)} user(s):", fg='green')
+            for user in results:
+                click.echo(user)
