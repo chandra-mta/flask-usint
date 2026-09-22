@@ -2,9 +2,10 @@
 Database schedule table interface commands
 """
 import click
-from .core import with_app_context, db, models
+from .core import with_app_context, db, models, supple
 from datetime import datetime, timedelta
 from sqlalchemy import select
+import json
 
 _FUTURE_MONTHS = 8
 _PERIOD_DAYS = 6 #: Numerically 13 in as time period end points are inclusive.
@@ -58,7 +59,7 @@ def _set_order_id():
     Pull all schedule entries and update the order_id column.
     Any schedule entry in the past or present is closed and marked order_id == Null
     All future schedule entries, order by start and stop time intervals, then have their order_id's updates sequentially.
-
+    Must run in app context.
     The order_id and start/stop time columns exist in tandem so that users can edit the time intervals while maintaining an ordered schedule.
     """
     _now = _grab_now()
@@ -82,6 +83,16 @@ def _set_order_id():
             sched.order_id = order_id
             order_id +=1
 
+def _fetch_current_schedule():
+    """
+    Fetch the current scheduler entry.
+    Must run in app context.
+    """
+    _now = _grab_now()
+    query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now)
+    current_schedule = db.session.execute(query).scalar_one()
+    return current_schedule
+
 @click.command("maintain-schedule")
 @with_app_context
 def maintain_schedule():
@@ -95,3 +106,16 @@ def maintain_schedule():
     except Exception:
         db.session.rollback()
         raise
+
+@click.command("fetch-current")
+@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
+@with_app_context
+def fetch_current_schedule(json_format):
+    "Fetch the current schedule entry"
+    current_schedule = _fetch_current_schedule()
+    if json_format:
+        _dict = current_schedule.to_dict()
+        _json = supple.helper_functions.coerce_to_json(_dict)
+        click.echo(_json)
+    else:
+        click.secho(current_schedule)
