@@ -14,21 +14,22 @@ _PERIOD_DAYS = 6 #: Numerically 13 in as time period end points are inclusive.
 #: 52|32||2027-02-15 00:00:00.000000|2027-02-21 00:00:00.000000|
 #
 
-_NOW = datetime.now()
+def _grab_now():
+    return datetime.now()
 
 def _inject_schedule_entries():
     """
     Inject additional schedule time period entries into the schedule table up to a point in the future
     Must run in an app context.
     """
-
+    _now = _grab_now()
     query = select(models.Schedule).order_by(models.Schedule.order_id.desc())
     latest = db.session.execute(query).scalars().first()
 
     if latest is None:
         return
 
-    horizon = _NOW + timedelta(days=30 * _FUTURE_MONTHS)
+    horizon = _now + timedelta(days=30 * _FUTURE_MONTHS)
 
     previous = latest
     order_id = latest.order_id
@@ -61,6 +62,7 @@ def _set_order_id():
 
     The order_id and start/stop time columns exist in tandem so that users can edit the time intervals while maintaining an ordered schedule.
     """
+    _now = _grab_now()
     query = select(models.Schedule).order_by(models.Schedule.start.asc())
     entries_by_time = db.session.execute(query).scalars().all()
 
@@ -68,15 +70,15 @@ def _set_order_id():
     for sched in entries_by_time:
         #: Iterate over each ORM, edit the attributes by direct python assignment.
         #: The SQLalchemy library will keep track of these objects and translate the changes to SQL transactions at the commit() call.
-        if sched.stop <= _NOW:
+        if sched.stop <= _now:
             #: Old Schedule entry. Maintain null order ID
             if sched.order_id is not None:
                 sched.order_id = None
-        elif sched.start <= _NOW <= sched.stop:
+        elif sched.start <= _now <= sched.stop:
             #: Current Schedule entry. Closed. Null order ID
             if sched.order_id is not None:
                 sched.order_id = None
-        elif _NOW <= sched.start:
+        elif _now <= sched.start:
             #: Future Schedule entry. Increment order_id
             sched.order_id = order_id
             order_id +=1
