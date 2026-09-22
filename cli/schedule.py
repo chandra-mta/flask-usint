@@ -53,6 +53,37 @@ def _inject_schedule_entries():
 
     db.session.commit()
 
+def _set_order_id():
+    """
+    Pull all schedule entries and update the order_id column.
+    Any schedule entry in the past or present is closed and marked order_id == Null
+    All future schedule entries, order by start and stop time intervals, then have their order_id's updates sequentially.
+
+    The order_id and start/stop time columns exist in tandem so that users can edit the time intervals while maintaining an ordered schedule.
+    """
+    query = select(models.Schedule).order_by(models.Schedule.start.asc())
+    entries_by_time = db.session.execute(query).scalars().all()
+
+    order_id = 0
+    for sched in entries_by_time:
+        #: Iterate over each ORM, edit the attributes by direct python assignment.
+        #: The SQLalchemy library will keep track of these objects and translate the changes to SQL transactions at the commit() call.
+        if sched.stop <= _NOW:
+            #: Old Schedule entry. Maintain null order ID
+            if sched.order_id is not None:
+                sched.order_id = None
+        elif sched.start <= _NOW <= sched.stop:
+            #: Current Schedule entry. Closed. Null order ID
+            if sched.order_id is not None:
+                sched.order_id = None
+        elif _NOW <= sched.start:
+            #: Future Schedule entry. Increment order_id
+            sched.order_id = order_id
+            order_id +=1
+    
+    #: Commit order_id updates to table
+    db.session.commit()
+
 @click.command("maintain-schedule")
 @with_app_context
 def maintain_schedule():
@@ -60,3 +91,4 @@ def maintain_schedule():
     Run all period schedule database maintenance functions
     """
     _inject_schedule_entries()
+    _set_order_id()
