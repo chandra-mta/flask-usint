@@ -21,7 +21,7 @@ def _grab_now():
 def _inject_schedule_entries():
     """
     Inject additional schedule time period entries into the schedule table up to a point in the future
-    Must run in an app context.
+    Must be called in app context wrapper function.
     """
     _now = _grab_now()
     query = select(models.Schedule).order_by(models.Schedule.order_id.desc())
@@ -59,7 +59,7 @@ def _set_order_id():
     Pull all schedule entries and update the order_id column.
     Any schedule entry in the past or present is closed and marked order_id == Null
     All future schedule entries, order by start and stop time intervals, then have their order_id's updates sequentially.
-    Must run in app context.
+    Must be called in app context wrapper function.
     The order_id and start/stop time columns exist in tandem so that users can edit the time intervals while maintaining an ordered schedule.
     """
     _now = _grab_now()
@@ -86,7 +86,7 @@ def _set_order_id():
 def _fetch_current_schedule():
     """
     Fetch the current scheduler entry.
-    Must run in app context.
+    Must be called in app context wrapper function.
     """
     _now = _grab_now()
     query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now)
@@ -96,7 +96,7 @@ def _fetch_current_schedule():
 def _fetch_by_order_id(order_id = 0):
     """
     Fetch an upcoming schedule entry by order id.
-    Must run in app context.
+    Must be called in app context wrapper function.
 
     Note that upcoming schedule entries start indexing at 0 as the represent the order of editable entries.
     The current schedule is not editable and therefore order_id = Null.
@@ -105,6 +105,26 @@ def _fetch_by_order_id(order_id = 0):
     query = select(models.Schedule).where(models.Schedule.order_id == order_id)
     schedule = db.session.execute(query).scalar_one()
     return schedule
+
+def _format_schedule_info(sched):
+    """
+    Format SQLAlchemy ORM into a JSON dict of Schedule and user information
+    Must be called in app context wrapper function.
+    """
+    if sched.user_id is None:
+        #: No assigned user, therefore the resultant user is None in the fetched information.
+        _dict = {
+            'schedule': sched.to_dict(),
+            'user': None
+        }
+    else:
+        #: Assigned schedule
+        _dict = {
+            'schedule': sched.to_dict(),
+            'user': sched.user.to_dict()
+        }
+    _json = supple.helper_functions.coerce_to_json(_dict, indent = 2)
+    return _json
 
 @click.command("maintain-schedule")
 @with_app_context
@@ -120,28 +140,29 @@ def maintain_schedule():
         db.session.rollback()
         raise
 
-@click.command("fetch-current")
-@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
-@with_app_context
-def fetch_current_schedule(json_format):
-    "Fetch the current schedule entry"
-    current_schedule = _fetch_current_schedule()
-    if json_format:
-        _dict = current_schedule.to_dict()
-        _json = supple.helper_functions.coerce_to_json(_dict)
-        click.echo(_json)
-    else:
-        click.secho(current_schedule)
 
-@click.command("fetch-upcoming")
+@click.command("fetch-schedule")
+@click.option("--order-id", default = None, help="Specify order_id to fetch upcoming entires. First upcoming entry starts at zero.")
 @click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
 @with_app_context
-def fetch_upcoming_schedule(json_format):
-    "Fetch the first upcoming schedule entry (editable)."
-    _schedule = _fetch_by_order_id(order_id=0)
+def fetch_schedule(order_id, json_format):
+    """
+    Fetch the current or an editable upcoming schedule entry.
+    
+    Note that upcoming schedule entries start indexing at 0 as the represent the order of editable entries.
+    The current schedule is not editable and therefore order_id = Null.
+    The next schedule entry will be editable, therefore it starts indexing at 0.
+    """
+    if order_id is None:
+        #: We fetch the current schedule entry.
+        _schedule = _fetch_current_schedule()
+    elif int(order_id) < 0:
+        click.secho("order id must be a non-negative integer.", fg='red')
+    else:
+        _schedule = _fetch_by_order_id(order_id=int(order_id))
+
     if json_format:
-        _dict = _schedule.to_dict()
-        _json = supple.helper_functions.coerce_to_json(_dict)
+        _json = _format_schedule_info(_schedule)
         click.echo(_json)
     else:
         click.secho(_schedule)
