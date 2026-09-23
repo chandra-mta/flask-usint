@@ -329,4 +329,9 @@ class Schedule(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
     def __repr__(self) -> str:
-        return f"Schedule(order_id={self.order_id!r}, user_id={self.user_id!r}, start={self.start!r}, stop={self.stop!r})"
+        if self.user_id is None:
+            return f"Schedule(order_id={self.order_id!r}, user_id={self.user_id!r}, start={self.start!r}, stop={self.stop!r})"
+        else:
+            _username = self.user.username
+            _email = self.user.email
+            return f"Schedule(order_id={self.order_id!r}, username={_username!r}, email={_email!r}, start={self.start!r}, stop={self.stop!r})"
