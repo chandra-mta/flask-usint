@@ -2,8 +2,7 @@
 Database user table interface commands
 """
 import click
-import json
-from .core import with_app_context, db, models
+from .core import with_app_context, db, models, supple
 
 @click.command("create")
 @click.option("--username", prompt="Username (POGO Username)", help="Username (POGO Username)")
@@ -181,12 +180,13 @@ def find_user(user_id, username, email, full_name, groups, is_active, json_forma
     #: Output results
     if json_format:
         if not results:
-            click.echo(json.dumps(None))
+            click.echo(supple.helper_functions.coerce_to_json(None))
         else:
             formatted_result = []
             for user in results:
                 formatted_result.append(user.to_dict())
-            click.echo(json.dumps(formatted_result, indent=2))
+            _json = supple.helper_functions.coerce_to_json(formatted_result, indent=2)
+            click.echo(_json)
     else:
 
         if not results:
