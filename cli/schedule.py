@@ -93,6 +93,19 @@ def _fetch_current_schedule():
     current_schedule = db.session.execute(query).scalar_one()
     return current_schedule
 
+def _fetch_by_order_id(order_id = 0):
+    """
+    Fetch an upcoming schedule entry by order id.
+    Must run in app context.
+
+    Note that upcoming schedule entries start indexing at 0 as the represent the order of editable entries.
+    The current schedule is not editable and therefore order_id = Null.
+    The next schedule entry will be editable, therefore it starts indexing at 0.
+    """
+    query = select(models.Schedule).where(models.Schedule.order_id == order_id)
+    schedule = db.session.execute(query).scalar_one()
+    return schedule
+
 @click.command("maintain-schedule")
 @with_app_context
 def maintain_schedule():
@@ -119,3 +132,16 @@ def fetch_current_schedule(json_format):
         click.echo(_json)
     else:
         click.secho(current_schedule)
+
+@click.command("fetch-upcoming")
+@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
+@with_app_context
+def fetch_upcoming_schedule(json_format):
+    "Fetch the first upcoming schedule entry (editable)."
+    _schedule = _fetch_by_order_id(order_id=0)
+    if json_format:
+        _dict = _schedule.to_dict()
+        _json = supple.helper_functions.coerce_to_json(_dict)
+        click.echo(_json)
+    else:
+        click.secho(_schedule)
