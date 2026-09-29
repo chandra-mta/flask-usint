@@ -53,7 +53,7 @@ def _make_approved(writer):
         time = datetime.fromtimestamp(time_epoch).strftime("%m/%d/%y")
         content += f"{obsid}\t{seq}\t{user}\t{time}\n"
     
-    writer.write('approved', content)
+    writer.write('approved.list', content)
 
 
 def legacy_usint_files(writer):
