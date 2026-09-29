@@ -14,6 +14,7 @@ from pathlib import Path
 import argparse
 import subprocess
 import json
+from legacy_file_writers import FileWriter, StdoutWriter
 
 TOO_CONTACT_DIR = Path("/data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
@@ -24,21 +25,6 @@ try:
 except TypeError as e:
     e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT = /proj/web-cxc/wsgi-scripts/cus.")
     raise e
-
-class FileWriter:
-    """Write text contents out to text files in configured directory"""
-    def __init__(self, directory):
-        self.directory = Path(directory)
-        self.directory.mkdir(parents=True, exist_ok=True)
-    def write(self, filename, content):
-        with open(self.directory / filename, "w") as f:
-            f.write(content)
-
-class StdoutWriter:
-    """Write text contents to stdout, typically for a test run of the script"""
-    def write(self, filename, content):
-        print(f"===== {filename} =====")
-        print(content, end="")
 
 def _make_TOO_POC(writer):
     """
