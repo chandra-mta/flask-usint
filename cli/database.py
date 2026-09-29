@@ -220,7 +220,7 @@ def _format_approval_info(final_approvals):
     formatted_approvals = {}
     for obsid,rev in final_approvals.items():
         formatted_approvals[obsid] = {
-            'revisions': rev.to_dict(),
+            'revision': rev.to_dict(),
             'user': rev.user.to_dict()
         }
     _json = supple.helper_functions.coerce_to_json(formatted_approvals)
