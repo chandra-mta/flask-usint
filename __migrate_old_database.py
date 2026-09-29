@@ -644,6 +644,9 @@ def add_till_break(old_signoff):
     #old_signoff = grab_old_signoff()
     idx = 0
     while True:
+        if idx >= len(old_signoff):
+            #: all signed off
+            break
         row = old_signoff[idx]
         if not is_open(row):
             idx += 1
