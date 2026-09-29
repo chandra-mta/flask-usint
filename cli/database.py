@@ -7,11 +7,15 @@ Database CLI commands
 """
 
 import click
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, text, select
 import os
 from urllib.parse import urlparse
-from .core import db, with_app_context, models
+from .core import db, with_app_context, models, supple
+import json
+from datetime import datetime, timedelta
+
+def _grab_now():
+    return datetime.now()
 
 def _file_to_sqlite_uri(filepath: str) -> str:
     """
@@ -207,3 +211,48 @@ def sync_test_database(prod_uri, test_uri, force):
         raise click.ClickException("Test database integrity check failed after sync was completed. Please check the test database for issues.")
     else:
         click.secho("Test database synced successfully with production database.", fg="green")
+
+def _format_approval_info(final_approvals):
+    """
+    Format SQLAlchemy ORM into JSON dict in old approval list format.
+    Must be called in app context wrapper function.
+    """
+    formatted_approvals = {}
+    for obsid,rev in final_approvals.items():
+        formatted_approvals[obsid] = {
+            'revisions': rev.to_dict(),
+            'user': rev.user.to_dict()
+        }
+    _json = supple.helper_functions.coerce_to_json(formatted_approvals)
+    return _json
+
+@click.command("fetch-approved-obsid")
+@click.option("--start", help="Specify start time for fetching all approved obsids.")
+@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
+@with_app_context
+def fetch_approved_obsids(start, json_format):
+    """
+    Fetch recently approved obsids.
+    """
+
+    if start is None:
+        start_epoch = int((_grab_now() - timedelta(days=500)).timestamp())
+    else:
+        start_epoch = int(supple.database_interface.to_epoch(start))
+
+    query = select(models.Revision).where(models.Revision.kind=='asis').where(models.Revision.time >= start_epoch).order_by(models.Revision.time.asc())
+    fetched_approvals = db.session.execute(query).scalars().all()
+
+    #: Since an approval can be later reversed, we need to check the obsids for removal requests
+    #: additionally, an obsid can be approved multiple times, but we only want to record the most recent approval.
+    final_approvals = {}
+    for rev in fetched_approvals:
+        if supple.database_interface.is_approved(rev.obsid):
+            final_approvals[rev.obsid] = rev
+
+    if json_format:
+        _json = _format_approval_info(final_approvals)
+        click.echo(_json)
+    else:
+        for ent in final_approvals.values():
+            click.secho(ent)
