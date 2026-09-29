@@ -175,24 +175,16 @@ def coerce_time(val, output_time_format = STORAGE_FORMAT):
                 return datetime.strptime(x,format).strftime(output_time_format)
             except ValueError:
                 pass
+    #: Coercing datetime-like objects
+    elif hasattr(val, 'strftime'):
+        return val.strftime(output_time_format)
     return val
 
-def coerce_to_json(val):
+def coerce_to_json(val, indent=None):
     """
     Coercion of python data type to a json-formatted string for data storage
     """
-    if val in NULL_LIST:
-        return None
-    elif isinstance(val, datetime):
-        #: Convert to ISO 8601 string then store
-        return json.dumps(val.strftime(STORAGE_FORMAT))
-    elif isinstance(val, list):
-        if len(val) > 0 and isinstance(val[0], datetime):
-            return json.dumps([x.strftime(STORAGE_FORMAT) for x in val])
-        else:
-            return json.dumps(val)
-    else:
-        return json.dumps(val)
+    return json.dumps(coerce(val), indent=indent)
 
 def coerce_from_json(val):
     """

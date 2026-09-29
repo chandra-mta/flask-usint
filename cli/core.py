@@ -30,6 +30,7 @@ try:
     from cus_app.extensions import db, mail
     #: Imports everything to ensure full model registration for SQLAlchemy
     import cus_app.models as models
+    import cus_app.supple as supple
 except ImportError as e:
     _import_fail(e)
 
