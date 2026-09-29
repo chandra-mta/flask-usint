@@ -10,14 +10,10 @@
 """
 
 import os
-from datetime import datetime
-import sys
-import re
 from pathlib import Path
 import argparse
 import subprocess
 import json
-import io
 
 TOO_CONTACT_DIR = Path("/data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
@@ -29,17 +25,22 @@ except TypeError as e:
     e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT = /proj/web-cxc/wsgi-scripts/cus.")
     raise e
 
-def _write(outfile, output):
-    """Handle outputs types, testing/stdout, file path, or file handler"""
-    #: Already opened file handler
-    if hasattr(outfile, "write"):
-        outfile.write(output)
-    elif isinstance(outfile,str):
-        #: String file path.
-        with open(outfile, "w") as f:
-            f.write(output)
+class FileWriter:
+    """Write text contents out to text files in configured directory"""
+    def __init__(self, directory):
+        self.directory = Path(directory)
+        self.directory.mkdir(parents=True, exist_ok=True)
+    def write(self, filename, content):
+        with open(self.directory / filename, "w") as f:
+            f.write(content)
 
-def _make_TOO_POC(too_poc_output):
+class StdoutWriter:
+    """Write text contents to stdout, typically for a test run of the script"""
+    def write(self, filename, content):
+        print(f"===== {filename} =====")
+        print(content, end="")
+
+def _make_TOO_POC(writer):
     """
     Write the legacy TOO-POC file.
 
@@ -53,27 +54,23 @@ def _make_TOO_POC(too_poc_output):
     )
     curr_sched = json.loads(result.stdout)
     email = curr_sched['user'].get('email')
-    _write(too_poc_output, f"{email}\n")
+    writer.write('TOO-POC', f"{email}\n")
 
-def legacy_too_files(too_contact_dir):
+def legacy_too_files(writer):
     """
-    If the input file directory is actually sys.stdout, then this batch function inputs the file path
+    Batch function for all TOO legacy files
     """
-    if isinstance(too_contact_dir, Path):
-        _make_TOO_POC(too_contact_dir / "TOO-POC")
-    elif isinstance(too_contact_dir, io.TextIOWrapper):
-        _make_TOO_POC(too_contact_dir)
-    
+    _make_TOO_POC(writer)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", help = "Determine data output file path. Write stdout for standard out.")
     args = parser.parse_args()
-
-    if args.path is None:
-        legacy_too_files(TOO_CONTACT_DIR)
-    elif args.path == "stdout":
-        legacy_too_files(sys.stdout)
+    
+    if args.path == "stdout":
+        #: Write legacy file content to stdout
+        writer = StdoutWriter()
     else:
-        outpath = Path(args.path)
-        legacy_too_files(outpath)
+        #: Write legacy file content to files
+        writer = FileWriter(args.path or TOO_CONTACT_DIR)
+    legacy_too_files(writer)
