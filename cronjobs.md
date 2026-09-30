@@ -17,6 +17,9 @@ OBS_SS_ROOT=/data/mta4/obs_ss
 #: Add rolling schedule horizon and update upcoming order to the TOO schedule
 0 2 * * * cd ${USINT_APPLICATION_ROOT}; ${ENV_CUS}/bin/python cli.py schedule maintain-schedule >> ${HOME}/Logs/too_contact.cron 2>&1
 
+#: Legacy script for text files of too ddt information.
+50 *  * * * cd ${USINT_ROOT}/TOO_Obs/Scripts; ${USINT_ROOT}/TOO_Obs/Scripts/too_ddt.sh >> ${HOME}/Logs/too_ddt_update.cron
+
 # Usint Related
 
 #: Sync the test usint database with the live usint database.
