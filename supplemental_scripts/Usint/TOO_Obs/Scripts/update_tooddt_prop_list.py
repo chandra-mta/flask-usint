@@ -373,7 +373,7 @@ def find_poc():
     input:  none, but read from tooddt_prop_obsid_list and new_obs_list
     output: propid_poc_dict ---- propid<--->poc dict
     """
-    ifile = ocat_dir + 'approved'
+    ifile = ocat_dir + 'approved.list'
     app   = ccf.read_data_file(ifile)
     spoc  = {}
     for ent in app:
