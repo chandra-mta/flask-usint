@@ -11,7 +11,8 @@ uses the app.jinja_env
 
 """
 import click
-from .core import with_app_context, db, models, emailing, add_additional_cli_error_context
+from datetime import datetime, timedelta
+from .core import with_app_context, db, models, emailing, supple, add_additional_cli_error_context
 from sqlalchemy import select
 from flask import current_app
 
@@ -44,6 +45,9 @@ SIGNOFF_RECIPIENTS = {
     'acis_si_status': ['acisdude@cfa.harvard.edu'],
     'hrc_si_status': ['vkashyap@cfa.harvard.edu', 'hrcdude@cfa.harvard.edu'],
 }
+
+def _grab_now():
+    return datetime.now()
 
 def _fetch_by_column_and_status(column_model, status_value):
     """
@@ -141,6 +145,65 @@ def _construct_group_reminder_content(column, pending_list):
         e = add_additional_cli_error_context(e)
         raise e
     return content
+
+
+def _format_updates_list(all_fetched_signoffs):
+    """
+    Format SQLAlchemy ORMs into updates_table.list
+    """
+    updates_list = []
+    for rev, sign in all_fetched_signoffs:
+        obsidrev = rev.obsidrev()
+        user = rev.user.username
+        seq = rev.sequence_number
+        #: Signoff formatting
+        signoff_strings = {}
+        for key in ('general', 'acis', 'acis_si', 'hrc_si', 'usint'):
+            _status = getattr(sign, f"{key}_status")
+            if _status == 'Not Required':
+                signoff_strings[key] = 'NULL'
+            elif _status == 'Discard':
+                signoff_strings[key] = 'N/A'
+            elif _status == 'Pending':
+                signoff_strings[key] = 'NA'
+            elif _status == 'Signed':
+                _signoff_user = getattr(sign, f"{key}_signoff")
+                _signoff_epoch = getattr(sign, f"{key}_time")
+                _x = datetime.fromtimestamp(_signoff_epoch).strftime("%m/%d/%y")
+                signoff_strings[key] = f"{_signoff_user.username} {_x}"
+        
+        entry_line = f"{obsidrev}\t{signoff_strings.get('general')}\t{signoff_strings.get('acis')}\t"
+        entry_line += f"{signoff_strings.get('acis_si')}\t{signoff_strings.get('hrc_si')}\t{signoff_strings.get('usint')}\t"
+        entry_line += f"{seq}\t{user}"
+        updates_list.append(entry_line)
+    return "\n".join(updates_list)
+
+    
+
+@click.command("fetch-all-signoffs")
+@click.option("--start", help="Specify start time for fetching all approved obsids.")
+@click.option("--list-format/--no-list-format", default=False, help="Format user results as legacy updates_table.list file to stdout.")
+@with_app_context
+def fetch_all_signoffs(start, list_format):
+    """
+    Fetch all signoffs starting with a given time
+    """
+
+    if start is None:
+        start_epoch = int((_grab_now() - timedelta(days=500)).timestamp())
+    else:
+        start_epoch = int(supple.database_interface.to_epoch(start))
+
+
+    query = select(models.Revision, models.Signoff).join(models.Signoff).where(models.Revision.time >= start_epoch).order_by(models.Revision.time.asc())
+    all_fetched_signoffs = db.session.execute(query).all()
+
+    if list_format:
+        click.echo(_format_updates_list(all_fetched_signoffs))
+    else:
+        for rev,sign in all_fetched_signoffs:
+            click.secho(sign)
+
 
 @click.command("send-reminder-emails")
 @with_app_context
