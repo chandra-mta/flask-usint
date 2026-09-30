@@ -55,12 +55,22 @@ def _make_approved(writer):
     
     writer.write('approved.list', content)
 
+def _make_updates_list(writer):
+    result = subprocess.run(
+        ["python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--list-format"],
+        capture_output = True,
+        text=True,
+        check=True
+    )
+    content = result.stdout
+    writer.write('updates_table.list', content)
 
 def legacy_usint_files(writer):
     """
     Batch function for all USINT legacy files
     """
-    _make_approved(writer)
+    #_make_approved(writer)
+    _make_updates_list(writer)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
