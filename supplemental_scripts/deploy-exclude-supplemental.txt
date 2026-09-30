@@ -1,3 +1,4 @@
+# Dev Exclusions
 .git/
 .gitignore
 __pycache__/
@@ -14,9 +15,18 @@ environment.yml
 .htaccess
 .htgroup
 .htpasswd
+
+# Exclude for OBS_SS
 .Pass_dir/
 mp_long_term
 scheduled_obs_list
 sot_ocat.out
 sot_ocat_ra.out
 README
+
+# Exclude for Usint/ocat
+*html
+APPROVED
+go_form/
+ocat/
+Save_month_html/
