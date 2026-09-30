@@ -22,7 +22,6 @@ mp_long_term
 scheduled_obs_list
 sot_ocat.out
 sot_ocat_ra.out
-README
 
 # Exclude for Usint/ocat
 *html
