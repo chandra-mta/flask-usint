@@ -20,6 +20,9 @@ OBS_SS_ROOT=/data/mta4/obs_ss
 #: Legacy script for text files of too ddt information.
 50 *  * * * cd ${USINT_ROOT}/TOO_Obs/Scripts; ${USINT_ROOT}/TOO_Obs/Scripts/too_ddt.sh >> ${HOME}/Logs/too_ddt_update.cron
 
+#: legacy script for schedule table information.
+3 0 * * * cd ${USINT_ROOT}; ${ENV_CUS}/bin/python create_schedule_table.py >> ${HOME}/Logs/schedule_table.cron 2>&1
+
 # Usint Related
 
 #: Sync the test usint database with the live usint database.
