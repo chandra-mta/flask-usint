@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import json
 from datetime import datetime
-from supplemental_scripts.Usint.legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
+from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
 
 OCAT_DIR = Path("/data/mta4/CUS/www/Usint/ocat")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.

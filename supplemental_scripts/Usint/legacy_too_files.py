@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import subprocess
 import json
-from supplemental_scripts.Usint.legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
+from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
 
 TOO_CONTACT_DIR = Path("/data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
