@@ -57,6 +57,9 @@ def construct_msg(content, subject, to, sender=None, cc=None):
     
     return msg
 
+def get_content(msg):
+    return msg.body
+
 def send_msg(msg):
     """
     Send Email Instance
