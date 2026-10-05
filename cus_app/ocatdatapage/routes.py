@@ -417,7 +417,7 @@ def multi_obsid_msg(main_msg, main_rev, multi_rev):
     for _rev in multi_rev.values():
         _content += f"{_rev.obsid} : {url_for('chkupdata.index', obsidrev=_rev.obsidrev(), _external=True)}\n"
     _content += f"\nUpdated parameters for {main_rev.obsid} are:\n\n"
-    _body = [x for x in main_msg.get_content().split('\n') if x != '']
+    _body = [x for x in mail.get_content(main_msg).split('\n') if x != '']
     _start = 0
     _end = len(_body)
     for i in range(len(_body)):
