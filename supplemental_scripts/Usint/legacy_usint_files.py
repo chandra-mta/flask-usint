@@ -12,20 +12,28 @@
 import os
 from pathlib import Path
 import argparse
-import subprocess
 import json
 from datetime import datetime
-from legacy_file_writers import FileWriter, StdoutWriter
+from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
 
 OCAT_DIR = Path("/data/mta4/CUS/www/Usint/ocat")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
 #: Thus, conda environments, shells, or cron tabs can determine which app installation we are using.
 _root = os.getenv("USINT_APPLICATION_ROOT")
+_env = os.getenv("ENV_CUS")
+
 try:
     USINT_APPLICATION_ROOT = Path(_root)
 except TypeError as e:
     e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT = /proj/web-cxc/wsgi-scripts/cus.")
     raise e
+
+try:
+    ENV_CUS = Path(_env)
+except TypeError as e:
+    e.add_note("Script must be invoked with the ENV_CUS environment variable set. Try ENV_CUS = /proj/sot/mta/envs/python_web_apps.")
+    raise e
+
 
 def _make_approved(writer):
     """
@@ -37,12 +45,7 @@ def _make_approved(writer):
 
     fetching by time frame / other query args but time frame first.
     """
-    result = subprocess.run(
-        ["python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--json-format"],
-        capture_output = True,
-        text=True,
-        check=True
-    )
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--json-format"])
     formatted_approvals = json.loads(result.stdout)
     
     content = ''
@@ -56,12 +59,7 @@ def _make_approved(writer):
     writer.write('approved.list', content)
 
 def _make_updates_list(writer):
-    result = subprocess.run(
-        ["python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--list-format"],
-        capture_output = True,
-        text=True,
-        check=True
-    )
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--list-format"])
     content = result.stdout
     writer.write('updates_table.list', content)
 
