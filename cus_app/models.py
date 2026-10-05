@@ -34,8 +34,16 @@ from flask_login import UserMixin
 from .extensions import db
 from typing import Optional, List #: Allows for Mapper to determine nullability of the table column.
 from datetime import datetime
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, inspect
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+def iter_columns(obj, names):
+    """
+    Iterate over the column attributes of a singular ORM.
+    """
+    for attr in inspect(obj).mapper.column_attrs:
+        if attr.key in names:
+            yield attr.key, getattr(obj, attr.key)
 
 class User(db.Model, UserMixin):
     """
@@ -321,4 +329,9 @@ class Schedule(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
     def __repr__(self) -> str:
-        return f"Schedule(order_id={self.order_id!r}, user_id={self.user_id!r}, start={self.start!r}, stop={self.stop!r})"
+        if self.user_id is None:
+            return f"Schedule(order_id={self.order_id!r}, user_id={self.user_id!r}, start={self.start!r}, stop={self.stop!r})"
+        else:
+            _username = self.user.username
+            _email = self.user.email
+            return f"Schedule(order_id={self.order_id!r}, username={_username!r}, email={_email!r}, start={self.start!r}, stop={self.stop!r})"

@@ -1,0 +1,31 @@
+# Dev Exclusions
+.git/
+.gitignore
+__pycache__/
+_example/
+flask-usint.code-workspace
+install.sh
+*pid
+*.txt
+*.conf.py
+.htaccess
+*ipynb
+.ipynb_checkpoints/
+environment.yml
+.htaccess
+.htgroup
+.htpasswd
+
+# Exclude for OBS_SS
+.Pass_dir/
+mp_long_term
+scheduled_obs_list
+sot_ocat.out
+sot_ocat_ra.out
+
+# Exclude for Usint/ocat
+*html
+APPROVED
+go_form/
+ocat/
+Save_month_html/

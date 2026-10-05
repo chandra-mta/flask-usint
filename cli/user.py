@@ -2,7 +2,7 @@
 Database user table interface commands
 """
 import click
-from .core import with_app_context, db, models
+from .core import with_app_context, db, models, supple
 
 @click.command("create")
 @click.option("--username", prompt="Username (POGO Username)", help="Username (POGO Username)")
@@ -133,8 +133,11 @@ def set_groups(username, group, add_group, remove_group):
 @click.option("--username", help="Username")
 @click.option("--email", help="Email address")
 @click.option("--full-name", help="Full name (partial match allowed)")
+@click.option("--groups", help="Groups")
+@click.option("--is-active", is_flag=True, help="Return only users marked active.")
+@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
 @with_app_context
-def find_user(user_id, username, email, full_name):
+def find_user(user_id, username, email, full_name, groups, is_active, json_format):
     """
     Query the database for a specific user.
     """
@@ -142,9 +145,10 @@ def find_user(user_id, username, email, full_name):
     if (user_id is None) and\
         (username is None) and\
         (email is None) and\
-        (full_name is None):
+        (full_name is None) and \
+        (groups is None):
         click.secho(
-            "Must provide at least one search option (--id, --username, --email, --full-name).",
+            "Must provide at least one search option (--id, --username, --email, --full-name, --groups).",
             fg="red"
         )
         return
@@ -163,15 +167,31 @@ def find_user(user_id, username, email, full_name):
     if full_name is not None:
         # partial match (case-insensitive)
         query = query.filter(models.User.full_name.ilike(f"%{full_name}%"))
+    
+    if groups is not None:
+        #: uses partial match due to group string formatting listing multiple groups for an individual
+        query = query.filter(models.User.groups.ilike(f"%{groups}%"))
+
+    if is_active:
+        query = query.filter(models.User.is_active == True)
 
     results = query.all()
 
-    # --- Output results ---
-    if not results:
-        click.secho("No users found.", fg="yellow")
-        return
+    #: Output results
+    if json_format:
+        if not results:
+            click.echo(supple.helper_functions.coerce_to_json(None))
+        else:
+            formatted_result = []
+            for user in results:
+                formatted_result.append(user.to_dict())
+            _json = supple.helper_functions.coerce_to_json(formatted_result, indent=2)
+            click.echo(_json)
+    else:
 
-    click.echo(f"\nFound {len(results)} user(s):\n")
-
-    for user in results:
-        click.echo(user)
+        if not results:
+            click.secho("No users found.", fg="yellow")
+        else:
+            click.secho(f"Found {len(results)} user(s):", fg='green')
+            for user in results:
+                click.echo(user)

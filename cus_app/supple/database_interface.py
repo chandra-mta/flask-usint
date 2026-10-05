@@ -159,9 +159,13 @@ def construct_requests(rev_obj, req_dict):
     for key, value in req_dict.items():
         if key in _PARAM_SELECTIONS["general_signoff_params"] + _PARAM_SELECTIONS["acis_signoff_params"] + _PARAM_SELECTIONS["acis_si_signoff_params"] + _PARAM_SELECTIONS["hrc_si_signoff_params"]:
             param = pull_param(key)
+            _value = coerce_to_json(value)
+            #: If JSON-format null, then use None so that SQLite store in the database as Null
+            if _value == 'null':
+                _value = None
             req = Request(revision_id= rev_obj.id,
                         parameter_id = param.id,
-                        value = coerce_to_json(value)
+                        value = _value
             )
             all_requests.append(req)
     return all_requests
@@ -175,9 +179,15 @@ def construct_originals(rev_obj, org_dict):
         if value is not None:
             if key in _PARAM_SELECTIONS["general_signoff_params"] + _PARAM_SELECTIONS["acis_signoff_params"] + _PARAM_SELECTIONS["acis_si_signoff_params"] + _PARAM_SELECTIONS["hrc_si_signoff_params"]:
                 param = pull_param(key)
+                _value = coerce_to_json(value)
+                #: If JSON-format null, then use None so that SQLite store in the database as Null
+                #: Note that this is for structural validity.
+                #: Policy is to assume that a lack of an entry for a revision already indicates that the value is Null
+                if _value == 'null':
+                    _value = None
                 req = Original(revision_id= rev_obj.id,
                             parameter_id = param.id,
-                            value = coerce_to_json(value)
+                            value = _value
                 )
                 all_originals.append(req)
     return all_originals

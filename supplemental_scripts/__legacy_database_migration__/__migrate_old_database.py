@@ -644,19 +644,31 @@ def add_till_break(old_signoff):
     #old_signoff = grab_old_signoff()
     idx = 0
     while True:
-        row = old_signoff[idx]
-        if not is_open(row):
-            idx += 1
-            new_rev, new_sign, org, req = rev_sign_orms(row)
-            session.add(new_rev)
-            session.add(new_sign)
-            for i in org:
-                session.add(i)
-            for j in req:
-                session.add(j)
-            session.commit()
-        else:
+        if idx >= len(old_signoff):
+            #: all signed off
             break
+        row = old_signoff[idx]
+        idx += 1
+        new_rev, new_sign, org, req = rev_sign_orms(row)
+        session.add(new_rev)
+        session.add(new_sign)
+        for i in org:
+            session.add(i)
+        for j in req:
+            session.add(j)
+        session.commit()
+        #if not is_open(row):
+        #    idx += 1
+        #    new_rev, new_sign, org, req = rev_sign_orms(row)
+        #    session.add(new_rev)
+        #    session.add(new_sign)
+        #    for i in org:
+        #        session.add(i)
+        #    for j in req:
+        #        session.add(j)
+        #    session.commit()
+        #else:
+        #    break
     #print()
 
 if __name__ == "__main__":
