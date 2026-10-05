@@ -137,7 +137,7 @@ def confirm(obsid=None):
                     extra_ocat_data = rod.read_ocat_data(extra_obsid)
                     multi_ocat_data[extra_obsid] = extra_ocat_data
 
-                    if extra_ocat_data.get('status') in ['scheduled', 'unobserved', 'untriggered']:
+                    if not (extra_ocat_data.get('status') in ['scheduled', 'unobserved', 'untriggered']):
                         multi_dict['cannot_request'].append(extra_obsid)
                         continue
                     
