@@ -16,3 +16,7 @@ SERVER_NAME = f"{_DOMAIN}:{_PORT}"
 #: Use http secured for apache web servers
 PREFERRED_URL_SCHEME = "http"
 #PREFERRED_URL_SCHEME = "https"
+
+#: Set for CLI interface emails as these jobs are run by the CUS user. Should be documented as such
+MAIL_DEFAULT_SENDER = "cus@cfa.harvard.edu"
+#: Set again in the CLI in case an application instance/config.py folder overrides this setting.
