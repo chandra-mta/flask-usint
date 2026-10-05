@@ -69,7 +69,7 @@ def legacy_usint_files(writer):
     """
     Batch function for all USINT legacy files
     """
-    #_make_approved(writer)
+    _make_approved(writer)
     _make_updates_list(writer)
 
 if __name__ == "__main__":
