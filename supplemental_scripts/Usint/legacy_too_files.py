@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import subprocess
 import json
-from legacy_file_writers import FileWriter, StdoutWriter
+from supplemental_scripts.Usint.legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
 
 TOO_CONTACT_DIR = Path("/data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
@@ -32,12 +32,7 @@ def _make_TOO_POC(writer):
 
     Note: Symlink /home/mta/TOO-POC -> /data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info/TOO-POC
     """
-    result = subprocess.run(
-        ["python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--json-format"],
-        capture_output = True,
-        text=True,
-        check=True
-    )
+    result = subproccess_wrapper(["python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--json-format"])
     curr_sched = json.loads(result.stdout)
     email = curr_sched['user'].get('email')
     writer.write('TOO-POC', f"{email}\n")
