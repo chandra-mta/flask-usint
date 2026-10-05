@@ -130,12 +130,11 @@ def confirm(obsid=None):
                 #: Change for the directly-edited obsid
                 main_rev = write_to_database(obsid, ocat_data, kind, notes, org_dict, req_dict)
                 #: intermediary variables for multi_obsid emails
-                multi_rev = {k:None for k in multi_obsid}
-                multi_ocat_data = {k:None for k in multi_obsid}
+                multi_rev = {}
+                multi_ocat_data = {}
                 #: Changes to the obsids listed in the multi_obsid
                 for extra_obsid in multi_obsid:
                     extra_ocat_data = rod.read_ocat_data(extra_obsid)
-                    multi_ocat_data[extra_obsid] = extra_ocat_data
 
                     if not (extra_ocat_data.get('status') in ['scheduled', 'unobserved', 'untriggered']):
                         multi_dict['cannot_request'].append(extra_obsid)
@@ -165,12 +164,14 @@ def confirm(obsid=None):
                         multi_dict['unaffected'].append(extra_obsid)
                         continue
 
+                    #: All checks finished. Can request this change, so include in the multi_ocat_data and multi_rev dictionaries for database transaction and notification.
                     multi_dict['requested'].append(extra_obsid)
                     #: Identify Notes
                     if kind == 'norm':
                         notes = construct_notes(ocat_data, extra_org_dict, extra_req_dict)
                     else:
                         notes = None
+                    multi_ocat_data[extra_obsid] = extra_ocat_data
                     multi_rev[extra_obsid] = write_to_database(extra_obsid, extra_ocat_data, kind, notes, extra_org_dict, extra_req_dict)
             except Exception as e:  # noqa: E722
                 #: In the event of an error, roll back the database session to avoid commits instilled by the server-side cookies
