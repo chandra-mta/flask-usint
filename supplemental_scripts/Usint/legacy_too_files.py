@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import subprocess
 import json
-from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
+from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper, grab_now
 
 TOO_CONTACT_DIR = Path("/data/mta4/CUS/www/Usint/ocat/Info_save/too_contact_info")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
@@ -44,6 +44,9 @@ def _make_TOO_POC(writer):
     curr_sched = json.loads(result.stdout)
     email = curr_sched['user'].get('email')
     writer.write('TOO-POC', f"{email}\n")
+
+def _make_this_week_person_in_charge(writer):
+    
 
 def legacy_too_files(writer):
     """
