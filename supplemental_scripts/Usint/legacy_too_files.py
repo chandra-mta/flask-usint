@@ -42,7 +42,7 @@ except TypeError as e:
     raise e
 
 def _fetch_schedule():
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "10", "--json-format"])
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "30", "--json-format"])
     full_sched = json.loads(result.stdout)
     now = grab_now().isoformat()
     curr_sched = None

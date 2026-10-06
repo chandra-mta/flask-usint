@@ -172,8 +172,8 @@ def fetch_schedule(order_id, begin, json_format):
         else:
             _schedule = _fetch_by_order_id(order_id=int(order_id))
     elif begin is not None:
-        begin_epoch = (_grab_now() - timedelta(days=int(begin))).timestamp()
-        _schedule = supple.database_interface.pull_schedule(begin=begin_epoch)
+        begin_datetime = (_grab_now() - timedelta(days=int(begin)))
+        _schedule = supple.database_interface.pull_schedule(begin=begin_datetime)
                 
 
     if json_format:
