@@ -120,7 +120,7 @@ def _make_schedule_html(writer, full_sched, idx):
         home_phone_list.append(home_phone)
         email_list.append(email)
     
-    template = _JINJA_ENV.get_template("too_contact_schedule.html")
+    template = _JINJA_ENV.get_template("too_contact_schedule.jinja")
     render = template.render(
         period_list=period_list,
         full_name_list=full_name_list,
