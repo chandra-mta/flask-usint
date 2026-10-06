@@ -5,6 +5,7 @@ _example/
 logs/
 memo
 *pid
+.git-commit
 
 #Ignore Pycache Files
 __pycache__/
