@@ -25,19 +25,24 @@ _env = os.getenv("ENV_CUS")
 try:
     USINT_APPLICATION_ROOT = Path(_root)
 except TypeError as e:
-    e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT = /proj/web-cxc/wsgi-scripts/cus.")
+    e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT=/proj/web-cxc/wsgi-scripts/cus.")
     raise e
 
 try:
     ENV_CUS = Path(_env)
 except TypeError as e:
-    e.add_note("Script must be invoked with the ENV_CUS environment variable set. Try ENV_CUS = /proj/sot/mta/envs/python_web_apps.")
+    e.add_note("Script must be invoked with the ENV_CUS environment variable set. Try ENV_CUS=/proj/sot/mta/envs/python_web_apps.")
     raise e
 
 def _fetch_schedule():
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--json-format"])
-    curr_sched = json.loads(result.stdout)
-    return curr_sched
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "30", "--json-format"])
+    full_sched = json.loads(result.stdout)
+    now = grab_now().isoformat()
+    curr_sched = None
+    for _sched in full_sched:
+        if _sched['schedule'].get('start') < now < _sched['schedule'].get('stop'):
+            curr_sched = _sched
+    return full_sched, curr_sched
 
 def _make_TOO_POC(writer, curr_sched):
     """
@@ -75,7 +80,7 @@ def legacy_too_files(writer):
     """
     Batch function for all TOO legacy files
     """
-    curr_sched = _fetch_schedule()
+    full_sched, curr_sched = _fetch_schedule() #: Fetch the full schedule begining 30 days ago
     _make_TOO_POC(writer, curr_sched)
     _make_this_week_person_in_charge(writer, curr_sched)
 
