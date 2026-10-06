@@ -84,15 +84,19 @@ lower value for hard sources (E>4 keV). Use PIMMS for more detailed estimates.
 <th>Period</th><th>Name</th><th>Office Phone</th><th>Cell Phone</th><th>Home Phone</th><th>Email</th>
 </tr>
 
-{% for i , (sched, user) in enumerate(full_sched) %}
+{% for i , (period, name, ophone, cphone, hphone, email) in enumerate(zip(period_list, full_name_list, office_phone_list, cell_phone_list, home_phone_list, email_list)) %}
         {% if i == idx %}
-        <!-- This schedule line is the current schedule-->
-        <tr style="color:blue; background-color:lime">
+                <!-- This schedule line is the current schedule-->
+                <tr style="color:blue; background-color:lime">
         {% else %}
-        <tr>
+                <tr>
         {% endif %}
-        <td style="text-align:center;">{} period </td>
-
+        <td style="text-align:center;">{{period}}</td>
+        <td style="text-align:center;">{{name}}</td>
+        <td style="text-align:center;">{{ophone}}</td>
+        <td style="text-align:center;">{{cphone}}</td>
+        <td style="text-align:center;">{{hphone}}</td>
+        <td style="text-align:center;"><a href="mailto:{{email}}">{{email}}</a></td>
         </tr>
 {% endfor %}
 
@@ -110,7 +114,7 @@ lower value for hard sources (E>4 keV). Use PIMMS for more detailed estimates.
 <hr />
 <p style='font-size:90%'>
 <em>
-Last Update: #UPDATE#<br /><br />
+Last Update: {{now}}<br /><br />
 If you have any questions about this page, please email to: 
 <a href='mailto:bwargelin@cfa.harvard.edu'>bwargelin@cfa.harvard.edu</a>
 </em>
