@@ -5,6 +5,7 @@ SOURCE_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 # Set the version variables
 source "$SOURCE_DIR/version.conf"
+#: Build ISO 8601 timestamp
 BUILD=$(date -u +"%Y%m%dT%H%M%SZ")
 
 case "$1" in

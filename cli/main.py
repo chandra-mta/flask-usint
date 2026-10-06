@@ -8,6 +8,16 @@ from .schedule import maintain_schedule, fetch_schedule
 from .info import print_config, app_root_path
 from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids
 from .signoffs import fetch_pending, send_reminder_emails, fetch_all_signoffs
+from .core import with_app_context
+from flask import current_app
+
+@click.command()
+@with_app_context
+def version():
+    """
+    Print out the current application version
+    """
+    click.secho(current_app.config.get('APP_VERSION'))
 
 @click.group()
 def cli():
@@ -66,3 +76,4 @@ cli.add_command(schedule)
 cli.add_command(info)
 cli.add_command(database)
 cli.add_command(signoffs)
+cli.add_command(version)

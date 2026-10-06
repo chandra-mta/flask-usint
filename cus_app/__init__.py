@@ -6,6 +6,7 @@
 
 """
 from datetime import datetime
+from pathlib import Path
 from itertools import zip_longest
 from flask import Flask, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -105,6 +106,13 @@ def create_app(
     #: Set the app config logging mode if altered by the factory function
     if logging_mode is not None:
         app.config["LOGGING_MODE"] = logging_mode
+
+    #: Configure app build version
+    version_file = Path(__file__).resolve().parent.parent / ".version"
+    try:
+        app.config["APP_VERSION"] = version_file.read_text().strip()
+    except FileNotFoundError:
+        app.config["APP_VERSION"] = "unknown"
 
     #: Bind the imported Flask Extensions to the initialized application.
     bind_flask_extensions(app)
