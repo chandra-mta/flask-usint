@@ -84,7 +84,17 @@ lower value for hard sources (E>4 keV). Use PIMMS for more detailed estimates.
 <th>Period</th><th>Name</th><th>Office Phone</th><th>Cell Phone</th><th>Home Phone</th><th>Email</th>
 </tr>
 
+{% for i , (sched, user) in enumerate(full_sched) %}
+        {% if i == idx %}
+        <!-- This schedule line is the current schedule-->
+        <tr style="color:blue; background-color:lime">
+        {% else %}
+        <tr>
+        {% endif %}
+        <td style="text-align:center;">{} period </td>
 
+        </tr>
+{% endfor %}
 
 
 </table>
