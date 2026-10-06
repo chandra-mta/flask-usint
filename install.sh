@@ -1,6 +1,11 @@
 #!/bin/bash
 
+# Set the source code directory
 SOURCE_DIR="$(dirname "${BASH_SOURCE[0]}")"
+
+# Set the version variables
+source "$SOURCE_DIR/version.conf"
+BUILD=$(date -u +"%Y%m%dT%H%M%SZ")
 
 case "$1" in
   prod)
@@ -24,3 +29,4 @@ esac
 #: Make the APP_ROOT directory if it doesn't exist. (only for home setting)
 mkdir -p $APP_ROOT
 rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude.txt" "$SOURCE_DIR/" "$APP_ROOT/"
+echo "${VERSION}+${BUILD}" > "$APP_ROOT/.version"

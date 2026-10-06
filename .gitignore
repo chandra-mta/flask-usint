@@ -5,7 +5,8 @@ _example/
 logs/
 memo
 *pid
-.git-commit
+#Minor app build artifacts
+.version
 
 #Ignore Pycache Files
 __pycache__/
