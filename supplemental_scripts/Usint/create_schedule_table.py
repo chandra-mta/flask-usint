@@ -110,9 +110,9 @@ def create_schedule_table():
 
     line  = head + line + tail
 
-    ofile = f"{USINT_DIR}/too_contact_schedule.html"
-    with open(ofile, 'w') as fo:
-        fo.write(line)
+    #ofile = f"{USINT_DIR}/too_contact_schedule.html"
+    #with open(ofile, 'w') as fo:
+    #    fo.write(line)
 #
 #--- send notifications
 #
@@ -120,7 +120,7 @@ def create_schedule_table():
 #
 #--- update this week's poc list
 #
-    update_this_week_poc(k_list, d_dict, stime)
+    #update_this_week_poc(k_list, d_dict, stime)
 
 #---------------------------------------------------------------------------------------
 #-- read_schedule: read the schedule data table                                       --
