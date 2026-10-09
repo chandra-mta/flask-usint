@@ -45,7 +45,7 @@ def _make_approved(writer):
 
     fetching by time frame / other query args but time frame first.
     """
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--begin", "1000", "--json-format"])
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--begin", "1500", "--json-format"])
     formatted_approvals = json.loads(result.stdout)
     
     content = ''
@@ -59,7 +59,7 @@ def _make_approved(writer):
     writer.write('approved.list', content)
 
 def _make_updates_list(writer):
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--begin", "1000", "--list-format"])
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--begin", "1500", "--list-format"])
     content = result.stdout
     writer.write('updates_table.list', content)
 
