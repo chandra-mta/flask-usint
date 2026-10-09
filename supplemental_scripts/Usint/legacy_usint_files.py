@@ -45,7 +45,7 @@ def _make_approved(writer):
 
     fetching by time frame / other query args but time frame first.
     """
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--json-format"])
+    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--begin", "1000", "--json-format"])
     formatted_approvals = json.loads(result.stdout)
     
     content = ''
