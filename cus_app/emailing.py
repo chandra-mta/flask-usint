@@ -79,14 +79,14 @@ def send_msg(msg):
                 msg.recipients = [current_user.email]
             mail.send(msg)
 
-def send_email(content, subject, to, sender = None, cc = []):
+def send_email(content, subject, to, sender = None, cc = None):
     """
     Combined send email function.
 
     :NOTE: This functionality is split only to allow cases in which we'd like to prepare sending emails in bulk before actually sending them.
     In typical usage, the send_email() function will be used across the board.
     """
-    msg = construct_msg(content, subject, to, sender = sender, cc = [])
+    msg = construct_msg(content, subject, to, sender = sender, cc = cc)
     send_msg(msg)
 
 #

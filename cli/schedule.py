@@ -221,14 +221,14 @@ def send_too_reminder_emails():
         content = _construct_email("too_duty_today", curr_schedule)
         emailing.send_email(content,
                             "TOO Point of Contact Duty Notification: Second Notification",
-                            curr_schedule.user.email,
+                            to=curr_schedule.user.email,
                             cc="bwargelin@cfa.harvard.edu")
     #: Is the first upcoming schedule period starting in two days? Send a reminder.
     if future_schedule[0].start.date() == (now + timedelta(days=2)).date():
         content = _construct_email("too_duty_soon", future_schedule[0])
         emailing.send_email(content,
                             "TOO Point of Contact Duty Notification",
-                            future_schedule[0].user.email,
+                            to=future_schedule[0].user.email,
                             cc="bwargelin@cfa.harvard.edu")
 
     #: Logistical checks.
@@ -237,7 +237,7 @@ def send_too_reminder_emails():
         content = _construct_email("too_missing_two_weeks")
         emailing.send_email(content,
                             "POC Schedule Needs To Be Filled",
-                            "bwargelin@cfa.harvard.edu")
+                            to="bwargelin@cfa.harvard.edu")
 
     #: Is the future schedule properly populated?
     for _sched in future_schedule:
@@ -249,4 +249,4 @@ def send_too_reminder_emails():
         content = _construct_email("too_missing_three_months")
         emailing.send_email(content,
                             "POC Schedule Needs To Be Filled",
-                            "bwargelin@cfa.harvard.edu")
+                            to="bwargelin@cfa.harvard.edu")
