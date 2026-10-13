@@ -1,9 +1,5 @@
 # Cronjobs
 
-Note that the following cronjobs reflect system needs for the v1.1 to v2.1 transition. These will need to be updated and reformatted
-once the v2.1 application version is live.
-
-
 **cus@r2d2-v**
 ```
 # Crontab Environment Variables
@@ -16,6 +12,9 @@ OBS_SS_ROOT=/data/mta4/obs_ss
 
 #: Add rolling schedule horizon and update upcoming order to the TOO schedule
 0 2 * * * cd ${USINT_APPLICATION_ROOT}; ${ENV_CUS}/bin/python cli.py schedule maintain-schedule >> ${HOME}/Logs/too_contact.cron 2>&1
+
+#: Send Schedule Reminder Emails
+3 0 * * * cd ${USINT_APPLICATION_ROOT}; ${ENV_CUS}/bin/python cli.py schedule send-reminder-emails >> ${HOME}/Logs/schedule_table.cron 2>&1
 
 #: Legacy script for text files of too ddt information.
 50 *  * * * cd ${USINT_ROOT}/TOO_Obs/Scripts; ${USINT_ROOT}/TOO_Obs/Scripts/too_ddt.sh >> ${HOME}/Logs/too_ddt_update.cron

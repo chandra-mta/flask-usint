@@ -3,7 +3,6 @@
 .gitignore
 __pycache__/
 _example/
-instance/
 
 # Exclusions for Application Root
 supplemental_pages/
@@ -18,3 +17,7 @@ install.sh
 .ipynb_checkpoints/
 environment.yml
 version.conf
+
+# Exclusions for instance specific files. Consult installation.md
+instance/
+cli_config.py

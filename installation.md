@@ -37,7 +37,7 @@ ssh cus@r2d2-v
         - MAIL_SUPPRESS_SEND
         - TEST_DATABASE
         - SECRET_KEY
-    - `cli_config.py` (Configuration values used whenever the CLI tool is used. Necessary for certain settings which are only in a web request not present from the command line)
+    - `cli_config.py` (Configuration values used whenever the CLI tool is used. Necessary for certain settings which are only in a web request not present from the command line. An example instance of the cli_config.py module is viewable in the project repository top level.)
         - SERVER_NAME
         - PREFERRED_URL_SCHEME
         - MAIL_DEFAULT_SENDER

@@ -2,10 +2,11 @@
 Database schedule table interface commands
 """
 import click
-from .core import with_app_context, db, models, supple
+from .core import with_app_context, db, models, supple, add_additional_cli_error_context, emailing
 from datetime import datetime, timedelta
 from sqlalchemy import select
 import json
+from flask import current_app
 
 _FUTURE_MONTHS = 8
 _PERIOD_DAYS = 6 #: Numerically 13 in as time period end points are inclusive.
@@ -89,7 +90,9 @@ def _fetch_current_schedule():
     Must be called in app context wrapper function.
     """
     _now = _grab_now()
-    query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now)
+    #: Schedule start and stop times mark the start of non-overlapping dates.
+    #: Therefore to have search of the stop time include the stop date, we need to subtract time so that it fits start of final day.
+    query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now - timedelta(seconds=86399))
     current_schedule = db.session.execute(query).scalar_one()
     return current_schedule
 
@@ -185,3 +188,67 @@ def fetch_schedule(order_id, begin, json_format):
                 click.secho(_)
         else:
             click.secho(_schedule)
+
+def _construct_email(template_name, sched = None):
+    """
+    Must call helper in a function with the with_app_context decorator
+    """
+    template = current_app.jinja_env.get_template(f"email/{template_name}.jinja")
+    try:
+        if sched is not None:
+            content = template.render(sched=sched)
+        else:
+            content = template.render()
+    except RuntimeError as e:
+        e = add_additional_cli_error_context(e)
+        raise e
+    return content
+
+@click.command("send-reminder-emails")
+@with_app_context
+def send_too_reminder_emails():
+    """
+    Send all reminder emails, such as whether more sign-ups are needed and when someone's duty is starting.
+    """
+
+    #: Fetch current schedule period, then all future periods.
+    curr_schedule = _fetch_current_schedule()
+    now = _grab_now()
+    query = select(models.Schedule).where(models.Schedule.order_id is not None).order_by(models.Schedule.order_id.asc())
+    future_schedule = db.session.execute(query).scalars().all()
+
+    #: Reminder checks.
+    #: Did the current schedule duty start today? Send a reminder.
+    if curr_schedule.start.date() == now.date():
+        content = _construct_email("too_duty_today", curr_schedule)
+        emailing.send_email(content,
+                            "TOO Point of Contact Duty Notification: Second Notification",
+                            to=curr_schedule.user.email,
+                            cc="bwargelin@cfa.harvard.edu")
+    #: Is the first upcoming schedule period starting in two days? Send a reminder.
+    if future_schedule[0].start.date() == (now + timedelta(days=2)).date():
+        content = _construct_email("too_duty_soon", future_schedule[0])
+        emailing.send_email(content,
+                            "TOO Point of Contact Duty Notification",
+                            to=future_schedule[0].user.email,
+                            cc="bwargelin@cfa.harvard.edu")
+
+    #: Logistical checks.
+    #: Is someone scheduled for the period after next?
+    if future_schedule[1].user is None:
+        content = _construct_email("too_missing_two_weeks")
+        emailing.send_email(content,
+                            "POC Schedule Needs To Be Filled",
+                            to="bwargelin@cfa.harvard.edu")
+
+    #: Is the future schedule properly populated?
+    for _sched in future_schedule:
+        #: Iterate until _sched lands on the first unassigned schedule entry
+        if _sched.user is None:
+            break
+    
+    if _sched.start.date() < (now + timedelta(days=90)).date():
+        content = _construct_email("too_missing_three_months")
+        emailing.send_email(content,
+                            "POC Schedule Needs To Be Filled",
+                            to="bwargelin@cfa.harvard.edu")
