@@ -81,19 +81,26 @@ def _make_this_week_person_in_charge(writer, curr_sched):
         content += line
     writer.write("this_week_person_in_charge", content)
 
-def _format_period(sched):
+def _format_html_period(sched):
     start = datetime.fromisoformat(sched['start'])
     stop = datetime.fromisoformat(sched['stop'])
     return f"{start.strftime("%B")} {start.day} - {stop.strftime("%B")} {stop.day}"
 
-def _make_schedule_html(writer, full_sched, idx):
+def _format_legacy_schedule_period(sched):
+    start = datetime.fromisoformat(sched['start'])
+    stop = datetime.fromisoformat(sched['stop'])
+    return f"{start.month}\t{start.day}\t{start.year}\t{stop.month}\t{stop.day}\t{stop.year}"
 
-    period_list=[]
+def _list_maker(full_sched):
+    html_period_list=[]
+    legacy_schedule_period_list = []
+    username_list = []
     full_name_list=[]
     office_phone_list=[]
     cell_phone_list=[]
     home_phone_list=[]
     email_list=[]
+
     for entry in full_sched:
         #: Iterate over schedule entires and paired user.
         user = entry['user'] #: user information or None
@@ -101,28 +108,35 @@ def _make_schedule_html(writer, full_sched, idx):
 
         if user is None:
             full_name = 'TBD'
+            username = ''
             office_phone = '---'
             cell_phone = '---'
             home_phone = '---'
             email = '---'
         else:
             full_name = user.get('full_name')
+            username = user.get('username')
             info = TOO_CONTACT_INFO.get(str(user.get('id')))
             office_phone = info.get('office_phone') or 'NA'
             cell_phone = info.get('cell_phone') or 'NA'
             home_phone = info.get('home_phone') or 'NA'
             email = info.get('email') or 'NA'
 
-        period_list.append(_format_period(sched))
+        html_period_list.append(_format_html_period(sched))
+        legacy_schedule_period_list.append(_format_legacy_schedule_period(sched))
+        username_list.append(username)
         full_name_list.append(full_name)
         office_phone_list.append(office_phone)
         cell_phone_list.append(cell_phone)
         home_phone_list.append(home_phone)
         email_list.append(email)
+    return html_period_list, legacy_schedule_period_list, username_list, full_name_list, office_phone_list, cell_phone_list, home_phone_list, email_list
+
+def _make_schedule_html(writer, idx, html_period_list, full_name_list, office_phone_list, cell_phone_list, home_phone_list, email_list):
     
     template = _JINJA_ENV.get_template("too_contact_schedule.jinja")
     render = template.render(
-        period_list=period_list,
+        period_list=html_period_list,
         full_name_list=full_name_list,
         office_phone_list=office_phone_list,
         cell_phone_list=cell_phone_list,
@@ -133,15 +147,23 @@ def _make_schedule_html(writer, full_sched, idx):
     )
     writer.write("too_contact_schedule.html", render)
 
+def _make_legacy_schedule(writer, full_name_list, legacy_schedule_period_list, username_list):
+    content = ''
+    for full_name, period, username in zip(full_name_list, legacy_schedule_period_list, username_list):
+        content += f"{full_name}\t{period}\t{username}\n"
+    writer.write("schedule.list", content)
+
 
 def legacy_too_files(too_writer, usint_writer):
     """
     Batch function for all TOO legacy files
     """
-    full_sched, curr_sched, idx = _fetch_schedule() #: Fetch the full schedule begining 30 days ago
+    full_sched, curr_sched, idx = _fetch_schedule() #: Fetch the full schedule beginning 30 days ago
     _make_TOO_POC(too_writer, curr_sched)
     _make_this_week_person_in_charge(too_writer, curr_sched)
-    _make_schedule_html(usint_writer, full_sched, idx)
+    html_period_list, legacy_schedule_period_list, username_list, full_name_list, office_phone_list, cell_phone_list, home_phone_list, email_list = _list_maker(full_sched)
+    _make_schedule_html(usint_writer, idx, html_period_list, full_name_list, office_phone_list, cell_phone_list, home_phone_list, email_list)
+    _make_legacy_schedule(too_writer, full_name_list, legacy_schedule_period_list, username_list)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
