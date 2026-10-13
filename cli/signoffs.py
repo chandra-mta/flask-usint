@@ -210,7 +210,7 @@ def fetch_all_signoffs(start, begin, list_format):
 
 @click.command("send-reminder-emails")
 @with_app_context
-def send_reminder_emails():
+def send_signoff_reminder_emails():
     """
     Send a reminder email for all pending signoffs across all columns.
     """

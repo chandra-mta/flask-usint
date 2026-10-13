@@ -4,10 +4,10 @@ CLI interface groupings
 
 import click
 from .user import create_user, set_groups, find_user
-from .schedule import maintain_schedule, fetch_schedule
+from .schedule import maintain_schedule, fetch_schedule, send_too_reminder_emails
 from .info import print_config, app_root_path
 from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids
-from .signoffs import fetch_pending, send_reminder_emails, fetch_all_signoffs
+from .signoffs import fetch_pending, send_signoff_reminder_emails, fetch_all_signoffs
 from .core import with_app_context
 from flask import current_app
 
@@ -57,6 +57,7 @@ user.add_command(find_user)
 
 schedule.add_command(maintain_schedule)
 schedule.add_command(fetch_schedule)
+schedule.add_command(send_too_reminder_emails)
 
 info.add_command(print_config)
 info.add_command(app_root_path)
@@ -67,7 +68,7 @@ database.add_command(sync_test_database)
 database.add_command(fetch_approved_obsids)
 
 signoffs.add_command(fetch_pending)
-signoffs.add_command(send_reminder_emails)
+signoffs.add_command(send_signoff_reminder_emails)
 signoffs.add_command(fetch_all_signoffs)
 
 # Attach subgroup to root CLI
