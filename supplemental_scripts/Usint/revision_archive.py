@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+"""
+
+**revision_archive.py:** Generate archive pages of usint revisions (updated.html)
+
+:Author: W. Aaron (william.aaron@sao.si.edu)
+:Last Updated: Oct 13, 2026
+
+"""
+
+import os
+from pathlib import Path
+import argparse
+import json
+from datetime import datetime
+from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
+from jinja2 import Environment, FileSystemLoader
+
+_JINJA_ENV = Environment(loader=FileSystemLoader("template", followlinks=True))
+_JINJA_ENV.globals.update({'enumerate':enumerate, 'zip':zip})
+
+OCAT_DIR = Path("/data/mta4/CUS/www/Usint/ocat")
+#: To use the CLI tools of a given application installation, these must be determined by the OS environment.
+#: Thus, conda environments, shells, or cron tabs can determine which app installation we are using.
+_root = os.getenv("USINT_APPLICATION_ROOT")
+_env = os.getenv("ENV_CUS")
+
+try:
+    USINT_APPLICATION_ROOT = Path(_root)
+except TypeError as e:
+    e.add_note("Script must be invoked with the USINT_APPLICATION_ROOT environment variable set. Try USINT_APPLICATION_ROOT = /proj/web-cxc/wsgi-scripts/cus.")
+    raise e
+
+try:
+    ENV_CUS = Path(_env)
+except TypeError as e:
+    e.add_note("Script must be invoked with the ENV_CUS environment variable set. Try ENV_CUS = /proj/sot/mta/envs/python_web_apps.")
+    raise e
