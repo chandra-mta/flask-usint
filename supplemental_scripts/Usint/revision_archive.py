@@ -43,6 +43,17 @@ except TypeError as e:
 def _grab_now():
     return datetime.now()
 
+def _determine_time_range(year, mon):
+    """
+    Given a year and month, find the epoch time range
+    """
+    start = int(datetime(year,mon,1,0,0).timestamp())
+    if mon == 12:
+        stop = int(datetime(year+1,1,1,0,0).timestamp())
+    else:
+        stop = int(datetime(year,mon+1,1,0,0).timestamp())
+    return [start, stop]
+
 def top_level_page(writer):
     "Write the updated.html page. With monthly subpages from Jan 2005 to current month and year."
     now = _grab_now()
