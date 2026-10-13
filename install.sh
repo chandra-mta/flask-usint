@@ -31,3 +31,5 @@ esac
 mkdir -p $APP_ROOT
 rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude.txt" "$SOURCE_DIR/" "$APP_ROOT/"
 echo "${VERSION}+${BUILD}" > "$APP_ROOT/.version"
+
+echo "Installations Complete. Consult installation.md doc for further steps."
