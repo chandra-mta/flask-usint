@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import json
 from datetime import datetime
-from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper, grab_now
+from usint_supplemental_lib import FileWriter, StdoutWriter, subproccess_wrapper, grab_now
 from jinja2 import Environment, FileSystemLoader
 
 _JINJA_ENV = Environment(loader=FileSystemLoader("template", followlinks=True))
