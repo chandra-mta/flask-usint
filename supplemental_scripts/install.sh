@@ -30,9 +30,11 @@ mkdir -p "$OBS_SS_ROOT"
 mkdir -p "$USINT_ROOT"
 
 #: OBS_SS stage
+echo "Installing into: ${OBS_SS_ROOT}"
 rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude-supplemental.txt" "$SOURCE_DIR/obs_ss/" "$OBS_SS_ROOT/"
 echo "${VERSION}+${BUILD}" > "$OBS_SS_ROOT/.version"
 
 #: USINT stage
+echo "Installing into: ${USINT_ROOT}"
 rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude-supplemental.txt" "$SOURCE_DIR/Usint/" "$USINT_ROOT/"
 echo "${VERSION}+${BUILD}" > "$USINT_ROOT/.version"
