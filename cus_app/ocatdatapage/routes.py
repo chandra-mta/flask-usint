@@ -403,7 +403,9 @@ def parameter_change_log_msg(ocat_data,rev):
         if rev.signoff.acis_status == "Pending":
             cc.add(mail.ARCOPS)
         if rev.signoff.acis_si_status == "Pending":
-            cc.add(mail.ACIS)
+            #: ACIS do not want to be informed of ACIS SI mode changes on individual Obsids. Other emails are fine.
+            #cc.add(mail.ACIS)
+            pass
         if rev.signoff.hrc_si_status == "Pending":
             cc.add(mail.HRC)
         return mail.construct_msg(content, subject, current_user.email, cc=cc)
