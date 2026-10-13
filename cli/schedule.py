@@ -17,7 +17,7 @@ _PERIOD_DAYS = 6 #: Numerically 13 in as time period end points are inclusive.
 #
 
 def _grab_now():
-    return datetime.now() - timedelta(days=1)
+    return datetime.now()
 
 def _inject_schedule_entries():
     """
@@ -90,7 +90,9 @@ def _fetch_current_schedule():
     Must be called in app context wrapper function.
     """
     _now = _grab_now()
-    query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now)
+    #: Schedule start and stop times mark the start of non-overlapping dates.
+    #: Therefore to have search of the stop time include the stop date, we need to subtract time so that it fits start of final day.
+    query = select(models.Schedule).where(models.Schedule.start <= _now).where(models.Schedule.stop >= _now - timedelta(seconds=86399))
     current_schedule = db.session.execute(query).scalar_one()
     return current_schedule
 
