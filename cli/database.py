@@ -227,18 +227,21 @@ def _format_approval_info(final_approvals):
     return _json
 
 @click.command("fetch-approved-obsid")
-@click.option("--start", help="Specify start time for fetching all approved obsids.")
+@click.option("--start", default = None, help="Specify start time for fetching all approved obsids.")
+@click.option("--begin", type=int, default = None, help="Begin <X> number of days ago and fetch all approved obsids before the specified time.")
 @click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
 @with_app_context
-def fetch_approved_obsids(start, json_format):
+def fetch_approved_obsids(start, begin, json_format):
     """
     Fetch recently approved obsids.
     """
 
-    if start is None:
+    if start is None and begin is None:
         start_epoch = int((_grab_now() - timedelta(days=500)).timestamp())
-    else:
+    elif start is not None:
         start_epoch = int(supple.database_interface.to_epoch(start))
+    elif begin is not None:
+        start_epoch = int((_grab_now() - timedelta(days=begin)).timestamp())
 
     query = select(models.Revision).where(models.Revision.kind=='asis').where(models.Revision.time >= start_epoch).order_by(models.Revision.time.asc())
     fetched_approvals = db.session.execute(query).scalars().all()

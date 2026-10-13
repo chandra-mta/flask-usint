@@ -182,17 +182,20 @@ def _format_updates_list(all_fetched_signoffs):
 
 @click.command("fetch-all-signoffs")
 @click.option("--start", help="Specify start time for fetching all approved obsids.")
+@click.option("--begin", type=int, default = None, help="Begin <X> number of days ago and fetch all approved obsids before the specified time.")
 @click.option("--list-format/--no-list-format", default=False, help="Format user results as legacy updates_table.list file to stdout.")
 @with_app_context
-def fetch_all_signoffs(start, list_format):
+def fetch_all_signoffs(start, begin, list_format):
     """
     Fetch all signoffs starting with a given time
     """
 
-    if start is None:
+    if start is None and begin is None:
         start_epoch = int((_grab_now() - timedelta(days=500)).timestamp())
-    else:
+    elif start is not None:
         start_epoch = int(supple.database_interface.to_epoch(start))
+    elif begin is not None:
+        start_epoch = int((_grab_now() - timedelta(days=begin)).timestamp())
 
 
     query = select(models.Revision, models.Signoff).join(models.Signoff).where(models.Revision.time >= start_epoch).order_by(models.Revision.time.asc())
