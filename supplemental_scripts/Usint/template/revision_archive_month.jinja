@@ -55,7 +55,7 @@
 
 {% for obsidrev, seq, date, user, gen_acis, acis_si, hrc_si, usint in zip(obsidrev_list, sequence_list, revision_date_list, revision_user_list, gen_acis_list, acis_si_list, hrc_si_list, usint_list) %}
     <tr>
-    <td><a href="{{ url_for('chkupdata.index', obsidrev=obsidrev, _external=True) }}">{{ obsidrev }}</a><br/>{{ seq }}<br/>{{ date }}<br/> {{ user }}</td>
+    <td><a href="{{ chkupdata_url }}/{{ obsidrev }}">{{ obsidrev }}</a><br/>{{ seq }}<br/>{{ date }}<br/> {{ user }}</td>
     <td>{{ gen_acis }}</td>
     <td>{{ acis_si }}</td>
     <td>{{ hrc_si }}</td>

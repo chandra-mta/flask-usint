@@ -150,6 +150,10 @@ def revision_archive(writer, year, month):
 
     start, stop = _determine_time_range(year, month)
 
+    #: Fetch the chkupdata URL for the app via the CLI tool. Entirely a hack to make url_for() operate from an external script.
+    url_result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "info", "url-for", "chkupdata.provide_obsidrev", "-k", "_external=True"])
+    chkupdata_url = url_result.stdout.strip()
+
     revision_result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-revision-history", "--start", str(start), "--stop", str(stop), "--json-format"])
     revision_history = json.loads(revision_result.stdout)
 
@@ -167,7 +171,8 @@ def revision_archive(writer, year, month):
         hrc_si_list=hrc_si_list,
         usint_list=usint_list,
         month=month_abbr[month],
-        year=year
+        year=year,
+        chkupdata_url = chkupdata_url
     )
 
     writer.write(f"{month_abbr[month]}_{year}.html", render)
@@ -177,8 +182,8 @@ def revision_archive(writer, year, month):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", help = "Determine data output file path. Write stdout for standard out.")
-    parser.add_argument("-y", "--year", type=int, help = "Year of the archive page to generate. Default is current year.")
-    parser.add_argument("-m", "--month", type=int, help = "Month of the archive page to generate. Default is current month.")
+    parser.add_argument("-y", "--year", type=int, help = "Numerical year of the archive page to generate. Default is current year.")
+    parser.add_argument("-m", "--month", type=int, choices=range(1,13), help = "Numerical month( index at 1) of the archive page to generate. Default is current month.")
     args = parser.parse_args()
     
     if args.path == "stdout":
