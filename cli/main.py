@@ -6,7 +6,7 @@ import click
 from .user import create_user, set_groups, find_user
 from .schedule import maintain_schedule, fetch_schedule, send_too_reminder_emails
 from .info import print_config, app_root_path
-from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids
+from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids, fetch_revision_history
 from .signoffs import fetch_pending, send_signoff_reminder_emails, fetch_all_signoffs
 from .core import with_app_context
 from flask import current_app
@@ -66,6 +66,7 @@ database.add_command(create_tables)
 database.add_command(pragma_check)
 database.add_command(sync_test_database)
 database.add_command(fetch_approved_obsids)
+database.add_command(fetch_revision_history)
 
 signoffs.add_command(fetch_pending)
 signoffs.add_command(send_signoff_reminder_emails)
