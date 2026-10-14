@@ -296,15 +296,19 @@ def fetch_revision_history(obsid, start, stop, json_format):
         query = query.where(models.Revision.obsid==obsid).order_by(models.Revision.time.asc())
         fetched_revisions = db.session.execute(query).all()
     else:
-        
-        start_epoch = supple.database_interface.to_epoch(start)
-        stop_epoch = supple.database_interface.to_epoch(stop)
-        if start_epoch is None:
-            raise click.ClickException(f"Start format unparseable: Use {supple.database_interface.DATETIME_FORMATS}")
-        if stop_epoch is None:
-            raise click.ClickException(f"Stop format unparseable: Use {supple.database_interface.DATETIME_FORMATS}")
-        start_epoch = int(start_epoch)
-        stop_epoch = int(stop_epoch)
+        try:
+            start_epoch = int(start)
+            stop_epoch = int(stop)
+        except ValueError:
+            #: Not convertible, try datetime string formatting conversion.
+            start_epoch = supple.database_interface.to_epoch(start)
+            stop_epoch = supple.database_interface.to_epoch(stop)
+            if start_epoch is None:
+                raise click.ClickException(f"Start format unparseable: Use {supple.database_interface.DATETIME_FORMATS}")
+            if stop_epoch is None:
+                raise click.ClickException(f"Stop format unparseable: Use {supple.database_interface.DATETIME_FORMATS}")
+            start_epoch = int(start_epoch)
+            stop_epoch = int(stop_epoch)
 
         query = query.where(models.Revision.time >= start_epoch).where(models.Revision.time <= stop_epoch).order_by(models.Revision.time.asc())
         fetched_revisions = db.session.execute(query).all()
