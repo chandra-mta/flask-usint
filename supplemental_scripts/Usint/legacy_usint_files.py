@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import json
 from datetime import datetime
-from legacy_file_lib import FileWriter, StdoutWriter, subproccess_wrapper
+from usint_supplemental_lib import FileWriter, StdoutWriter, subprocess_wrapper
 
 OCAT_DIR = Path("/data/mta4/CUS/www/Usint/ocat")
 #: To use the CLI tools of a given application installation, these must be determined by the OS environment.
@@ -45,7 +45,7 @@ def _make_approved(writer):
 
     fetching by time frame / other query args but time frame first.
     """
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--begin", "1500", "--json-format"])
+    result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "database", "fetch-approved-obsid", "--begin", "1500", "--json-format"])
     formatted_approvals = json.loads(result.stdout)
     
     content = ''
@@ -59,7 +59,7 @@ def _make_approved(writer):
     writer.write('approved.list', content)
 
 def _make_updates_list(writer):
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--begin", "1500", "--list-format"])
+    result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "signoffs", "fetch-all-signoffs", "--begin", "1500", "--list-format"])
     content = result.stdout
     writer.write('updates_table.list', content)
 

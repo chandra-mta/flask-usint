@@ -5,7 +5,7 @@ from datetime import datetime
 def grab_now():
     return datetime.now()
 
-def subproccess_wrapper(command_list, capture_output = True, text = True, check = True):
+def subprocess_wrapper(command_list, capture_output = True, text = True, check = True):
 
     try:
         result = subprocess.run(

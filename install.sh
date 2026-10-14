@@ -29,6 +29,7 @@ esac
 
 #: Make the APP_ROOT directory if it doesn't exist. (only for home setting)
 mkdir -p $APP_ROOT
+echo "Installing into: ${APP_ROOT}"
 rsync -av --delete --exclude-from="$SOURCE_DIR/deploy-exclude.txt" "$SOURCE_DIR/" "$APP_ROOT/"
 echo "${VERSION}+${BUILD}" > "$APP_ROOT/.version"
 

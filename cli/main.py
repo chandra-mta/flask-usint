@@ -3,10 +3,10 @@ CLI interface groupings
 """
 
 import click
-from .user import create_user, set_groups, find_user
+from .user import create_user, set_groups, find_user, fetch_all_users
 from .schedule import maintain_schedule, fetch_schedule, send_too_reminder_emails
-from .info import print_config, app_root_path
-from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids
+from .info import print_config, app_root_path, url_for_endpoint
+from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids, fetch_revision_history
 from .signoffs import fetch_pending, send_signoff_reminder_emails, fetch_all_signoffs
 from .core import with_app_context
 from flask import current_app
@@ -54,6 +54,7 @@ def signoffs():
 user.add_command(create_user)
 user.add_command(set_groups)
 user.add_command(find_user)
+user.add_command(fetch_all_users)
 
 schedule.add_command(maintain_schedule)
 schedule.add_command(fetch_schedule)
@@ -61,11 +62,13 @@ schedule.add_command(send_too_reminder_emails)
 
 info.add_command(print_config)
 info.add_command(app_root_path)
+info.add_command(url_for_endpoint)
 
 database.add_command(create_tables)
 database.add_command(pragma_check)
 database.add_command(sync_test_database)
 database.add_command(fetch_approved_obsids)
+database.add_command(fetch_revision_history)
 
 signoffs.add_command(fetch_pending)
 signoffs.add_command(send_signoff_reminder_emails)

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Updated Target List  {{ month }}/{{ year }}</title>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<style  type='text/css'>
+    table{text-align:center;
+        margin-left:auto;
+        margin-right:auto;
+        border-style:solid;
+        border-spacing:8px;
+        border-width:2px;
+        border-collapse:separate
+        }
+    a:link {color:blue;}
+    a:visited {color:teal;}
+</style>
+</head>
+
+<body style='color:#000000;background-color:#FFFFE0'>
+
+
+<h1>Updated Targets List</h1>
+
+<p>This list contains all targets which have been verified as updated in {{ month }} {{ year }}.</p>
+
+<strong>Back to:</strong> 
+<ul>
+<li>
+    <a href="https://cxc.cfa.harvard.edu/cgi-bin/target_search/search.html">
+    <strong>Chandra Uplink Support Observation Search Form</strong></a>
+</li>
+
+<li>
+    <a href="https://cxc.cfa.harvard.edu/wsgi/cus/usint/">
+    <strong>Chandra Uplink Support Organizational Page</strong></a>
+</li>
+
+<li>
+    <a href="https://cxc.cfa.harvard.edu/cus/Usint/updated.html">
+    <strong>Back to Updated Targets List top page</strong></a>
+</li>
+</ul>
+
+
+<table border=1>
+
+<tr>
+    <th>OBSID.revision</th>
+    <th>General/ACIS edits by</th>
+    <th>ACIS SI MODE edits by</th>
+    <th>HRC  SI MODE edits by</th>
+    <th>Verified by</th>
+</tr>
+
+{% for obsidrev, seq, date, user, gen_acis, acis_si, hrc_si, usint in zip(obsidrev_list, sequence_list, revision_date_list, revision_user_list, gen_acis_list, acis_si_list, hrc_si_list, usint_list) %}
+    <tr>
+    <td><a href="{{ chkupdata_url }}/{{ obsidrev }}">{{ obsidrev }}</a><br/>{{ seq }}<br/>{{ date }}<br/> {{ user }}</td>
+    <td>{{ gen_acis }}</td>
+    <td>{{ acis_si }}</td>
+    <td>{{ hrc_si }}</td>
+    <td>{{ usint }}</td>
+    </tr>
+{% endfor %}
+
+
+</table>
+
+<p style='padding-top:20px;padding-bottom:20px'>
+<strong>
+    <a href="https://cxc.cfa.harvard.edu/cus/Usint/updated.html">
+    Back to Updated Targets List top page</a>
+</strong>
+
+</body></html>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Updated Target List</title>
+<style  type='text/css'>
+    table{
+            text-align:center;
+            margin-left:auto;
+            margin-right:auto;
+            border-style:solid;
+            border-spacing:8px;
+            border-width:2px;
+            border-collapse:separate
+        }
+    a:link {color:blue;}
+    a:visited {color:teal;}
+</style>
+</head>
+
+<body style='color:#000000;background-color:#FFFFE0'>
+
+<h1>Updated Targets List</h1>
+<p>This list contains all targets which have been verified as updated.</p>
+<ul>
+    <li>Please select a verified month to see the list of targets.</li>
+    <li style='padding-top:6px'>If you want to see the most recent data list, 
+        plese reload this page<br /> 
+        before open a list of targets. The update may take several seconds.</li>
+</ul>
+
+<table border=1>
+<!--First row is all of the years-->
+<tr><th>Year</th>
+{% for year in range(2005, curr_year + 1) %}
+    <th>{{ year }}</th>
+{% endfor%}
+</tr>
+
+{% for month in range(1,13) %}
+    <tr><th>{{ month_abbr[month] }}</th>
+    {% for year in range(2005, curr_year + 1) %}
+        {% if year == curr_year and month > curr_month %}
+            <td>&#160;</td>
+        {% else %}
+            <td><a href="./{{ archive_subdir_name }}/{{ month_abbr[month] }}_{{ year }}.html">{{ month_abbr[month] }}</a></td>
+        {% endif %}
+    {% endfor %}
+    </tr>
+{% endfor %}
+
+</table>
+
+<p style='padding-top:30px'> <strong>Back to:</strong></p>
+<ul>
+    <li><a href="https://cxc.cfa.harvard.edu/cgi-bin/target_search/search.html">
+        <strong>Chandra Uplink Support Observation Search Form</strong></a>
+    </li>
+    <li><a href="https://cxc.cfa.harvard.edu/wsgi/cus/usint/">
+        <strong>Chandra Uplink Support Organizational Page</strong></a>
+    </li>
+</ul>
+</p>
+<hr />
+<p style='padding-top:10px'>
+<em>
+If you have any questions about this page, please contact 
+<a href='mailto:bwargelin@head.cfa.harvard.edu'>bwargelin@head.cfa.harvard.edu</a>.
+</em>
+</p>
+
+</body>
+</html>
