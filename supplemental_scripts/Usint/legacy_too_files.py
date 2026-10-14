@@ -14,7 +14,7 @@ from pathlib import Path
 import argparse
 import json
 from datetime import datetime
-from usint_supplemental_lib import FileWriter, StdoutWriter, subproccess_wrapper, grab_now
+from usint_supplemental_lib import FileWriter, StdoutWriter, subprocess_wrapper, grab_now
 from jinja2 import Environment, FileSystemLoader
 
 _JINJA_ENV = Environment(loader=FileSystemLoader("template", followlinks=True))
@@ -42,7 +42,7 @@ except TypeError as e:
     raise e
 
 def _fetch_schedule():
-    result = subproccess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "30", "--json-format"])
+    result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "30", "--json-format"])
     full_sched = json.loads(result.stdout)
     now = grab_now().isoformat()
     curr_sched = None
