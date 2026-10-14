@@ -226,6 +226,20 @@ def _format_approval_info(final_approvals):
     _json = supple.helper_functions.coerce_to_json(formatted_approvals)
     return _json
 
+def _format_revision_history(fetched_revisions):
+    """
+    Format SQLAlchemy ORM into JSON dict in old revision history list format.
+    Must be called in app context wrapper function.
+    """
+    formatted_revisions = []
+    for rev, sign in fetched_revisions:
+        formatted_revisions.append({
+            'revision': rev.to_dict(),
+            'signoff': sign.to_dict()
+        })
+    _json = supple.helper_functions.coerce_to_json(formatted_revisions)
+    return _json
+
 @click.command("fetch-approved-obsid")
 @click.option("--start", default = None, help="Specify start time for fetching all approved obsids.")
 @click.option("--begin", type=int, default = None, help="Begin <X> number of days ago and fetch all approved obsids before the specified time.")
@@ -276,9 +290,11 @@ def fetch_revision_history(obsid, start, stop, json_format):
     if not(obsid_mode ^ time_mode):
         raise click.ClickException("Must specify either obsid or start and stop time range. Not both or neither.")
 
+    query = select(models.Revision, models.Signoff).join(models.Signoff)
+
     if obsid_mode:
-        query = select(models.Revision).where(models.Revision.obsid==obsid).order_by(models.Revision.time.asc())
-        fetched_revisions = db.session.execute(query).scalars().all()
+        query = query.where(models.Revision.obsid==obsid).order_by(models.Revision.time.asc())
+        fetched_revisions = db.session.execute(query).all()
     else:
         
         start_epoch = supple.database_interface.to_epoch(start)
@@ -290,10 +306,15 @@ def fetch_revision_history(obsid, start, stop, json_format):
         start_epoch = int(start_epoch)
         stop_epoch = int(stop_epoch)
 
-        query = select(models.Revision).where(models.Revision.time >= start_epoch).where(models.Revision.time <= stop_epoch).order_by(models.Revision.time.asc())
-        fetched_revisions = db.session.execute(query).scalars().all()
+        query = query.where(models.Revision.time >= start_epoch).where(models.Revision.time <= stop_epoch).order_by(models.Revision.time.asc())
+        fetched_revisions = db.session.execute(query).all()
 
     if len(fetched_revisions) == 0:
         click.secho("No revisions found for the specified criteria.", fg="yellow")
-    for rev in fetched_revisions:
-        click.secho(rev)
+    
+    if json_format:
+        _json = _format_revision_history(fetched_revisions)
+        click.echo(_json)
+    else:
+        for rev, sign in fetched_revisions:
+            click.secho((rev, sign))
