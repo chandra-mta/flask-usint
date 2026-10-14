@@ -195,3 +195,23 @@ def find_user(user_id, username, email, full_name, groups, is_active, json_forma
             click.secho(f"Found {len(results)} user(s):", fg='green')
             for user in results:
                 click.echo(user)
+
+@click.command("fetch-all-users")
+@click.option("--json-format/--no-json-format", default=False, help="Format user results as JSON file to stdout.")
+@with_app_context
+def fetch_all_users(json_format):
+    """
+    Fetch all users in the database.
+    """
+    results = models.User.query.all()
+
+    #: Output results
+    if json_format:
+        formatted_result = []
+        for user in results:
+            formatted_result.append(user.to_dict())
+        _json = supple.helper_functions.coerce_to_json(formatted_result, indent=2)
+        click.echo(_json)
+    else:
+        for user in results:
+            click.echo(user)

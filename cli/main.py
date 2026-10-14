@@ -3,7 +3,7 @@ CLI interface groupings
 """
 
 import click
-from .user import create_user, set_groups, find_user
+from .user import create_user, set_groups, find_user, fetch_all_users
 from .schedule import maintain_schedule, fetch_schedule, send_too_reminder_emails
 from .info import print_config, app_root_path
 from .database import create_tables, pragma_check, sync_test_database, fetch_approved_obsids, fetch_revision_history
@@ -54,6 +54,7 @@ def signoffs():
 user.add_command(create_user)
 user.add_command(set_groups)
 user.add_command(find_user)
+user.add_command(fetch_all_users)
 
 schedule.add_command(maintain_schedule)
 schedule.add_command(fetch_schedule)
