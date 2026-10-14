@@ -5,6 +5,7 @@ import click
 from .core import with_app_context
 from pprint import pformat
 from flask import current_app
+from flask import url_for
 
 @click.command("print-config")
 @with_app_context
@@ -25,3 +26,18 @@ def app_root_path():
     Print the absolute path of the configured application root.
     """
     click.echo(current_app.root_path)
+
+@click.command("url-for")
+@click.argument("endpoint")
+@click.option('--kwargs', '-k', multiple=True, help="Keyword arguments for the URL generation in the form key=value")
+@with_app_context
+def url_for_endpoint(endpoint, kwargs):
+    """
+    Print the URL for a given endpoint.
+
+    :param endpoint: The endpoint name for which to generate the URL.
+    :param kwargs: Optional keyword arguments to pass to the URL generation.
+    """
+    kwargs_dict = dict(k.split('=') for k in kwargs)
+    url = url_for(endpoint, **kwargs_dict)
+    click.echo(url)
