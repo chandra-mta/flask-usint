@@ -183,7 +183,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", help = "Determine data output file path. Write stdout for standard out.")
     parser.add_argument("-y", "--year", type=int, help = "Numerical year of the archive page to generate. Default is current year.")
-    parser.add_argument("-m", "--month", type=int, choices=range(1,13), help = "Numerical month( index at 1) of the archive page to generate. Default is current month.")
+    parser.add_argument("-m", "--month", type=int, choices=range(1,13), help = "Numerical month (index at 1) of the archive page to generate. Default is current month.")
     args = parser.parse_args()
     
     if args.path == "stdout":
@@ -198,13 +198,18 @@ if __name__ == "__main__":
         else:
             archive_writer = FileWriter(f"{args.path}/{ARCHIVE_SUBDIR_NAME}")
 
+    top_level_page(usint_writer)
+
     if args.year is None and args.month is None:
         now = _grab_now()
         year = now.year
         month = now.month
+        #: Run again for previous month in case revisions were closed after the month ended.
+        if month == 1:
+            revision_archive(archive_writer, year-1, 12)
+        else:
+            revision_archive(archive_writer, year, month-1)
     else:
         year = args.year
         month = args.month
-    
-    top_level_page(usint_writer)
     revision_archive(archive_writer, year, month)
