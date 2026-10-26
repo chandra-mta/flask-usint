@@ -31,7 +31,7 @@ OBS_SS_ROOT=/data/mta4/obs_ss
 0 4 * * 0-6 cd ${USINT_APPLICATION_ROOT}; ${ENV_CUS}/bin/python cli.py signoffs send-reminder-emails >> ${HOME}/Logs/signoff_request.cron 2>&1
 
 #: Usint Revision Archive Webpages. Nonfunctional as of 2026-09-30. Needs refactor to v2.1 usint.db paradigm.
-#20 2,10,12,14,16,18,20 * * * cd ${USINT_ROOT}; ${USINT_ROOT}/updated_fill_wrap_script  > ${HOME}/Logs/updated_fill_cus.cron 2>&1
+20 12,20 * * * cd ${USINT_ROOT}; ${ENV_CUS}/bin/python revision_archive.py >> ${HOME}/Logs/updated_fill_cus.cron 2>&1
 
 # obs_ss Related
 
