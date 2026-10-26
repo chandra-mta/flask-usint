@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 import argparse
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from usint_supplemental_lib import FileWriter, StdoutWriter, subprocess_wrapper, grab_now
 from jinja2 import Environment, FileSystemLoader
 
@@ -44,11 +44,16 @@ except TypeError as e:
 def _fetch_schedule():
     result = subprocess_wrapper([f"{ENV_CUS}/bin/python", f"{USINT_APPLICATION_ROOT}/cli.py", "schedule", "fetch-schedule", "--begin", "30", "--json-format"])
     full_sched = json.loads(result.stdout)
-    now = grab_now().isoformat()
+    now = grab_now()
     curr_sched = None
     idx = None
     for i, entry in enumerate(full_sched):
-        if entry['schedule'].get('start') < now < entry['schedule'].get('stop'):
+        #: Each schedule stop date is the start of the day, but we want to include the duration of the final day.
+        #: Therefore add to the final stopping time in case (now) is, for example, between the schedule entry stop date and the next entry's start.
+        #: Note. Schedule has oversights with timezone considerations
+        _start = datetime.fromisoformat(entry['schedule'].get('start')).replace(tzinfo=None)
+        _stop = datetime.fromisoformat(entry['schedule'].get('stop')).replace(tzinfo=None)
+        if _start < now < _stop + timedelta(seconds=86399):
             curr_sched = entry
             idx = i
     return full_sched, curr_sched, idx
