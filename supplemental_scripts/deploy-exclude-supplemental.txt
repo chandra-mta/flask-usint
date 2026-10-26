@@ -3,7 +3,6 @@
 .gitignore
 __pycache__/
 _example/
-flask-usint.code-workspace
 install.sh
 *pid
 *.txt

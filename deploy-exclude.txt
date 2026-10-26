@@ -7,7 +7,6 @@ _example/
 # Exclusions for Application Root
 supplemental_pages/
 supplemental_scripts/
-flask-usint.code-workspace
 install.sh
 *pid
 *.txt

@@ -248,7 +248,10 @@ def send_too_reminder_emails():
             break
     
     if _sched.start.date() < (now + timedelta(days=90)).date():
-        content = _construct_email("too_missing_three_months")
-        emailing.send_email(content,
-                            "POC Schedule Needs To Be Filled",
-                            to="bwargelin@cfa.harvard.edu")
+        #: Since this problem only affects later workflows, we don't need to spam it daily.
+        #: Just send email if today is monday.
+        if now.weekday() == 0:
+            content = _construct_email("too_missing_three_months")
+            emailing.send_email(content,
+                                "POC Schedule Needs To Be Filled",
+                                to="bwargelin@cfa.harvard.edu")
